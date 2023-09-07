@@ -1,0 +1,44 @@
+using Microsoft.AspNetCore.Mvc;
+using QuestionService.Data;
+using QuestionService.DTOs;
+using QuestionService.Entities;
+using QuestionService.RequestHelpers;
+using Serilog;
+
+namespace QuestionService.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class QuestionController : ControllerBase
+{
+    private readonly IQuestionRepository _repo;
+
+    public QuestionController(IQuestionRepository questionRepository)
+    {
+        _repo = questionRepository;
+    }
+
+    /// <summary>
+    /// Return a list of question based on the query params
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    public async Task<ActionResult<List<Question>>> GetQuestions([FromQuery] SearchParams searchParams)
+    {
+        return await _repo.GetQuestionEntitiesAsync(
+            searchParams.PageNumber,
+            searchParams.PageSize,
+            searchParams.OrderBy,
+            searchParams.FilterBy,
+            searchParams.SortOrder,
+            searchParams.Difficulty);
+    }
+
+    [HttpGet]
+    [Route("byqn")]
+    public async Task<ActionResult<List<QuestionDto>>> GetQuestionsByQuestionNumbers([FromQuery] string questionNumbers)
+    {
+        Log.Information("===> getting questions by qn");
+        return await _repo.GetQuestionsByQuestionNumbers(questionNumbers);
+    }
+}
