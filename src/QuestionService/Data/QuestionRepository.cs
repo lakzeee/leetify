@@ -10,8 +10,6 @@ public class QuestionRepository : IQuestionRepository
 {
     private readonly QuestionDbContext _context;
     private readonly IMapper _mapper;
-    private IQuestionRepository _questionRepositoryImplementation;
-
     public QuestionRepository(QuestionDbContext context, IMapper mapper)
     {
         _context = context;
@@ -19,7 +17,8 @@ public class QuestionRepository : IQuestionRepository
     }
 
 
-    public async Task<List<Question>> GetQuestionEntitiesAsync(int pageNumber, int pageSize, string orderBy,
+    public async Task<(List<Question>, int totalResultCount, int pageCount)> GetQuestionEntitiesAsync(int pageNumber,
+        int pageSize, string orderBy,
         string filterBy,
         string sortOrder,
         string difficulty)
@@ -35,6 +34,9 @@ public class QuestionRepository : IQuestionRepository
             var difficultyLevels = difficulty.Split(',').ToList();
             query = query.Where(q => difficultyLevels.Contains(q.Difficulty.ToLower()));
         }
+
+        var totalCount = await query.CountAsync();
+        var pageCount = (int)Math.Ceiling((double)totalCount / pageSize);
 
         switch (orderBy)
         {
@@ -61,7 +63,7 @@ public class QuestionRepository : IQuestionRepository
         // Execute the query and return the result as a list
         var questions = await query.ToListAsync();
 
-        return questions;
+        return (questions, totalCount, pageCount);
     }
 
     public async Task<List<QuestionDto>> GetQuestionsByQuestionNumbers(string questionNumbers)

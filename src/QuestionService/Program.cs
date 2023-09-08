@@ -43,6 +43,12 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "LeetCode Question Service Api V1"));
 }
 
+app.UseCors(b =>
+    b
+        .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader());
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

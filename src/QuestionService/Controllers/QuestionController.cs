@@ -25,13 +25,19 @@ public class QuestionController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<Question>>> GetQuestions([FromQuery] SearchParams searchParams)
     {
-        return await _repo.GetQuestionEntitiesAsync(
+        var (questions, totalCount, pageCount) = await _repo.GetQuestionEntitiesAsync(
             searchParams.PageNumber,
             searchParams.PageSize,
             searchParams.OrderBy,
             searchParams.FilterBy,
             searchParams.SortOrder,
             searchParams.Difficulty);
+        return Ok(new
+        {
+            results = questions,
+            totalCount = totalCount,
+            pageCount = pageCount
+        });
     }
 
     [HttpGet]

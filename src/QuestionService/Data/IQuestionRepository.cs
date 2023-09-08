@@ -5,7 +5,8 @@ namespace QuestionService.Data;
 
 public interface IQuestionRepository
 {
-    Task<List<Question>> GetQuestionEntitiesAsync(int pageNumber, int pageSize, string orderBy, string filterBy,
+    Task<(List<Question>, int totalResultCount, int pageCount)> GetQuestionEntitiesAsync(int pageNumber,
+        int pageSize, string orderBy, string filterBy,
         string sortOrder, string difficulty);
 
     Task<List<QuestionDto>> GetQuestionsByQuestionNumbers(string questionNumbers);
