@@ -3,11 +3,10 @@ import FormInput from "@/UI/layout/planform/FormInput";
 import FormToggle from "@/UI/layout/planform/FormToggle";
 import { useCreatePlanStore } from "@/Components/hooks/useCreatePlanStore";
 import AddedQuestionTable from "@/UI/layout/table/AddedQuestionTable";
-import { useEffect, useState } from "react";
-import { PlanQuestion } from "@/types";
 import { useTablekeyStore } from "@/Components/hooks/useTablekeyStore";
+import { Tooltip } from "react-tooltip";
 
-export default function PlanForm() {
+export default function CreatePlanForm() {
   // manage state of the form
   const planName = useCreatePlanStore((state) => state.planName);
   const setPlanName = useCreatePlanStore((state) => state.setPlanName);
@@ -19,13 +18,17 @@ export default function PlanForm() {
   const setIsPublic = useCreatePlanStore((state) => state.setIsPublic);
   // manage state of added question
   const addedQuestions = useCreatePlanStore((state) => state.addedQuestions);
-  const addToAddedQuestion = useCreatePlanStore(
-    (state) => state.addToAddedQuestions,
-  );
+
   const { tableKey } = useTablekeyStore();
 
   function handleSubmit() {
-    const data = { planName, description, tags, isPublic };
+    const data = {
+      planName,
+      description,
+      tags,
+      isPublic,
+      questionList: addedQuestions,
+    };
     console.log(data);
   }
 
@@ -73,6 +76,8 @@ export default function PlanForm() {
             Submit
           </button>
         </div>
+        <Tooltip id="remove-tooltip" />
+        <Tooltip id="add-tooltip" />
       </div>
     </>
   );

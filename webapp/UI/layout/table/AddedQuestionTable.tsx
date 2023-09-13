@@ -1,34 +1,42 @@
 import PlanQuestionRow from "@/UI/layout/table/PlanQuestionRow";
 import { PlanQuestion } from "@/types";
+import TableWrapper from "@/UI/layout/table/tablebase/TableWrapper";
+import TableHeader from "@/UI/layout/table/tablebase/TableHeader";
+import {
+  generateRandomKey,
+  groupPlanQuestionsByGroupName,
+} from "@/Components/utils/helpers";
+import React from "react";
+import TableGroupRow from "@/UI/layout/table/tablebase/TableGroupRow";
 
 type Props = {
   data: PlanQuestion[];
 };
 export default function AddedQuestionTable({ data }: Props) {
-  const columTitles = ["no", "title", "topics", "difficulty"];
+  const groupByGroupName = groupPlanQuestionsByGroupName(data);
+  const columTitles = ["no", "title", "topics", "difficulty", "actions"];
 
   return (
-    <>
-      <div className="overflow-x-auto shadow-md dark:shadow-none rounded-lg">
-        <table className="w-full text-left text-gray-500 dark:text-gray-400">
-          <thead className="text-gray-700 text-xs uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-              {columTitles.map((title) => (
-                <th key={title} scope="col" className="px-3 py-4">
-                  {title}
-                </th>
+    <TableWrapper>
+      <TableHeader columTitles={columTitles} />
+      <tbody>
+        {Object.entries(groupByGroupName).map(
+          ([groupName, groupQuestions], idx) => (
+            <React.Fragment
+              key={`groupHeader_${groupName}_${idx}_${generateRandomKey()}`}
+            >
+              <TableGroupRow key={groupName} groupName={groupName} />
+              {groupQuestions.map((question) => (
+                <PlanQuestionRow
+                  key={question.title}
+                  question={question}
+                  existedGroupName={groupName}
+                />
               ))}
-              <th className="text-center min-w-40">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data &&
-              data.map((d, idx) => (
-                <PlanQuestionRow key={d.title} question={d} />
-              ))}
-          </tbody>
-        </table>
-      </div>
-    </>
+            </React.Fragment>
+          ),
+        )}
+      </tbody>
+    </TableWrapper>
   );
 }

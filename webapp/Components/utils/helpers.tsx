@@ -15,3 +15,16 @@ export function groupPlanQuestionsByGroupName(
     {} as Record<string, PlanQuestion[]>,
   );
 }
+
+export function generateRandomKey(length = 4) {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let randomKey = "";
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    randomKey += characters.charAt(randomIndex);
+  }
+
+  return randomKey;
+}

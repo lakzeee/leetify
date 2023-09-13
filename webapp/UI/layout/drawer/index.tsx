@@ -12,7 +12,7 @@ export default function Drawer() {
               <a href="/questions">All Question</a>
             </li>
             <li>
-              <a href="/myplans">My Plans</a>
+              <a href="/myplans/create">My Plans</a>
             </li>
           </ul>
         </div>

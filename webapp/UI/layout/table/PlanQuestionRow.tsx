@@ -1,20 +1,34 @@
 import { PlanQuestion } from "@/types";
 import TopicBadges from "@/UI/layout/table/TopicBadges";
-import { IoIosAddCircle, IoIosCheckmarkCircle } from "react-icons/io";
+import {
+  IoIosAddCircle,
+  IoIosCheckmarkCircle,
+  IoIosRemoveCircle,
+} from "react-icons/io";
 import { useEffect, useState } from "react";
 import { useCreatePlanStore } from "@/Components/hooks/useCreatePlanStore";
+import "react-tooltip/dist/react-tooltip.css";
+import { useTablekeyStore } from "@/Components/hooks/useTablekeyStore";
 
 type Props = {
   question: PlanQuestion;
+  existedGroupName?: string;
 };
-export default function PlanQuestionRow({ question }: Props) {
-  const [groupName, setGroupName] = useState("");
+export default function PlanQuestionRow({
+  question,
+  existedGroupName = "",
+}: Props) {
+  const [groupName, setGroupName] = useState(existedGroupName);
   const [isAdded, setIsAdded] = useState(false);
 
   const addToAddedQuestion = useCreatePlanStore(
     (state) => state.addToAddedQuestions,
   );
   const addedQuestions = useCreatePlanStore((state) => state.addedQuestions);
+  const removeFromAddedQuestions = useCreatePlanStore(
+    (state) => state.removeFromAddedQuestions,
+  );
+  const { inc } = useTablekeyStore();
 
   // Check if current row is added in the plan
   useEffect(() => {
@@ -25,11 +39,24 @@ export default function PlanQuestionRow({ question }: Props) {
       setIsAdded(false);
     } else {
       setIsAdded(true);
+      if (existingQuestionIndex)
+        setGroupName(
+          addedQuestions[existingQuestionIndex]?.groupName ?? existedGroupName,
+        );
     }
   }, [question]);
-  const handleButtonClick = () => {
+
+  const handleAdd = () => {
     addToAddedQuestion(question, groupName);
+    setGroupName(groupName);
     setIsAdded(true);
+    inc();
+  };
+
+  const handleRemove = () => {
+    removeFromAddedQuestions(question.leetCodeNo);
+    setIsAdded(false);
+    inc();
   };
 
   return (
@@ -51,16 +78,26 @@ export default function PlanQuestionRow({ question }: Props) {
               placeholder="Group Name"
               className="input min-w-1/2 rounded-full input-bordered w-full"
             />
-            <button
-              onClick={handleButtonClick}
-              className="absolute right-0 p-2"
-            >
-              {isAdded ? (
-                <IoIosCheckmarkCircle color="#2DD4BE" size={30} />
-              ) : (
-                <IoIosAddCircle size={30} />
-              )}
-            </button>
+            <div className="absolute flex flex-row right-0 p-2">
+              <button
+                onClick={handleRemove}
+                data-tooltip-id="remove-tooltip"
+                data-tooltip-content="Remove From List"
+              >
+                {isAdded && <IoIosRemoveCircle color="#F5C254" size={30} />}
+              </button>
+              <button
+                onClick={handleAdd}
+                data-tooltip-id="add-tooltip"
+                data-tooltip-content="Confirm Group Name"
+              >
+                {isAdded ? (
+                  <IoIosCheckmarkCircle color="#2DD4BE" size={30} />
+                ) : (
+                  <IoIosAddCircle size={30} />
+                )}
+              </button>
+            </div>
           </div>
         </td>
       </tr>

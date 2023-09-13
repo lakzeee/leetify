@@ -11,7 +11,7 @@ export default function FormInput({ placeholder, value, handleChange }: Props) {
         placeholder={placeholder}
         value={value}
         onChange={(e) => handleChange?.(e.target.value)}
-        className="input input-primary focus:ring-0 focus:border-none w-full max-w-xs"
+        className="input input-bordered focus:ring-0 focus:border-none w-full max-w-xs"
       />
     </>
   );

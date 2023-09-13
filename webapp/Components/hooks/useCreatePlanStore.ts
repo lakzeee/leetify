@@ -23,6 +23,7 @@ type Actions = {
     data: PlanQuestion,
     groupName: string | undefined,
   ) => void;
+  removeFromAddedQuestions: (questionNo: number) => void;
 };
 
 const initialState: State = {
@@ -59,6 +60,16 @@ export const useCreatePlanStore = createWithEqualityFn<State & Actions>(
           addedQuestions.push(question);
         }
         return { addedQuestions };
+      }),
+    removeFromAddedQuestions: (questionNo) =>
+      set((state) => {
+        const addedQuestions = Array.isArray(state.addedQuestions)
+          ? state.addedQuestions
+          : [];
+        const updatedAddedQuestions = addedQuestions.filter(
+          (q) => q.leetCodeNo !== questionNo,
+        );
+        return { addedQuestions: updatedAddedQuestions };
       }),
   }),
   shallow,

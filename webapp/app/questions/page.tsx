@@ -1,5 +1,5 @@
 "use client";
-import QuestionsList from "@/UI/layout/table/QuestionsList";
+import QuestionsList from "@/app/questions/QuestionsList";
 
 export default function My() {
   return (

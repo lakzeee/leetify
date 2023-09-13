@@ -1,10 +1,10 @@
-import PlanForm from "@/UI/layout/planform";
-import EditQuestionDialog from "@/UI/layout/planform/AddQuestionDialog";
+import EditQuestionDialog from "@/app/myplans/create/AddQuestionDialog";
+import CreatePlanForm from "@/app/myplans/create/CreatePlanForm";
 
 export default function CreatePlan() {
   return (
     <>
-      <PlanForm />
+      <CreatePlanForm />
       <EditQuestionDialog />
     </>
   );

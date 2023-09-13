@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useQuestionsSearchParamsStore } from "@/Components/hooks/useQuestionsSearchParamsStore";
 import { getAllTopics } from "@/Components/actions/questionActions";
 
-const TopicFilter: React.FC = () => {
+const TopicsFilter: React.FC = () => {
   const topic = useQuestionsSearchParamsStore((state) => state.filterBy);
   const setParams = useQuestionsSearchParamsStore((state) => state.setParams);
   const [topics, setTopics] = useState([]);
@@ -39,4 +39,4 @@ const TopicFilter: React.FC = () => {
   );
 };
 
-export default TopicFilter;
+export default TopicsFilter;
