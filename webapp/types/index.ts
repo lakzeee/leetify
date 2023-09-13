@@ -14,7 +14,14 @@ export type Question = {
   difficulty: string;
   createdAt?: string;
   updatedAt?: string;
-  question: null;
+};
+
+export type PlanQuestion = {
+  leetCodeNo: number;
+  title: string;
+  topics: string;
+  difficulty: string;
+  groupName?: string;
 };
 
 export type QuestionKey = keyof Question;

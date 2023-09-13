@@ -17,7 +17,7 @@ type Actions = {
 };
 
 const initialState: State = {
-  pageNumber: 2,
+  pageNumber: 1,
   pageSize: 12,
   pageCount: 1,
   filterBy: undefined,

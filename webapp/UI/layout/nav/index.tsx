@@ -10,12 +10,17 @@ export default function Nav() {
         {/*Title Button*/}
         <label
           htmlFor="my-drawer"
-          className="hover:cursor-pointer drawer-button"
+          className="hover:cursor-pointer drawer-button mx-4"
         >
           <BiMenuAltLeft size="20" />
         </label>
         <div className="flex-1">
-          <a className="normal-case text-xl hover:cursor-pointer ">Leetify</a>
+          <a
+            href="/"
+            className="normal-case text-xl font-medium hover:cursor-pointer "
+          >
+            Leetify
+          </a>
         </div>
         <div className="flex-none">
           <ThemeButton />

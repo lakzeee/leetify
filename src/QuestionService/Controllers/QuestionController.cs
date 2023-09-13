@@ -31,7 +31,8 @@ public class QuestionController : ControllerBase
             searchParams.OrderBy,
             searchParams.FilterBy,
             searchParams.SortOrder,
-            searchParams.Difficulty);
+            searchParams.Difficulty
+        );
         return Ok(new
         {
             results = questions,
@@ -45,6 +46,14 @@ public class QuestionController : ControllerBase
     public async Task<ActionResult<List<QuestionDto>>> GetQuestionsByQuestionNumbers([FromQuery] string questionNumbers)
     {
         Log.Information("===> getting questions by qn");
-        return await _repo.GetQuestionsByQuestionNumbers(questionNumbers);
+        return Ok(await _repo.GetQuestionsByQuestionNumbers(questionNumbers));
+    }
+
+    [HttpGet]
+    [Route("topicList")]
+    public async Task<ActionResult<List<string>>> GetTopicList()
+    {
+        Log.Information("===> getting topic list");
+        return Ok(await _repo.GetAllTopics());
     }
 }

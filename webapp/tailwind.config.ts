@@ -10,11 +10,6 @@ const config: Config = {
     "./node_modules/flowbite/**/*.js",
     "./node_modules/flowbite-react/**/*.js",
   ],
-  theme: {
-    fontSize: {
-      xs: "0.4rem",
-    },
-  },
   plugins: [
     require("@tailwindcss/typography"),
     require("daisyui"),

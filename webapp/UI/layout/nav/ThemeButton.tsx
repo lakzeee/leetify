@@ -11,7 +11,7 @@ export default function ThemeButton() {
     if (theme === "night") {
       setTheme("winter");
       document.documentElement.classList.remove("dark");
-    } else {
+    } else if (theme === "winter") {
       setTheme("night");
       document.documentElement.classList.add("dark");
     }
@@ -21,6 +21,9 @@ export default function ThemeButton() {
   useEffect(() => {
     const body = document.documentElement;
     body.setAttribute("data-theme", theme);
+    if (theme === "winter") {
+      document.documentElement.classList.remove("dark");
+    }
   }, [theme]);
 
   return (

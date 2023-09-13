@@ -9,10 +9,10 @@ export default function Drawer() {
           <ul className="menu p-4 w-60 min-h-full bg-base-200 text-base-content pt-20">
             {/* Sidebar content here */}
             <li>
-              <a>Sidebar Item 1</a>
+              <a href="/questions">All Question</a>
             </li>
             <li>
-              <a>Sidebar Item 2</a>
+              <a href="/myplans">My Plans</a>
             </li>
           </ul>
         </div>

@@ -5,6 +5,7 @@ import { getQuestionData } from "@/Components/actions/questionActions";
 import qs from "query-string";
 import QuestionsTable from "@/UI/layout/table/QuestionsTable";
 import { Pagination } from "flowbite-react";
+import Filters from "@/UI/layout/table/Filters";
 
 export default function QuestionsList() {
   const [loading, setLoading] = useState(true);
@@ -47,6 +48,7 @@ export default function QuestionsList() {
 
   return (
     <>
+      <Filters />
       <QuestionsTable data={data.questions} columTitles={columTitles} />
       <Pagination
         currentPage={params.pageNumber}

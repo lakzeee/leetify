@@ -1,10 +1,12 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import ToasterProvider from "@/Components/providers/ToasterProvider";
-import Nav from "@/UI/layout/nav";
+// import Nav from "@/UI/layout/nav";
 import React from "react";
 import Drawer from "@/UI/layout/drawer";
+import dynamic from "next/dynamic";
 
+const Nav = dynamic(() => import("../UI/layout/nav"), { ssr: false });
 export const metadata: Metadata = {
   title: "Leetify",
   description: "Elevate Your Coding Interview Preparation",

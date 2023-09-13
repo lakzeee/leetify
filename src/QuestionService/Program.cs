@@ -32,6 +32,7 @@ builder.Services.AddDbContext<QuestionDbContext>(opt =>
 
 builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 

@@ -10,4 +10,6 @@ public interface IQuestionRepository
         string sortOrder, string difficulty);
 
     Task<List<QuestionDto>> GetQuestionsByQuestionNumbers(string questionNumbers);
+
+    Task<List<string>> GetAllTopics();
 }

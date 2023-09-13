@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using QuestionService.DTOs;
 using QuestionService.Entities;
 
@@ -10,10 +11,13 @@ public class QuestionRepository : IQuestionRepository
 {
     private readonly QuestionDbContext _context;
     private readonly IMapper _mapper;
-    public QuestionRepository(QuestionDbContext context, IMapper mapper)
+    private readonly IMemoryCache _cache;
+
+    public QuestionRepository(QuestionDbContext context, IMapper mapper, IMemoryCache cache)
     {
         _context = context;
         _mapper = mapper;
+        _cache = cache;
     }
 
 
@@ -71,6 +75,25 @@ public class QuestionRepository : IQuestionRepository
         var numbers = questionNumbers.Split(',').Select(q => int.Parse(q.Trim()));
         var filteredQuestions = await _context.Questions.Where(q => numbers.Contains(q.LeetCodeNo)).ToListAsync();
         return _mapper.Map<List<QuestionDto>>(filteredQuestions);
+    }
+
+    public async Task<List<string>> GetAllTopics()
+    {
+        if (_cache.TryGetValue("AllTopics", out List<string> cachedTopics)) return cachedTopics;
+        var uniqueTopics = await _context.Questions
+            .Select(q => q.Topics) // Select the Topics property
+            .ToListAsync(); // Execute the query asynchronously and fetch the data into memory
+
+        var topicList = uniqueTopics
+            .SelectMany(topics => topics.Split(',').Select(topic => topic.Trim())) // Split and trim the topics
+            .Where(t => !string.IsNullOrEmpty(t))
+            .Distinct() // Get distinct topics
+            .OrderBy(t => t)
+            .ToList();
+
+        _cache.Set("UniqueTopics", topicList, TimeSpan.FromHours(1));
+
+        return topicList;
     }
 
 
