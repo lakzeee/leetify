@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { AiOutlineUser } from "react-icons/ai";
+import NavLogin from "@/UI/layout/nav/NavLogin";
 
 export default function AvatarButton() {
   const [avatarChar, setAvatarChar] = useState(null);
@@ -22,7 +23,7 @@ export default function AvatarButton() {
             )}
           </div>
         </div>
-        {/*<NavLogin user={user} />*/}
+        <NavLogin user={""} />
       </div>
     </>
   );

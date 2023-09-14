@@ -14,6 +14,9 @@ export default function Drawer() {
             <li>
               <a href="/myplans/create">My Plans</a>
             </li>
+            <li>
+              <a href="/session">Session(Dev Only)</a>
+            </li>
           </ul>
         </div>
       </div>

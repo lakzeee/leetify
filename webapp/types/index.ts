@@ -25,3 +25,13 @@ export type PlanQuestion = {
 };
 
 export type QuestionKey = keyof Question;
+
+declare global {
+  namespace NodeJS {
+    interface ProcessEnv {
+      GOOGLE_ID: string;
+      GOOGLE_SECRET: string;
+      API_URL: string;
+    }
+  }
+}

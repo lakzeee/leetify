@@ -24,7 +24,7 @@ builder.Services.AddSwaggerGen(c =>
     }
 );
 
-// Configuration for PostgreSql
+// Configuration for PostgreSql, Repo DI, AutoMapper and Memory Cache
 builder.Services.AddDbContext<QuestionDbContext>(opt =>
 {
     opt.UseNpgsql(builder.Configuration.GetConnectionString("QuestionDbConnection"));
