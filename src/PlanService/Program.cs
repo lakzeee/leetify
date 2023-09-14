@@ -33,6 +33,7 @@ builder.Services.AddSwaggerGen(c =>
         c.IncludeXmlComments(xmlPath);
     }
 );
+
 var jwtSecret = builder.Configuration["Jwt:Key"];
 // Add JWT Authentication
 builder.Services.AddAuthentication(o =>
