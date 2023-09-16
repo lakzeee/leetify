@@ -51,8 +51,16 @@ export const useCreatePlanStore = createWithEqualityFn<State & Actions>(
         const addedQuestions = Array.isArray(state.addedQuestions)
           ? state.addedQuestions
           : [];
+        if (!groupName) groupName = "Ungrouped";
+        let isNewGroupName = true;
+        if (addedQuestions.some((q) => q.groupName == groupName)) {
+          isNewGroupName = false;
+        }
 
         let maxGroupRank = 0;
+        let maxGroupOrder = 0;
+        let existingGroupOrder;
+        // loop through question to find current max groupRank and max groupOrder
         if (addedQuestions && addedQuestions.length > 0) {
           maxGroupRank = (
             addedQuestions.filter(
@@ -61,18 +69,39 @@ export const useCreatePlanStore = createWithEqualityFn<State & Actions>(
           ).reduce((maxRank: number, q: PlanQuestion) => {
             return q.groupRank && q.groupRank > maxRank ? q.groupRank : maxRank;
           }, 0);
+          maxGroupOrder = Math.max(
+            ...addedQuestions.map((q) => q.groupOrder || 0),
+          );
+          const existingGroupQuestion = addedQuestions.findLast(
+            (q) => q.groupName === groupName,
+          );
+          if (existingGroupQuestion) {
+            existingGroupOrder = existingGroupQuestion.groupOrder;
+          }
         }
-        const newGroupRank = maxGroupRank + 1;
 
+        // check if question exist in list
         const existingQuestionIndex = addedQuestions.findIndex(
           (q) => q.leetCodeNo == question.leetCodeNo,
         );
+
         if (existingQuestionIndex !== -1) {
-          addedQuestions[existingQuestionIndex].groupName = groupName;
-          addedQuestions[existingQuestionIndex].groupRank = newGroupRank;
+          // update properties of existing questions
+          const existingQuestion = addedQuestions[existingQuestionIndex];
+
+          existingQuestion.groupName = groupName;
+          existingQuestion.groupRank = maxGroupRank + 1;
+          existingQuestion.groupOrder = isNewGroupName
+            ? maxGroupOrder + 1
+            : existingGroupOrder;
         } else {
+          // add new question
           question.groupName = groupName;
-          question.groupRank = newGroupRank;
+          question.groupOrder = isNewGroupName
+            ? maxGroupOrder + 1
+            : existingGroupOrder;
+
+          question.groupRank = maxGroupRank + 1;
           addedQuestions.push(question);
         }
         return { addedQuestions };
