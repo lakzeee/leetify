@@ -1,18 +1,40 @@
+import { useController, UseControllerProps } from "react-hook-form";
+
 type Props = {
-  placeholder: string;
-  value?: string;
-  handleChange?: (value: string) => void;
-};
-export default function FormInput({ placeholder, value, handleChange }: Props) {
+  label: string;
+  type?: string;
+  showLabel?: boolean;
+} & UseControllerProps;
+export default function FormInput(props: Props) {
+  const { fieldState, field } = useController({ ...props, defaultValue: "" });
+
   return (
     <>
+      {props.showLabel && (
+        <label className="label">
+          <span className="label-text-alt">{props.label}</span>
+        </label>
+      )}
       <input
-        type="text"
-        placeholder={placeholder}
-        value={value}
-        onChange={(e) => handleChange?.(e.target.value)}
-        className="input input-bordered focus:ring-0 focus:border-none w-full max-w-lg"
+        {...props}
+        {...field}
+        type={props.type || "text"}
+        placeholder={props.label}
+        className={`text-xs input input-bordered max-w-md focus:outline-none focus:border-primary ${
+          fieldState.error
+            ? "input-error"
+            : !fieldState.isDirty
+            ? ""
+            : "input-success"
+        } `}
       />
+      {fieldState.error?.message && (
+        <label className="label">
+          <span className="label-text-alt text-error">
+            {fieldState.error?.message}
+          </span>
+        </label>
+      )}
     </>
   );
 }

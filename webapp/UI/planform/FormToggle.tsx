@@ -1,27 +1,29 @@
+import { useController, UseControllerProps } from "react-hook-form";
+
 type Props = {
-  placeholder: string;
-  value?: boolean;
-  handleChange?: (value: boolean) => void;
-};
-export default function FormToggle({
-  placeholder,
-  value,
-  handleChange,
-}: Props) {
+  label: string;
+  type?: string;
+  showLabel?: boolean;
+} & UseControllerProps;
+export default function FormToggle(props: Props) {
+  const { fieldState, field } = useController({
+    ...props,
+    defaultValue: false,
+  });
+
   return (
     <>
-      <div className="w-52 flex flex-col">
+      <div className="w-52 flex flex-row justify-start items-center gap-2">
         <label className="cursor-pointer label">
-          <span className="label-text">{placeholder}</span>
-          <input
-            type="checkbox"
-            className="toggle toggle-primary"
-            checked={value}
-            onChange={(event) => {
-              handleChange?.(event.target.checked);
-            }}
-          />
+          <span className="label-text">{props.label}</span>
         </label>
+        <input
+          {...props}
+          {...field}
+          type="checkbox"
+          placeholder={props.label}
+          className="toggle"
+        />
       </div>
     </>
   );

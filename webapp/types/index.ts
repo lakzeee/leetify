@@ -42,12 +42,6 @@ export type UserRes = {
   error?: string;
 };
 
-export type UserSes = {
-  email: string;
-  image: string;
-  name: string;
-};
-
 export type QuestionKey = keyof Question;
 
 declare global {
