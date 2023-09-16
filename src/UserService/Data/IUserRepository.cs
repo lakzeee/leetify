@@ -7,5 +7,5 @@ namespace UserService.Data;
 public interface IUserRepository
 {
     public Task<User> GetUserByEmail(string email);
-    public Task CreateUser(UserDto userDto);
+    public Task<string> CreateUser(UserDto userDto);
 }

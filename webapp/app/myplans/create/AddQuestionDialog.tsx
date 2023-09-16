@@ -36,7 +36,7 @@ export default function EditQuestionDialog() {
           console.log("Failed getQuestionsByQuestionNumbers");
         });
     }
-  }, [questionNumbers]);
+  }, [questionNumbers, setQuestions]);
 
   const columTitles = ["no", "title", "topics", "difficulty"];
   return (

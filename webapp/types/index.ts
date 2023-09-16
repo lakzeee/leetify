@@ -23,6 +23,7 @@ export type PlanQuestion = {
   difficulty: string;
   groupName?: string;
   groupRank?: number;
+  groupOrder?: number;
 };
 
 export type User = {

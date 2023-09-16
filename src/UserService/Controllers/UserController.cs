@@ -53,8 +53,9 @@ public class UserController : ControllerBase
             if (user != null) return BadRequest("User existed");
             if (!userDto.IsConsent) return BadRequest("User not consent");
 
-            await _repo.CreateUser(userDto);
-            return StatusCode(201, $"User Created for {userDto.Email}");
+            var userId = await _repo.CreateUser(userDto);
+            if (userId == null) return BadRequest("Unexpected Error");
+            return StatusCode(201, new { userId = userId });
         }
         catch (Exception ex)
         {

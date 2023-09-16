@@ -1,5 +1,8 @@
-import { getSession } from "next-auth/react";
-import { getCurrentUser, getTokenWorkAround } from "@/app/session/authUtils";
+import {
+  getCurrentUser,
+  getSession,
+  getTokenWorkAround,
+} from "@/app/session/authUtils";
 import Container from "@/UI/container";
 
 export default async function Page() {
@@ -20,7 +23,7 @@ export default async function Page() {
       </div>
       <div>
         <h3>Token Data</h3>
-        <pre>{JSON.stringify(token, null, 2)}</pre>
+        <p className="flex-wrap">{JSON.stringify(token, null, 2)}</p>
       </div>
     </Container>
   );

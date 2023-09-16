@@ -1,8 +1,8 @@
 import { AiOutlineUser } from "react-icons/ai";
 import { User } from "next-auth";
-import { signIn, signOut } from "next-auth/react";
 import { BiLogIn, BiLogOut, BiUserPin } from "react-icons/bi";
 import AuthModal from "@/UI/nav/AuthModal";
+import { LogOut } from "@/Components/utils/authHelper";
 
 type Props = {
   avatarChar?: string;
@@ -55,7 +55,7 @@ export default function AvatarButton({ avatarChar, user }: Props) {
                 </button>
               </li>
               <li>
-                <button onClick={() => signOut()}>
+                <button onClick={() => LogOut()}>
                   <BiLogOut />
                   Log Out
                 </button>

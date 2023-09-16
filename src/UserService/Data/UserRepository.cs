@@ -1,5 +1,4 @@
 using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
 using MongoDB.Entities;
 using UserService.DTOs;
 using UserService.Models;
@@ -22,9 +21,11 @@ public class UserRepository : IUserRepository
             .ExecuteFirstAsync();
     }
 
-    public async Task CreateUser(UserDto userDto)
+    public async Task<string> CreateUser(UserDto userDto)
     {
         var newUser = _mapper.Map<User>(userDto);
         await newUser.SaveAsync();
+        if (newUser.ID != null) return newUser.ID.ToString();
+        return null;
     }
 }

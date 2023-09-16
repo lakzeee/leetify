@@ -30,6 +30,7 @@ export default function Consent({ params }: { params: { provider: string } }) {
               throw r.error;
             }
             if (!r.isNewUser) {
+              localStorage.setItem("userId", r.user?.id as string);
               router.push("/");
             } else {
               fetchUserInfo();
@@ -44,7 +45,7 @@ export default function Consent({ params }: { params: { provider: string } }) {
     }
 
     verifyIfIsNewUser();
-  }, []);
+  }, [router]);
 
   function handleCreateUser() {
     const data = {
@@ -61,6 +62,7 @@ export default function Consent({ params }: { params: { provider: string } }) {
           if (r.error) {
             throw r.error;
           }
+          localStorage.setItem("userId", r.userId as string);
           toast("Thanks for signing up!");
           router.push("/");
         })
