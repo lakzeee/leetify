@@ -1,5 +1,5 @@
 import { PlanQuestion } from "@/types";
-import TopicBadges from "@/UI/layout/table/TopicBadges";
+import TopicBadges from "@/UI/table/TopicBadges";
 import {
   IoIosAddCircle,
   IoIosCheckmarkCircle,
@@ -14,10 +14,7 @@ type Props = {
   question: PlanQuestion;
   existedGroupName?: string;
 };
-export default function PlanQuestionRow({
-  question,
-  existedGroupName = "",
-}: Props) {
+export default function PlanQuestionRow({ question, existedGroupName }: Props) {
   const [groupName, setGroupName] = useState(existedGroupName);
   const [isAdded, setIsAdded] = useState(false);
 
@@ -62,21 +59,25 @@ export default function PlanQuestionRow({
   return (
     <>
       <tr className="bg-white dark:bg-gray-800 dark:border-gray-700">
-        <td className="px-3 py-4">{question.leetCodeNo}</td>
-        <td className="px-3 py-4">{question.title}</td>
-        <td className="px-3 py-4">
-          <TopicBadges topics={question.topics} maxBadge={3} />
+        <td className="px-6 py-4">
+          <div className="flex flex-row justify-center items-center gap-2">
+            {question.leetCodeNo}
+          </div>
         </td>
-        <td className="px-3 py-4">{question.difficulty}</td>
-        <td className="px-3 py-4">
-          <div className="relative flex flex-row items-center">
+        <td className="px-6 py-4">{question.title}</td>
+        <td className="px-6 py-4">
+          <TopicBadges topics={question.topics} maxBadge={3} xs={true} />
+        </td>
+        <td className="px-6 py-4">{question.difficulty}</td>
+        <td className="px-6 py-4 min-w-[10rem]">
+          <div className="relative flex flex-row items-center w-full min-w-[15rem]">
             <input
               key={question.leetCodeNo}
               type="text"
               value={groupName}
               onChange={(e) => setGroupName(e.target.value)}
               placeholder="Group Name"
-              className="input min-w-1/2 rounded-full input-bordered w-full"
+              className="input rounded-full input-bordered w-full"
             />
             <div className="absolute flex flex-row right-0 p-2">
               <button

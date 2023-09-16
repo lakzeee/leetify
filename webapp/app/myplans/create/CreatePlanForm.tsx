@@ -1,8 +1,8 @@
 "use client";
-import FormInput from "@/UI/layout/planform/FormInput";
-import FormToggle from "@/UI/layout/planform/FormToggle";
+import FormInput from "@/UI/planform/FormInput";
+import FormToggle from "@/UI/planform/FormToggle";
 import { useCreatePlanStore } from "@/Components/hooks/useCreatePlanStore";
-import AddedQuestionTable from "@/UI/layout/table/AddedQuestionTable";
+import AddedQuestionTable from "@/UI/table/AddedQuestionTable";
 import { useTablekeyStore } from "@/Components/hooks/useTablekeyStore";
 import { Tooltip } from "react-tooltip";
 
@@ -34,7 +34,10 @@ export default function CreatePlanForm() {
 
   return (
     <>
-      <div className="form-control flex flex-col gap-2" onSubmit={handleSubmit}>
+      <div
+        className="form-control flex flex-col gap-2 w-full"
+        onSubmit={handleSubmit}
+      >
         <FormInput
           placeholder="Plan Name"
           value={planName}

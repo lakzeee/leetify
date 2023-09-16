@@ -1,7 +1,7 @@
 import { Question, QuestionKey } from "@/types";
-import QuestionRow from "@/UI/layout/table/QuestionRow";
-import TableWrapper from "@/UI/layout/table/tablebase/TableWrapper";
-import TableHeader from "@/UI/layout/table/tablebase/TableHeader";
+import QuestionRow from "@/UI/table/QuestionRow";
+import TableWrapper from "@/UI/table/tablebase/TableWrapper";
+import TableHeader from "@/UI/table/tablebase/TableHeader";
 
 type Props = {
   columTitles: string[];

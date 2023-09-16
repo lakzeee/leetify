@@ -1,28 +1,25 @@
+"use client";
 import React, { useEffect } from "react";
 import { FiMoon, FiSun } from "react-icons/fi";
 import { useLocalStorage } from "usehooks-ts";
 
 export default function ThemeButton() {
-  //we store the theme in localStorage to preserve the state on next visit with an initial theme of dark.
   const [theme, setTheme] = useLocalStorage("color-theme", "night");
-
-  //toggles the theme
   const toggleTheme = () => {
     if (theme === "night") {
       setTheme("winter");
-      document.documentElement.classList.remove("dark");
     } else if (theme === "winter") {
       setTheme("night");
-      document.documentElement.classList.add("dark");
     }
   };
 
-  //modify data-theme attribute on document.body when theme changes
   useEffect(() => {
     const body = document.documentElement;
     body.setAttribute("data-theme", theme);
     if (theme === "winter") {
       document.documentElement.classList.remove("dark");
+    } else {
+      document.documentElement.classList.add("dark");
     }
   }, [theme]);
 

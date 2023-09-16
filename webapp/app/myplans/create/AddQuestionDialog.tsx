@@ -2,16 +2,17 @@
 import { useEffect, useState } from "react";
 import { useCreatePlanStore } from "@/Components/hooks/useCreatePlanStore";
 import { getQuestionsByQuestionNumbers } from "@/Components/actions/questionActions";
-import PlanQuestionsTable from "@/UI/layout/table/PlanQuestionsTable";
+import PlanQuestionsTable from "@/UI/table/PlanQuestionsTable";
 import { useTablekeyStore } from "@/Components/hooks/useTablekeyStore";
 import { Tooltip } from "react-tooltip";
+import { Simulate } from "react-dom/test-utils";
+import error = Simulate.error;
 
 export default function EditQuestionDialog() {
   const [questionNumbers, setQuestionNumbers] = useState("");
   const questions = useCreatePlanStore((state) => state.questions);
   const setQuestions = useCreatePlanStore((state) => state.setQuestions);
   const resetQuestion = useCreatePlanStore((state) => state.resetQuestions);
-  const addedQuestions = useCreatePlanStore((state) => state.addedQuestions);
   const { inc } = useTablekeyStore();
 
   function resetSearch() {
@@ -26,9 +27,14 @@ export default function EditQuestionDialog() {
 
   useEffect(() => {
     if (questionNumbers && !questionNumbers.endsWith(",")) {
-      getQuestionsByQuestionNumbers(questionNumbers).then((data) => {
-        setQuestions(data);
-      });
+      getQuestionsByQuestionNumbers(questionNumbers)
+        .then((data: any) => {
+          if (data.error) throw data.error;
+          setQuestions(data);
+        })
+        .catch((error) => {
+          console.log("Failed getQuestionsByQuestionNumbers");
+        });
     }
   }, [questionNumbers]);
 

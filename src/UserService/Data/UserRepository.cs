@@ -15,7 +15,7 @@ public class UserRepository : IUserRepository
         _mapper = mapper;
     }
 
-    public async Task<ActionResult<User>> GetUserByEmail(string email)
+    public async Task<User> GetUserByEmail(string email)
     {
         return await DB.Find<User>()
             .Match(u => u.Email == email)

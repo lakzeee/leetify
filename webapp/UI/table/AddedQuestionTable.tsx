@@ -1,13 +1,13 @@
-import PlanQuestionRow from "@/UI/layout/table/PlanQuestionRow";
+import PlanQuestionRow from "@/UI/table/PlanQuestionRow";
 import { PlanQuestion } from "@/types";
-import TableWrapper from "@/UI/layout/table/tablebase/TableWrapper";
-import TableHeader from "@/UI/layout/table/tablebase/TableHeader";
+import TableWrapper from "@/UI/table/tablebase/TableWrapper";
+import TableHeader from "@/UI/table/tablebase/TableHeader";
 import {
   generateRandomKey,
   groupPlanQuestionsByGroupName,
 } from "@/Components/utils/helpers";
 import React from "react";
-import TableGroupRow from "@/UI/layout/table/tablebase/TableGroupRow";
+import TableGroupRow from "@/UI/table/tablebase/TableGroupRow";
 
 type Props = {
   data: PlanQuestion[];

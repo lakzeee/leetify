@@ -1,5 +1,5 @@
-import DifficultyFilter from "@/UI/layout/table/filter/DifficultyFilter";
-import TopicsFilter from "@/UI/layout/table/filter/TopicsFilter";
+import DifficultyFilter from "@/UI/table/filter/DifficultyFilter";
+import TopicsFilter from "@/UI/table/filter/TopicsFilter";
 
 export default function Filters() {
   return (

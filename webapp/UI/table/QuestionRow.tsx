@@ -1,5 +1,5 @@
 import { Question } from "@/types";
-import TopicBadges from "@/UI/layout/table/TopicBadges";
+import TopicBadges from "@/UI/table/TopicBadges";
 
 type Props = {
   question: Question;

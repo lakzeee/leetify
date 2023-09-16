@@ -1,4 +1,4 @@
-import { PageResult, PlanQuestion, Question } from "@/types";
+import { PageResult, PlanQuestion, Question, UserRes } from "@/types";
 import { fetchWrapper } from "@/Components/utils/fetchWrapper";
 
 export async function getQuestionData(

@@ -3,7 +3,7 @@ import { useQuestionsSearchParamsStore } from "@/Components/hooks/useQuestionsSe
 import { useQuestionsStore } from "@/Components/hooks/useQuestionsStore";
 import { getQuestionData } from "@/Components/actions/questionActions";
 import qs from "query-string";
-import QuestionsTable from "@/UI/layout/table/QuestionsTable";
+import QuestionsTable from "@/UI/table/QuestionsTable";
 import { Pagination } from "flowbite-react";
 import Filters from "@/app/questions/Filters";
 
@@ -47,7 +47,7 @@ export default function QuestionsList() {
     );
 
   return (
-    <>
+    <div className="w-full">
       <Filters />
       <QuestionsTable data={data.questions} columTitles={columTitles} />
       <Pagination
@@ -58,6 +58,6 @@ export default function QuestionsList() {
         nextLabel=""
         previousLabel=""
       />
-    </>
+    </div>
   );
 }

@@ -23,6 +23,7 @@ type Actions = {
     data: PlanQuestion,
     groupName: string | undefined,
   ) => void;
+  // updateGroupRank: (questionNo: number, increase: boolean) => void;
   removeFromAddedQuestions: (questionNo: number) => void;
 };
 
@@ -32,7 +33,7 @@ const initialState: State = {
   tags: "",
   isPublic: false,
   questions: undefined,
-  addedQuestions: undefined,
+  addedQuestions: [],
   questionsString: "",
 };
 
@@ -50,13 +51,28 @@ export const useCreatePlanStore = createWithEqualityFn<State & Actions>(
         const addedQuestions = Array.isArray(state.addedQuestions)
           ? state.addedQuestions
           : [];
+
+        let maxGroupRank = 0;
+        if (addedQuestions && addedQuestions.length > 0) {
+          maxGroupRank = (
+            addedQuestions.filter(
+              (q) => q.groupName === groupName,
+            ) as PlanQuestion[]
+          ).reduce((maxRank: number, q: PlanQuestion) => {
+            return q.groupRank && q.groupRank > maxRank ? q.groupRank : maxRank;
+          }, 0);
+        }
+        const newGroupRank = maxGroupRank + 1;
+
         const existingQuestionIndex = addedQuestions.findIndex(
           (q) => q.leetCodeNo == question.leetCodeNo,
         );
         if (existingQuestionIndex !== -1) {
           addedQuestions[existingQuestionIndex].groupName = groupName;
+          addedQuestions[existingQuestionIndex].groupRank = newGroupRank;
         } else {
           question.groupName = groupName;
+          question.groupRank = newGroupRank;
           addedQuestions.push(question);
         }
         return { addedQuestions };

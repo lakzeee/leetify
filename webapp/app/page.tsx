@@ -1,3 +1,6 @@
+"use client";
+import Container from "../UI/container";
+
 export default function Home() {
-  return <div>hello</div>;
+  return <Container>hello</Container>;
 }

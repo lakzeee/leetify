@@ -1,11 +1,33 @@
+import { getTokenWorkAround } from "@/app/session/authUtils";
+
 const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
 async function get(url: string) {
   const requestOptions = {
     method: "GET",
+    headers: await getHears(),
   };
   const response = await fetch(baseUrl + url, requestOptions);
   return await handleResponse(response);
+}
+
+async function post(url: string, body: {}) {
+  const requestOptions = {
+    method: "POST",
+    headers: await getHears(),
+    body: JSON.stringify(body),
+  };
+  const response = await fetch(baseUrl + url, requestOptions);
+  return await handleResponse(response);
+}
+
+async function getHears() {
+  const token = await getTokenWorkAround(true);
+  const headers = { "Content-type": "application/json" } as any;
+  if (token) {
+    headers.Authorization = "Bearer " + token;
+  }
+  return headers;
 }
 
 async function handleResponse(response: Response) {
@@ -29,4 +51,4 @@ async function handleResponse(response: Response) {
   }
 }
 
-export const fetchWrapper = { get };
+export const fetchWrapper = { get, post };

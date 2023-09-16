@@ -1,8 +1,6 @@
 using System.Security.Claims;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Entities;
 using Serilog;
 using UserService.Data;
 using UserService.DTOs;
@@ -34,8 +32,8 @@ public class UserController : ControllerBase
         try
         {
             var user = await _repo.GetUserByEmail(email);
-            if (user == null) return NotFound();
-            return Ok(user);
+            if (user == null) return Ok(new { IsNewUser = true, User = "" });
+            return Ok(new { IsNewUser = false, User = user });
         }
         catch (Exception ex)
         {
@@ -51,9 +49,7 @@ public class UserController : ControllerBase
         try
         {
             if (!VerifyUserEmail(userDto.Email)) return Forbid();
-            var user = await DB.Find<User>()
-                .Match(u => u.Email == userDto.Email)
-                .ExecuteFirstAsync();
+            var user = await _repo.GetUserByEmail(userDto.Email);
             if (user != null) return BadRequest("User existed");
             if (!userDto.IsConsent) return BadRequest("User not consent");
 

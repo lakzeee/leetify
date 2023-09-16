@@ -1,5 +1,6 @@
 import { getSession } from "next-auth/react";
 import { getCurrentUser, getTokenWorkAround } from "@/app/session/authUtils";
+import Container from "@/UI/container";
 
 export default async function Page() {
   const session = await getSession();
@@ -7,7 +8,7 @@ export default async function Page() {
   const user = await getCurrentUser();
 
   return (
-    <div>
+    <Container>
       <h1 title="Session Dashboard" />
       <div>
         <h3>Current User</h3>
@@ -21,6 +22,6 @@ export default async function Page() {
         <h3>Token Data</h3>
         <pre>{JSON.stringify(token, null, 2)}</pre>
       </div>
-    </div>
+    </Container>
   );
 }

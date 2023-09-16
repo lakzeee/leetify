@@ -11,7 +11,7 @@ export default function TableHeader({ columTitles }: Props) {
           <th
             key={`${columTitles}_${generateRandomKey()}`}
             scope="col"
-            className="px-6 py-3"
+            className="px-6 py-3 text-center"
           >
             {title}
           </th>
