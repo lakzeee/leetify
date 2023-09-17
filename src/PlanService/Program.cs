@@ -9,6 +9,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using PlanService.Data;
+using Polly;
 using Serilog;
 
 IdentityModelEventSource.ShowPII = true;
@@ -59,6 +61,9 @@ builder.Services.AddAuthentication(o =>
         };
     });
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddScoped<IPlanRepository, PlanRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -75,5 +80,12 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.Lifetime.ApplicationStarted.Register(async () =>
+{
+    await Policy.Handle<TimeoutException>()
+        .WaitAndRetryAsync(5, _ => TimeSpan.FromSeconds(10))
+        .ExecuteAndCaptureAsync(async () => await DbInitializer.InitDb(app));
+});
 
 app.Run();

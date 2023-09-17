@@ -36,6 +36,7 @@ export default function CreatePlanForm() {
     }
     const data = {
       userId: userId,
+      tags: formData.tags,
       description: formData.description,
       isPublic: formData.isPublic,
       planName: formData.planName,
