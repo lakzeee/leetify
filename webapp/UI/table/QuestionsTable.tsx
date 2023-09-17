@@ -1,5 +1,5 @@
-import { Question, QuestionKey } from "@/types";
-import QuestionRow from "@/UI/table/QuestionRow";
+import { Question } from "@/types";
+import QuestionRow from "@/UI/table/row/QuestionRow";
 import TableWrapper from "@/UI/table/tablebase/TableWrapper";
 import TableHeader from "@/UI/table/tablebase/TableHeader";
 

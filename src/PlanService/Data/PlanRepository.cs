@@ -19,30 +19,59 @@ public class PlanRepository : IPlanRepository
         _mapper = mapper;
     }
 
-    public async Task<bool> SavePlanAsync(CreatePlanDto createPlanDto)
+    public async Task<string> SavePlanAsync(CreatePlanDto createPlanDto)
     {
         try
         {
             var plan = _mapper.Map<CreatePlanDto, Plan>(createPlanDto);
+            plan.CreatedAt = DateTime.UtcNow;
+            plan.UpdatedAt = DateTime.UtcNow;
             await plan.SaveAsync();
-            return true;
+            return plan.ID.ToString();
         }
         catch (Exception e)
         {
             Log.Error("Saving createPlanDto Fail", e.Message);
-            return false;
+            return null;
         }
     }
 
-    public async Task<List<Plan>> GetUserCreatedPlan(string userId)
+    public async Task<List<UserPlanDto>> GetUserCreatedPlan(string userId)
     {
-        var plans = await DB.Find<Plan>().ManyAsync(a => a.UserId == userId);
-        return plans;
+        var plans = await DB.Find<Plan>()
+            .ManyAsync(a => a.UserId == userId);
+        var userPlans = _mapper.Map<List<Plan>, List<UserPlanDto>>(plans);
+        return userPlans;
     }
 
     public async Task<List<Plan>> GetAllPublicPlan()
     {
         var plans = await DB.Find<Plan>().ManyAsync(a => a.IsPublic == true);
         return plans;
+    }
+
+    public async Task<Plan> GetPlanById(string planId)
+    {
+        return await DB.Find<Plan>().OneAsync(planId);
+    }
+
+    public async Task<bool> UpdatePlanById(CreatePlanDto createPlanDto, string planId)
+    {
+        var plan = await DB.Find<Plan>().OneAsync(planId);
+        if (plan == null) return false;
+        plan.PlanName = createPlanDto.PlanName;
+        plan.Description = createPlanDto.Description;
+        plan.IsPublic = createPlanDto.IsPublic;
+        plan.QuestionList = _mapper.Map<List<PlanQuestionDto>, List<PlanQuestion>>(createPlanDto.QuestionList);
+        plan.UpdatedAt = DateTime.UtcNow;
+        await plan.SaveAsync();
+        return true;
+    }
+
+    public async Task<bool> DeletePlanById(string planId)
+    {
+        var plan = await DB.Find<Plan>().OneAsync(planId);
+        await plan.DeleteAsync();
+        return true;
     }
 }

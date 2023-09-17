@@ -1,4 +1,4 @@
-import PlanQuestionRow from "@/UI/table/PlanQuestionRow";
+import PlanQuestionRow from "@/UI/table/row/PlanQuestionRow";
 import { PlanQuestion } from "@/types";
 import TableWrapper from "@/UI/table/tablebase/TableWrapper";
 import TableHeader from "@/UI/table/tablebase/TableHeader";

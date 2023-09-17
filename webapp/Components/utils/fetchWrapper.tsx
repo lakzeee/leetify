@@ -1,4 +1,5 @@
 import { getTokenWorkAround } from "@/app/session/authUtils";
+import { ErrorRes } from "@/types";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -21,6 +22,24 @@ async function post(url: string, body: {}) {
   return await handleResponse(response);
 }
 
+async function put(url: string, body: {}) {
+  const requestOptions = {
+    method: "PUT",
+    headers: await getHears(),
+    body: JSON.stringify(body),
+  };
+  const response = await fetch(baseUrl + url, requestOptions);
+  return await handleResponse(response);
+}
+
+async function del(url: string) {
+  const requestOptions = {
+    method: "DELETE",
+    headers: await getHears(),
+  };
+  const response = await fetch(baseUrl + url, requestOptions);
+  return await handleResponse(response);
+}
 async function getHears() {
   const token = await getTokenWorkAround(true);
   const headers = { "Content-type": "application/json" } as any;
@@ -51,4 +70,4 @@ async function handleResponse(response: Response) {
   }
 }
 
-export const fetchWrapper = { get, post };
+export const fetchWrapper = { get, post, put, del };

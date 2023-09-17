@@ -13,7 +13,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" data-theme="night" className="dark">
+    <html lang="en" data-theme="night" className={"dark"}>
       <body>
         <ToasterProvider />
         <main>{children}</main>

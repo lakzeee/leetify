@@ -6,14 +6,13 @@ import { useRouter } from "next/navigation";
 import Container from "@/UI/container";
 import ConsentCheckBox from "@/app/consent/[provider]/ConsentCheckBox";
 import { signOut } from "next-auth/react";
-import { UserSes } from "@/types";
 import toast from "react-hot-toast";
 
 export default function Consent({ params }: { params: { provider: string } }) {
   const router = useRouter();
   const [isNewUser, setIsNewUser] = useState(false);
   const [isConsent, setIsConsent] = useState(false);
-  const [user, setUser] = useState<UserSes>();
+  const [user, setUser] = useState<any>();
 
   useEffect(() => {
     async function fetchUserInfo() {

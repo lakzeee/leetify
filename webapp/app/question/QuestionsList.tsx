@@ -5,7 +5,7 @@ import { getQuestionData } from "@/Components/actions/questionActions";
 import qs from "query-string";
 import QuestionsTable from "@/UI/table/QuestionsTable";
 import { Pagination } from "flowbite-react";
-import Filters from "@/app/questions/Filters";
+import Filters from "@/app/question/Filters";
 
 export default function QuestionsList() {
   const [loading, setLoading] = useState(true);

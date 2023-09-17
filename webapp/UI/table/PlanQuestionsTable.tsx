@@ -1,5 +1,5 @@
-import { PlanQuestion, Question, QuestionKey } from "@/types";
-import PlanQuestionRow from "@/UI/table/PlanQuestionRow";
+import { PlanQuestion } from "@/types";
+import PlanQuestionRow from "@/UI/table/row/PlanQuestionRow";
 
 type Props = {
   columTitles: string[];

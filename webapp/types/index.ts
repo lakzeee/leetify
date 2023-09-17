@@ -1,10 +1,10 @@
-export type PageResult<T> = {
+export interface PageResult<T> {
   results: T[];
   pageCount: number;
   totalCount: number;
-};
+}
 
-export type Question = {
+export interface Question {
   id: string;
   leetCodeNo: number;
   title: string;
@@ -14,9 +14,10 @@ export type Question = {
   difficulty: string;
   createdAt?: string;
   updatedAt?: string;
-};
+}
 
-export type PlanQuestion = {
+export interface PlanQuestion {
+  id?: string;
   leetCodeNo: number;
   title: string;
   topics: string;
@@ -24,9 +25,24 @@ export type PlanQuestion = {
   groupName?: string;
   groupRank?: number;
   groupOrder?: number;
-};
+}
 
-export type User = {
+export interface CreatePlanReq {
+  planName: string;
+  tags?: string;
+  description: string;
+  isPublic: boolean;
+  userId: string;
+  questionList?: PlanQuestion[];
+}
+
+export interface PlanQuestionRes extends CreatePlanReq {
+  createdAt: string;
+  updatedAt: string;
+  id: string;
+}
+
+export interface User {
   name: string;
   email: string;
   authProvider: string;
@@ -34,15 +50,20 @@ export type User = {
   createdAt: string;
   updatedAt: string;
   id: string;
-};
+}
 
-export type UserRes = {
+export interface UserRes {
   isNewUser: boolean;
   user: User | undefined;
   error?: string;
-};
+}
 
-export type QuestionKey = keyof Question;
+export interface ErrorRes {
+  error: {
+    status: number;
+    message: string;
+  };
+}
 
 declare global {
   namespace NodeJS {

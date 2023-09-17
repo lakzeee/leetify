@@ -8,25 +8,51 @@ import { Tooltip } from "react-tooltip";
 import toast from "react-hot-toast";
 import { FieldValues, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
+import {
+  CreateNewPlan,
+  UpdatePlanDetailById,
+} from "@/Components/actions/planActions";
+import { useRouter } from "next/navigation";
+import { PlanQuestionRes } from "@/types";
 
-export default function CreatePlanForm() {
+type Props = {
+  planDetail?: PlanQuestionRes;
+  planId?: string;
+};
+export default function CreatePlanForm({ planDetail, planId }: Props) {
   // manage state of the form
   const [loading, setLoading] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
   const addedQuestions = useCreatePlanStore((state) => state.addedQuestions);
+  const resetAddQuestions = useCreatePlanStore(
+    (state) => state.resetAddQuestions,
+  );
+  const setAddedQuestionsFromList = useCreatePlanStore(
+    (state) => state.setAddedQuestionsFromList,
+  );
   const { tableKey } = useTablekeyStore();
+  const router = useRouter();
 
   const {
     control,
     handleSubmit,
     setFocus,
+    reset,
     formState: { isSubmitting, isValid },
   } = useForm({
     mode: "onTouched",
   });
 
   useEffect(() => {
+    if (planDetail) {
+      const { planName, isPublic, description, tags } = planDetail;
+      reset({ planName, isPublic, description, tags });
+      setIsUpdate(true);
+      if (planDetail.questionList)
+        setAddedQuestionsFromList(planDetail.questionList);
+    }
     setFocus("planName");
-  }, []);
+  }, [setFocus]);
 
   function onSubmit(formData: FieldValues) {
     const userId = localStorage.getItem("userId");
@@ -42,7 +68,36 @@ export default function CreatePlanForm() {
       planName: formData.planName,
       questionList: addedQuestions,
     };
-    console.log(data);
+    setLoading(true);
+
+    if (isUpdate) {
+      if (planId) {
+        UpdatePlanDetailById(planId, data)
+          .then((r) => {
+            if (r.error) {
+              throw r.error;
+            }
+            setLoading(false);
+            toast.success("Plan Update Success");
+            router.push(`/plan`);
+          })
+          .catch();
+      } else {
+        return;
+      }
+    } else {
+      CreateNewPlan(data)
+        .then((r) => {
+          if (r.error) {
+            throw r.error;
+          }
+          setLoading(true);
+          resetAddQuestions();
+          toast.success("Plan Create Success");
+          router.push(`/plan`);
+        })
+        .catch();
+    }
   }
 
   return (
@@ -71,7 +126,7 @@ export default function CreatePlanForm() {
           control={control}
         />
         <div>
-          <button
+          <div
             className="btn btn-md"
             onClick={() =>
               // @ts-ignore
@@ -79,22 +134,20 @@ export default function CreatePlanForm() {
             }
           >
             Add a question
-          </button>
+          </div>
         </div>
-
         {addedQuestions && addedQuestions.length > 0 && (
           <AddedQuestionTable key={tableKey} data={addedQuestions} />
         )}
 
         <div>
           <button
-            type="submit"
             className={`btn ${
               (!isValid || !addedQuestions || addedQuestions.length == 0) &&
               "btn-disabled"
             }`}
           >
-            Submit
+            {isUpdate ? "Update" : "Create"}
           </button>
         </div>
         <Tooltip id="remove-tooltip" />

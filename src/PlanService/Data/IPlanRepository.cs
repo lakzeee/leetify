@@ -7,8 +7,12 @@ namespace PlanService.Data;
 
 public interface IPlanRepository
 {
-    public Task<bool> SavePlanAsync(CreatePlanDto createPlanDto);
+    public Task<string> SavePlanAsync(CreatePlanDto createPlanDto);
 
-    public Task<List<Plan>> GetUserCreatedPlan(string userId);
+    public Task<List<UserPlanDto>> GetUserCreatedPlan(string userId);
     public Task<List<Plan>> GetAllPublicPlan();
+    public Task<Plan> GetPlanById(string planId);
+
+    public Task<bool> UpdatePlanById(CreatePlanDto createPlanDto, string planId);
+    public Task<bool> DeletePlanById(string planId);
 }

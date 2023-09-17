@@ -30,17 +30,42 @@ public class PlanController : ControllerBase
         return email == claim?[1].Value;
     }
 
+
+    [HttpGet("{planId}")]
+    public async Task<ActionResult<List<Plan>>> GetPlanById(string planId)
+    {
+        return Ok(await _repo.GetPlanById(planId));
+    }
+
+
     [HttpPost]
     public async Task<ActionResult> CreateNewPlan([FromBody] CreatePlanDto createPlanDto)
     {
         var res = await _repo.SavePlanAsync(createPlanDto);
-        if (!res) return BadRequest("Something went wrong");
+        if (res == null) return BadRequest("Something went wrong");
+        return Ok(new { PlanId = res });
+    }
+
+    [HttpPut("{planId}")]
+    public async Task<ActionResult> UpdatePlanById([FromBody] CreatePlanDto createPlanDto, string planId)
+    {
+        var res = await _repo.UpdatePlanById(createPlanDto, planId);
+        if (!res) return StatusCode(500, "Internal Server Error");
         return Ok();
     }
 
-    [HttpGet("{userId}")]
+    [HttpDelete("{planId}")]
+    public async Task<ActionResult> DeletePlanById(string planId)
+    {
+        var res = await _repo.DeletePlanById(planId);
+        if (!res) return StatusCode(500, "Internal Server Error");
+        return Ok();
+    }
+
+    [HttpGet]
+    [Route("user/{userId}")]
     [Authorize]
-    public async Task<ActionResult<List<Plan>>> GetUserCreatedPlan(string userId)
+    public async Task<ActionResult<List<UserPlanDto>>> GetUserCreatedPlan(string userId)
     {
         try
         {
@@ -59,4 +84,5 @@ public class PlanController : ControllerBase
     {
         return Ok(await _repo.GetAllPublicPlan());
     }
+
 }

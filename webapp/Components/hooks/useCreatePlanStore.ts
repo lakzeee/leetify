@@ -19,12 +19,14 @@ type Actions = {
   setIsPublic: (isPublic: boolean) => void;
   setQuestions: (data: PlanQuestion[]) => void;
   resetQuestions: () => void;
+  resetAddQuestions: () => void;
   addToAddedQuestions: (
     data: PlanQuestion,
     groupName: string | undefined,
   ) => void;
   // updateGroupRank: (questionNo: number, increase: boolean) => void;
   removeFromAddedQuestions: (questionNo: number) => void;
+  setAddedQuestionsFromList: (data: PlanQuestion[]) => void;
 };
 
 const initialState: State = {
@@ -32,7 +34,7 @@ const initialState: State = {
   description: "",
   tags: "",
   isPublic: false,
-  questions: undefined,
+  questions: [],
   addedQuestions: [],
   questionsString: "",
 };
@@ -44,8 +46,11 @@ export const useCreatePlanStore = createWithEqualityFn<State & Actions>(
     setDescription: (description) => set({ description: description }),
     setTags: (tags) => set({ tags: tags }),
     setIsPublic: (isPublic) => set({ isPublic: isPublic }),
-    resetQuestions: () => set({ questions: undefined }),
+    resetQuestions: () => set({ questions: [] }),
+    resetAddQuestions: () => set({ addedQuestions: [] }),
     setQuestions: (questions) => set({ questions: questions }),
+    setAddedQuestionsFromList: (questionList) =>
+      set({ addedQuestions: questionList }),
     addToAddedQuestions: (question, groupName) =>
       set((state) => {
         const addedQuestions = Array.isArray(state.addedQuestions)

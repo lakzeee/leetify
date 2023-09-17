@@ -12,7 +12,7 @@ public class Plan : Entity
     public string Description { get; set; }
     public bool IsPublic { get; set; }
     public string UserId { get; set; }
-    public List<PlanQuestion> PlanQuestion { get; set; }
+    public List<PlanQuestion> QuestionList { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 }
@@ -21,6 +21,7 @@ public class PlanQuestion
 {
     public string Id { get; set; }
     public int LeetCodeNo { get; set; }
+    public string Topics { get; set; }
     public string Title { get; set; }
     public string Difficulty { get; set; }
     public string GroupName { get; set; }

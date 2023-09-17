@@ -1,5 +1,5 @@
-import EditQuestionDialog from "@/app/myplans/create/AddQuestionDialog";
-import CreatePlanForm from "@/app/myplans/create/CreatePlanForm";
+import EditQuestionDialog from "@/app/plan/create/AddQuestionDialog";
+import CreatePlanForm from "@/app/plan/create/CreatePlanForm";
 import Container from "../../../UI/container";
 import { getCurrentUser } from "@/app/session/authUtils";
 import Heading from "@/UI/heading";
