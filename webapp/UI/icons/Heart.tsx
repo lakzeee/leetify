@@ -11,12 +11,14 @@ type Props = {
   userId?: string;
   planId: string;
   showWhenNotSaved?: boolean;
+  isClickable?: boolean;
 };
 
 export default function Heart({
   userId,
   planId,
   showWhenNotSaved = false,
+  isClickable = true,
 }: Props) {
   const [isSaved, setIsSaved] = useState(false);
   const savedPlans = useSavedPlansStore((state) => state.savedPlans);
@@ -26,6 +28,7 @@ export default function Heart({
   );
 
   function handleSaveButton() {
+    if (!isClickable) return;
     if (!userId) {
       toast("Please log in to do that");
       return;

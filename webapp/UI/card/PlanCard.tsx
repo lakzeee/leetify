@@ -6,18 +6,28 @@ import { useRouter } from "next/navigation";
 type Props = {
   plan: PlanQuestionRes;
   userId?: string;
+  heartClickable?: boolean;
 };
-export default function PlanCard({ plan, userId }: Props) {
+export default function PlanCard({
+  plan,
+  userId,
+  heartClickable = true,
+}: Props) {
   const router = useRouter();
 
   return (
     <div
       onClick={() => router.push(`/plan/public/${plan.id}`)}
-      className="relative card w-90 h-30 bg-base-200 shadow-xl cursor-pointer"
+      className="relative card w-90 h-30 shadow-xl cursor-pointer"
     >
       <div className="-z-0">
         <div className="absolute right-0 mr-8">
-          <Heart planId={plan.id} showWhenNotSaved={false} userId={userId} />
+          <Heart
+            planId={plan.id}
+            showWhenNotSaved={false}
+            userId={userId}
+            isClickable={heartClickable}
+          />
         </div>
         <div className="card-body">
           <h2 className="card-title">

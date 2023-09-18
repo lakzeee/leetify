@@ -5,16 +5,16 @@ import React from "react";
 import UserPlanRow from "@/UI/table/row/UserPlanRow";
 type Props = {
   userPlans: PlanQuestionRes[];
+  enableAction?: boolean;
+  enableProgress?: boolean;
 };
-export default function UserPlansTable({ userPlans }: Props) {
-  const columTitles = [
-    "Name",
-    "isPublic",
-    "tags",
-    "createdAt",
-    "updatedAt",
-    "",
-  ];
+export default function UserPlansTable({
+  userPlans,
+  enableAction = true,
+  enableProgress = false,
+}: Props) {
+  const columTitles = ["Name", "isPublic", "tags", "createdAt", "updatedAt"];
+  if (enableAction) columTitles.push(" ");
 
   return (
     <TableWrapper>
@@ -23,7 +23,12 @@ export default function UserPlansTable({ userPlans }: Props) {
         {userPlans &&
           userPlans.length > 0 &&
           userPlans.map((userPlan) => (
-            <UserPlanRow key={userPlan.id} userPlan={userPlan} />
+            <UserPlanRow
+              key={userPlan.id}
+              userPlan={userPlan}
+              enableAction={enableAction}
+              enableProgress={enableProgress}
+            />
           ))}
       </tbody>
     </TableWrapper>

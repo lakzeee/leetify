@@ -1,5 +1,5 @@
 import { fetchWrapper } from "@/Components/utils/fetchWrapper";
-import { CreatePlanReq, ErrorRes, PlanQuestionRes } from "@/types";
+import { CreatePlanReq, PlanQuestionRes } from "@/types";
 
 export async function CreateNewPlan(data: CreatePlanReq): Promise<any> {
   return await fetchWrapper.post(`/plan`, data);
@@ -49,4 +49,10 @@ export async function RemovePlanFromUser(data: {
   planId: string;
 }) {
   return await fetchWrapper.post(`/plan/remove`, data);
+}
+
+export async function GetUserSavedPlans(
+  userId: string,
+): Promise<PlanQuestionRes[]> {
+  return await fetchWrapper.get(`/plan/public/user/${userId}`);
 }

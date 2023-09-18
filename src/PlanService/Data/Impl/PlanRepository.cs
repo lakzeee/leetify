@@ -35,12 +35,19 @@ public class PlanRepository : IPlanRepository
         }
     }
 
-    public async Task<List<PlanDto>> GetUserCreatedPlan(string userId)
+    public async Task<List<PlanDto>> GetUserCreatedPlans(string userId)
     {
         var plans = await DB.Find<Plan>()
             .ManyAsync(a => a.UserId == userId);
         var userPlans = _mapper.Map<List<Plan>, List<PlanDto>>(plans);
         return userPlans;
+    }
+
+    public async Task<List<PlanDto>> GetPlansByPlanIds(List<string> planIds)
+    {
+        var savedPlans = new List<Plan>();
+        foreach (var planId in planIds) savedPlans.Add(await DB.Find<Plan>().OneAsync(planId));
+        return _mapper.Map<List<Plan>, List<PlanDto>>(savedPlans);
     }
 
     public async Task<List<PlanDto>> GetAllPublicPlan()

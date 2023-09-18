@@ -44,7 +44,12 @@ export default function PublicPlan() {
         {publicPlansData &&
           publicPlansData.length > 0 &&
           publicPlansData.map((plan) => (
-            <PlanCard key={plan.id} plan={plan} userId={userId} />
+            <PlanCard
+              key={plan.id}
+              plan={plan}
+              userId={userId}
+              heartClickable={false}
+            />
           ))}
       </div>
     </Container>
