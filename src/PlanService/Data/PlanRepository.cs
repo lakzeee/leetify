@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using MongoDB.Bson;
 using MongoDB.Entities;
 using PlanService.DTOs;
 using PlanService.Models;
@@ -36,23 +35,29 @@ public class PlanRepository : IPlanRepository
         }
     }
 
-    public async Task<List<UserPlanDto>> GetUserCreatedPlan(string userId)
+    public async Task<List<PlanDto>> GetUserCreatedPlan(string userId)
     {
         var plans = await DB.Find<Plan>()
             .ManyAsync(a => a.UserId == userId);
-        var userPlans = _mapper.Map<List<Plan>, List<UserPlanDto>>(plans);
+        var userPlans = _mapper.Map<List<Plan>, List<PlanDto>>(plans);
         return userPlans;
     }
 
-    public async Task<List<Plan>> GetAllPublicPlan()
+    public async Task<List<PlanDto>> GetAllPublicPlan()
     {
         var plans = await DB.Find<Plan>().ManyAsync(a => a.IsPublic == true);
-        return plans;
+        var publicPlan = _mapper.Map<List<Plan>, List<PlanDto>>(plans);
+        return publicPlan;
     }
-
     public async Task<Plan> GetPlanById(string planId)
     {
         return await DB.Find<Plan>().OneAsync(planId);
+    }
+
+    public async Task<Plan> GetPublicPlanById(string planId)
+    {
+        var plan = await DB.Find<Plan>().OneAsync(planId);
+        return plan.IsPublic ? plan : null;
     }
 
     public async Task<bool> UpdatePlanById(CreatePlanDto createPlanDto, string planId)

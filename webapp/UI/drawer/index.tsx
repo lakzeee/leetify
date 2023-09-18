@@ -9,14 +9,19 @@ export default function Drawer() {
           <label htmlFor="my-drawer" className="drawer-overlay"></label>
           <ul className="menu p-4 w-60 min-h-full bg-base-200 text-base-content pt-20">
             {/* Sidebar content here */}
-            <li>
-              <a href="/question">All Question</a>
-            </li>
+
             <li>
               <a href="/plan">My Plans</a>
             </li>
             <li>
               <a href="/session">Session(Dev Only)</a>
+            </li>
+            <div className="divider" />
+            <li>
+              <a href="/question">All Question</a>
+            </li>
+            <li>
+              <a href="/plan/public">Explore Plans</a>
             </li>
           </ul>
         </div>

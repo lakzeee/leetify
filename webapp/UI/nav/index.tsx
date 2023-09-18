@@ -1,8 +1,9 @@
 "use client";
 import AvatarButton from "@/UI/nav/AvatarButton";
 import { BiMenuAltLeft } from "react-icons/bi";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getCurrentUser } from "@/app/session/authUtils";
+import ThemeButton from "@/UI/nav/ThemeButton";
 
 type Props = {
   displayAvatar?: boolean;
@@ -41,7 +42,7 @@ export default function Nav({ displayAvatar = true }: Props) {
           </a>
         </div>
 
-        {/*<ThemeButton />*/}
+        <ThemeButton />
         {displayAvatar && <AvatarButton avatarChar={avatarChar} user={user} />}
       </div>
     </>

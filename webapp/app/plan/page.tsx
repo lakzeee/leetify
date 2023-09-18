@@ -28,9 +28,11 @@ export default function MyPlans() {
           </a>
         </div>
       </div>
-      {userPlans && userPlans.length > 0 && (
-        <UserPlansTable key={generateRandomKey()} userPlans={userPlans} />
-      )}
+      <div className="w-full">
+        {userPlans && userPlans.length > 0 && (
+          <UserPlansTable key={generateRandomKey()} userPlans={userPlans} />
+        )}
+      </div>
     </Container>
   );
 }

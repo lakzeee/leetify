@@ -4,6 +4,7 @@ type Props = {
   topics: string;
   maxBadge?: number;
   xs?: boolean;
+  xl?: boolean;
 };
 
 function truncateString(strs: string[], maxLength: number) {
@@ -18,14 +19,16 @@ function truncateString(strs: string[], maxLength: number) {
   return res;
 }
 
-export default function TopicBadges({ topics, maxBadge = 3, xs }: Props) {
+export default function TopicBadges({ topics, maxBadge = 3, xs, xl }: Props) {
   const isExtraSmallScreen = useMediaQuery("(max-width: 600px)");
   const isSmallScreen = useMediaQuery("(max-width: 800px)"); // Small screen width limit
   const isMediumScreen = useMediaQuery("(max-width: 1020px)"); // Medium screen width lim
 
   let listOfTopic = topics.split(",").slice(0, maxBadge);
 
-  if (isExtraSmallScreen && xs) {
+  if (xl) {
+    listOfTopic = truncateString(listOfTopic, 10);
+  } else if (isExtraSmallScreen && xs) {
     listOfTopic = truncateString(listOfTopic, 4);
   } else if ((isSmallScreen && xs) || (isMediumScreen && xs)) {
     listOfTopic = truncateString(listOfTopic, 4); // Shorten more for small screens
@@ -36,12 +39,12 @@ export default function TopicBadges({ topics, maxBadge = 3, xs }: Props) {
   }
 
   return (
-    <>
+    <div>
       {listOfTopic.map((t, index) => (
         <div key={index} className="badge badge-info ml-1">
           {t}
         </div>
       ))}
-    </>
+    </div>
   );
 }

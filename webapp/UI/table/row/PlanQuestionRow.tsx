@@ -13,8 +13,13 @@ import { useTablekeyStore } from "@/Components/hooks/useTablekeyStore";
 type Props = {
   question: PlanQuestion;
   existedGroupName?: string;
+  enableAction?: boolean;
 };
-export default function PlanQuestionRow({ question, existedGroupName }: Props) {
+export default function PlanQuestionRow({
+  question,
+  existedGroupName,
+  enableAction = true,
+}: Props) {
   const [groupName, setGroupName] = useState(existedGroupName);
   const [isAdded, setIsAdded] = useState(false);
 
@@ -69,38 +74,40 @@ export default function PlanQuestionRow({ question, existedGroupName }: Props) {
           <TopicBadges topics={question.topics} maxBadge={3} xs={true} />
         </td>
         <td className="px-6 py-4">{question.difficulty}</td>
-        <td className="px-6 py-4 min-w-[10rem]">
-          <div className="relative flex flex-row items-center w-full min-w-[15rem]">
-            <input
-              key={question.leetCodeNo}
-              type="text"
-              value={groupName}
-              onChange={(e) => setGroupName(e.target.value)}
-              placeholder="Group Name"
-              className="input rounded-full input-bordered w-full"
-            />
-            <div className="absolute flex flex-row right-0 p-2">
-              <button
-                onClick={handleRemove}
-                data-tooltip-id="remove-tooltip"
-                data-tooltip-content="Remove From List"
-              >
-                {isAdded && <IoIosRemoveCircle color="#F5C254" size={30} />}
-              </button>
-              <button
-                onClick={handleAdd}
-                data-tooltip-id="add-tooltip"
-                data-tooltip-content="Confirm Group Name"
-              >
-                {isAdded ? (
-                  <IoIosCheckmarkCircle color="#2DD4BE" size={30} />
-                ) : (
-                  <IoIosAddCircle size={30} />
-                )}
-              </button>
+        {enableAction && (
+          <td className="px-6 py-4 min-w-[10rem]">
+            <div className="relative flex flex-row items-center w-full min-w-[15rem]">
+              <input
+                key={question.leetCodeNo}
+                type="text"
+                value={groupName}
+                onChange={(e) => setGroupName(e.target.value)}
+                placeholder="Group Name"
+                className="input rounded-full input-bordered w-full"
+              />
+              <div className="absolute flex flex-row right-0 p-2">
+                <button
+                  onClick={handleRemove}
+                  data-tooltip-id="remove-tooltip"
+                  data-tooltip-content="Remove From List"
+                >
+                  {isAdded && <IoIosRemoveCircle color="#F5C254" size={30} />}
+                </button>
+                <button
+                  onClick={handleAdd}
+                  data-tooltip-id="add-tooltip"
+                  data-tooltip-content="Confirm Group Name"
+                >
+                  {isAdded ? (
+                    <IoIosCheckmarkCircle color="#2DD4BE" size={30} />
+                  ) : (
+                    <IoIosAddCircle size={30} />
+                  )}
+                </button>
+              </div>
             </div>
-          </div>
-        </td>
+          </td>
+        )}
       </tr>
     </>
   );

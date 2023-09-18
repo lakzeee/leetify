@@ -2,7 +2,7 @@ using System;
 
 namespace PlanService.DTOs;
 
-public class UserPlanDto
+public class PlanDto
 {
     public string Id { get; set; }
     public string PlanName { get; set; }

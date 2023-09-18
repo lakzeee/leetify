@@ -65,7 +65,7 @@ public class PlanController : ControllerBase
     [HttpGet]
     [Route("user/{userId}")]
     [Authorize]
-    public async Task<ActionResult<List<UserPlanDto>>> GetUserCreatedPlan(string userId)
+    public async Task<ActionResult<List<PlanDto>>> GetUserCreatedPlan(string userId)
     {
         try
         {
@@ -83,6 +83,13 @@ public class PlanController : ControllerBase
     public async Task<ActionResult<List<Plan>>> GetAllPublicPlan()
     {
         return Ok(await _repo.GetAllPublicPlan());
+    }
+
+    [HttpGet]
+    [Route("public/{planId}")]
+    public async Task<ActionResult<List<Plan>>> GetPublicPlanById(string planId)
+    {
+        return Ok(await _repo.GetPublicPlanById(planId));
     }
 
 }

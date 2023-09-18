@@ -9,6 +9,16 @@ export async function GetUserPlans(userId: string): Promise<PlanQuestionRes[]> {
   return await fetchWrapper.get(`/plan/user/${userId}`);
 }
 
+export async function GetAllPublicPlans(): Promise<PlanQuestionRes[]> {
+  return await fetchWrapper.get(`/plan/public`);
+}
+
+export async function GetPublicPlanById(
+  userId: string,
+): Promise<PlanQuestionRes> {
+  return await fetchWrapper.get(`/plan/public/${userId}`);
+}
+
 export async function GetPlanDetailById(
   planId: string,
 ): Promise<PlanQuestionRes> {

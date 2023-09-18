@@ -13,7 +13,7 @@ public class MappingProfiles : Profile
             .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
             .ForMember(dest => dest.QuestionList, opt => opt.MapFrom(src => src.QuestionList));
         CreateMap<PlanQuestionDto, PlanQuestion>();
-        CreateMap<Plan, UserPlanDto>()
+        CreateMap<Plan, PlanDto>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ID));
     }
 }

@@ -1,3 +1,4 @@
+"use client";
 import { PlanQuestionRes } from "@/types";
 import TopicBadges from "@/UI/table/TopicBadges";
 import { DateTimeHelper } from "@/Components/utils/DateTimeHelper";
@@ -50,32 +51,34 @@ export default function UserPlanRow({ userPlan }: Props) {
             </a>
             <button
               className="btn btn-circle btn-sm"
-              // @ts-ignore
-              onClick={() => window.delete_modal.showModal()}
+              onClick={() =>
+                // @ts-ignore
+                document.getElementById("delete_modal").showModal()
+              }
             >
               <AiTwotoneDelete />
             </button>
-            <dialog id="delete_modal" className="modal modal-middle">
-              <form method="dialog" className="modal-box max-w-sm">
-                <Heading
-                  title={"Confirm Delete"}
-                  subTitle={"Are you sure about this?"}
-                />
-                <div className="modal-action flex flex-row gap-2 mt-4 justify-start">
-                  <button className="btn btn-sm btn-outline">Cancel</button>
-                  <button
-                    className="btn btn-sm btn-outline"
-                    onClick={handleDelete}
-                  >
-                    Confirm
-                  </button>
-                </div>
-              </form>
-              <form method="dialog" className="modal-backdrop">
-                <button>close</button>
-              </form>
-            </dialog>
           </div>
+          <dialog id="delete_modal" className="modal modal-middle">
+            <form method="dialog" className="modal-box max-w-sm">
+              <Heading
+                title={"Confirm Delete"}
+                subTitle={`Are you sure to you want to delete plan: ${userPlan.planName} ? \n You can't undo this action`}
+              />
+              <div className="modal-action flex flex-row gap-2 mt-4 justify-start">
+                <button className="btn btn-sm btn-outline">Cancel</button>
+                <button
+                  className="btn btn-sm btn-outline"
+                  onClick={handleDelete}
+                >
+                  Confirm
+                </button>
+              </div>
+            </form>
+            <form method="dialog" className="modal-backdrop">
+              <button>close</button>
+            </form>
+          </dialog>
         </td>
       </tr>
     </>
