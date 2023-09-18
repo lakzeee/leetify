@@ -7,7 +7,7 @@ using PlanService.DTOs;
 using PlanService.Models;
 using Serilog;
 
-namespace PlanService.Data;
+namespace PlanService.Data.Impl;
 
 public class PlanRepository : IPlanRepository
 {

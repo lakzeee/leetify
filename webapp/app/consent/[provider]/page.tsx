@@ -7,11 +7,13 @@ import Container from "@/UI/container";
 import ConsentCheckBox from "@/app/consent/[provider]/ConsentCheckBox";
 import { signOut } from "next-auth/react";
 import toast from "react-hot-toast";
+import Heading from "@/UI/heading";
 
 export default function Consent({ params }: { params: { provider: string } }) {
   const router = useRouter();
   const [isNewUser, setIsNewUser] = useState(false);
   const [isConsent, setIsConsent] = useState(false);
+  const [profileName, setProfileName] = useState("");
   const [user, setUser] = useState<any>();
 
   useEffect(() => {
@@ -22,6 +24,7 @@ export default function Consent({ params }: { params: { provider: string } }) {
 
     async function verifyIfIsNewUser() {
       const userData: any = await getCurrentUser();
+      setProfileName(userData.name);
       if (userData.email) {
         getUserByEmail(userData.email)
           .then((r) => {
@@ -52,6 +55,7 @@ export default function Consent({ params }: { params: { provider: string } }) {
       email: "",
       authProvider: params.provider,
       isConsent: isConsent,
+      profileName: profileName,
     };
     if (user) {
       data.name = user.name;
@@ -97,7 +101,10 @@ export default function Consent({ params }: { params: { provider: string } }) {
           className={`btn btn-primary btn-sm mr-2 ${
             !isConsent && "btn-disabled"
           }`}
-          onClick={handleCreateUser}
+          onClick={() =>
+            // @ts-ignore
+            document.getElementById("profileName_modal").showModal()
+          }
         >
           Submit
         </button>
@@ -108,6 +115,33 @@ export default function Consent({ params }: { params: { provider: string } }) {
           Cancel SignUp
         </button>
       </div>
+      <dialog id="profileName_modal" className="modal modal-middle">
+        <form method="dialog" className="modal-box max-w-sm">
+          <Heading
+            title={"Confirm Your Profile Name"}
+            subTitle={`You can modify from your profile page later`}
+          />
+          <input
+            type="text"
+            value={profileName}
+            onChange={(e) => e.target.value}
+            placeholder="Profile Name"
+            className="mt-2 input input-ghost w-full max-w-xs focus:ring-0 focus:border-none"
+          />
+
+          <div className="modal-action flex flex-row gap-2 mt-4 justify-start">
+            <button
+              className="btn btn-sm btn-outline"
+              onClick={handleCreateUser}
+            >
+              Confirm
+            </button>
+          </div>
+        </form>
+        <form method="dialog" className="modal-backdrop">
+          <button>close</button>
+        </form>
+      </dialog>
     </Container>
   );
 }

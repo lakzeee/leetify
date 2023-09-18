@@ -3,7 +3,7 @@ import React from "react";
 export default function Drawer() {
   return (
     <>
-      <div className="drawer">
+      <div className="drawer z-40">
         <input id="my-drawer" type="checkbox" className="drawer-toggle" />
         <div className="drawer-side">
           <label htmlFor="my-drawer" className="drawer-overlay"></label>

@@ -35,3 +35,18 @@ export async function UpdatePlanDetailById(
 export async function DeletePlanById(planId: string): Promise<any> {
   return await fetchWrapper.del(`/plan/${planId}`);
 }
+
+export async function GetSavedPlanRecordByUserId(userId: string) {
+  return await fetchWrapper.get(`/plan/saved/${userId}`);
+}
+
+export async function SavePlanToUser(data: { userId: string; planId: string }) {
+  return await fetchWrapper.post(`/plan/save`, data);
+}
+
+export async function RemovePlanFromUser(data: {
+  userId: string;
+  planId: string;
+}) {
+  return await fetchWrapper.post(`/plan/remove`, data);
+}

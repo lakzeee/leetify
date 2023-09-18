@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PlanService.Data;
+using PlanService.Data.Impl;
 using Polly;
 using Serilog;
 
@@ -63,6 +64,7 @@ builder.Services.AddAuthentication(o =>
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IPlanRepository, PlanRepository>();
+builder.Services.AddScoped<ISavedPlanRepository, SavePlanRepository>();
 
 var app = builder.Build();
 
