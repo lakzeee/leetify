@@ -1,3 +1,15 @@
+declare global {
+  namespace NodeJS {
+    interface ProcessEnv {
+      GOOGLE_ID: string;
+      GOOGLE_SECRET: string;
+      API_URL: string;
+      GITHUB_ID: string;
+      GITHUB_SECRET: string;
+    }
+  }
+}
+
 export interface PageResult<T> {
   results: T[];
   pageCount: number;
@@ -65,14 +77,14 @@ export interface ErrorRes {
   };
 }
 
-declare global {
-  namespace NodeJS {
-    interface ProcessEnv {
-      GOOGLE_ID: string;
-      GOOGLE_SECRET: string;
-      API_URL: string;
-      GITHUB_ID: string;
-      GITHUB_SECRET: string;
-    }
-  }
+export type DndId = string | number;
+export interface DndColumn {
+  id: DndId;
+  title: string;
+}
+
+export interface DndItem {
+  id: DndId;
+  columnId: DndId;
+  content: string;
 }

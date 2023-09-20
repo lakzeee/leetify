@@ -15,7 +15,7 @@ const DifficultyFilter: React.FC = () => {
       id="difficulty"
       name="difficulty"
       value={difficulty || ""}
-      className="select max-w-xs focus:border-none focus:ring-0"
+      className="select selete-sm max-w-xs focus:border-none focus:ring-0"
       onChange={handleDifficultyChange}
     >
       <option value={""}>Select A Difficulty</option>

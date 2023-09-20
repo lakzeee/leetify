@@ -24,7 +24,7 @@ const TopicsFilter: React.FC = () => {
     <select
       id="topic"
       name="topic"
-      className="select max-w-xs focus:border-none focus:ring-0"
+      className="select selete-sm max-w-xs focus:border-none focus:ring-0"
       value={topic || ""}
       onChange={handleTopicChange}
     >

@@ -4,18 +4,27 @@ import UserPlansTable from "@/app/plan/UserPlansTable";
 import { generateRandomKey } from "@/Components/utils/helpers";
 import { useEffect, useState } from "react";
 import {
+  GetSavedPlanRecordByUserId,
   GetUserPlans,
   GetUserSavedPlans,
 } from "@/Components/actions/planActions";
 import { PlanQuestionRes } from "@/types";
 import Heading from "@/UI/heading";
+import { useSavedPlansStore } from "@/Components/hooks/useSavedPlansStore";
 
 export default function MyPlans() {
   const [userPlans, setUserPlans] = useState<PlanQuestionRes[]>();
   const [savedPlans, setSavePlans] = useState<PlanQuestionRes[]>();
+  const setSavedPlansStore = useSavedPlansStore((state) => state.setSavedPlans);
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");
+    async function fetchUserSavedPlan(userId: string) {
+      const userSavedPlans = await GetSavedPlanRecordByUserId(userId);
+      if (userSavedPlans?.planIds?.length > 0) {
+        setSavedPlansStore(userSavedPlans.planIds);
+      }
+    }
 
     async function fetchUserPlans(userId: string) {
       const userPlans = await GetUserPlans(userId);
@@ -26,6 +35,7 @@ export default function MyPlans() {
       setSavePlans(savePlans);
     }
     if (userId) {
+      fetchUserSavedPlan(userId);
       fetchUserPlans(userId);
       fetchSavedPlans(userId);
     }

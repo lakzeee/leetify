@@ -41,7 +41,7 @@ export default function TopicBadges({ topics, maxBadge = 3, xs, xl }: Props) {
   return (
     <div>
       {listOfTopic.map((t, index) => (
-        <div key={index} className="badge badge-info ml-1">
+        <div key={index} className="badge badge-info ml-1 mb-1">
           {t}
         </div>
       ))}

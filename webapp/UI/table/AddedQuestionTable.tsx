@@ -6,7 +6,7 @@ import {
   generateRandomKey,
   groupPlanQuestionsByGroupName,
 } from "@/Components/utils/helpers";
-import React from "react";
+import React, { useState } from "react";
 import TableGroupRow from "@/UI/table/tablebase/TableGroupRow";
 import TableCaption from "@/UI/table/tablebase/TableCaption";
 
@@ -14,15 +14,32 @@ type Props = {
   data: PlanQuestion[];
   enableAction?: boolean;
   children?: React.ReactNode;
+  enableProgress?: boolean;
 };
 export default function AddedQuestionTable({
   data,
   enableAction = true,
   children,
+  enableProgress = false,
 }: Props) {
+  // Initialize a state variable to keep track of collapsed groups
+  const [collapsedGroups, setCollapsedGroups] = useState<string[]>([]);
+
   const groupByGroupName = groupPlanQuestionsByGroupName(data);
   const columTitles = ["no", "title", "topics", "difficulty"];
   if (enableAction) columTitles.push("action");
+  if (enableProgress) columTitles.push("Status", "Last Visit", "Tags");
+
+  // Function to toggle the collapse state of a group
+  const toggleCollapse = (groupName: string) => {
+    if (collapsedGroups.includes(groupName)) {
+      setCollapsedGroups(
+        collapsedGroups.filter((group) => group !== groupName),
+      );
+    } else {
+      setCollapsedGroups([...collapsedGroups, groupName]);
+    }
+  };
 
   return (
     <TableWrapper>
@@ -34,15 +51,21 @@ export default function AddedQuestionTable({
             <React.Fragment
               key={`groupHeader_${groupName}_${idx}_${generateRandomKey()}`}
             >
-              <TableGroupRow key={groupName} groupName={groupName} />
-              {groupQuestions.map((question) => (
-                <PlanQuestionRow
-                  key={question.title}
-                  question={question}
-                  existedGroupName={groupName}
-                  enableAction={enableAction}
-                />
-              ))}
+              <TableGroupRow
+                key={groupName}
+                groupName={groupName}
+                onClick={() => toggleCollapse(groupName)} // Add click event handler to toggle collapse
+              />
+              {!collapsedGroups.includes(groupName) && // Check if the group is not collapsed
+                groupQuestions.map((question) => (
+                  <PlanQuestionRow
+                    key={question.title}
+                    question={question}
+                    existedGroupName={groupName}
+                    enableAction={enableAction}
+                    enableProgress={enableProgress}
+                  />
+                ))}
             </React.Fragment>
           ),
         )}

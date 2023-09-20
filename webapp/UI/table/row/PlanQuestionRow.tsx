@@ -9,16 +9,19 @@ import { useEffect, useState } from "react";
 import { useCreatePlanStore } from "@/Components/hooks/useCreatePlanStore";
 import "react-tooltip/dist/react-tooltip.css";
 import { useTablekeyStore } from "@/Components/hooks/useTablekeyStore";
+import LeetCodeLink from "@/UI/link/LeetCodeLink";
 
 type Props = {
   question: PlanQuestion;
   existedGroupName?: string;
   enableAction?: boolean;
+  enableProgress?: boolean;
 };
 export default function PlanQuestionRow({
   question,
   existedGroupName,
   enableAction = true,
+  enableProgress = false,
 }: Props) {
   const [groupName, setGroupName] = useState(existedGroupName);
   const [isAdded, setIsAdded] = useState(false);
@@ -69,8 +72,10 @@ export default function PlanQuestionRow({
             {question.leetCodeNo}
           </div>
         </td>
-        <td className="px-6 py-4">{question.title}</td>
-        <td className="px-6 py-4">
+        <td className="px-6 py-4 text-gray-900 lg:whitespace-nowrap dark:text-white">
+          <LeetCodeLink title={question.title}>{question.title}</LeetCodeLink>
+        </td>
+        <td className="px-6 py-4 text-gray-900 lg:whitespace-nowrap dark:text-white">
           <TopicBadges topics={question.topics} maxBadge={3} xs={true} />
         </td>
         <td className="px-6 py-4">{question.difficulty}</td>
@@ -107,6 +112,13 @@ export default function PlanQuestionRow({
               </div>
             </div>
           </td>
+        )}
+        {enableProgress && (
+          <>
+            <td className="px-6 py-4">TO-DO</td>
+            <td className="px-6 py-4">Never</td>
+            <td className="px-6 py-4">Tags</td>
+          </>
         )}
       </tr>
     </>
