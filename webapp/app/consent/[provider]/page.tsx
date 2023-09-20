@@ -8,11 +8,16 @@ import ConsentCheckBox from "@/app/consent/[provider]/ConsentCheckBox";
 import { signOut } from "next-auth/react";
 import toast from "react-hot-toast";
 import Heading from "@/UI/heading";
+import CookiesStrictlyCheckBox from "@/app/consent/[provider]/CookiesStrictlyCheckBox";
+import CookiesFunctionalCheckBox from "@/app/consent/[provider]/CookiesFunctionalCheckBox";
+import { setCookie } from "cookies-next";
 
 export default function Consent({ params }: { params: { provider: string } }) {
   const router = useRouter();
   const [isNewUser, setIsNewUser] = useState(false);
   const [isConsent, setIsConsent] = useState(false);
+  const [isStrictlyCookiesConsent, setIsStrictlyCookiesConsent] = useState(false);
+  const [isFunctionalCookiesConsent, setIsFunctionalCookiesConsent] = useState(false);
   const [profileName, setProfileName] = useState("");
   const [user, setUser] = useState<any>();
 
@@ -26,13 +31,16 @@ export default function Consent({ params }: { params: { provider: string } }) {
       const userData: any = await getCurrentUser();
       setProfileName(userData.name);
       if (userData.email) {
-        getUserByEmail(userData.email)
+        getUserByEmail()
           .then((r) => {
             if (r.error) {
               throw r.error;
             }
             if (!r.isNewUser) {
-              localStorage.setItem("userId", r.user?.id as string);
+              setCookie('userJwt', r.token, {
+                path:"/",
+                maxAge: 60*60*24,
+              })
               router.push("/");
             } else {
               fetchUserInfo();
@@ -40,7 +48,6 @@ export default function Consent({ params }: { params: { provider: string } }) {
             }
           })
           .catch((e) => {
-            // TODO: Redirect to auth error page
             signOut({ callbackUrl: "/" });
           });
       }
@@ -55,6 +62,8 @@ export default function Consent({ params }: { params: { provider: string } }) {
       email: "",
       authProvider: params.provider,
       isConsent: isConsent,
+      isStrictlyCookiesConsent: isStrictlyCookiesConsent,
+      isFunctionalCookiesConsent: isFunctionalCookiesConsent,
       profileName: profileName,
     };
     if (user) {
@@ -65,7 +74,10 @@ export default function Consent({ params }: { params: { provider: string } }) {
           if (r.error) {
             throw r.error;
           }
-          localStorage.setItem("userId", r.userId as string);
+          setCookie('userJwt', r.token, {
+            path:"/",
+            maxAge: 60*60*24,
+          })
           toast("Thanks for signing up!");
           router.push("/");
         })
@@ -84,7 +96,7 @@ export default function Consent({ params }: { params: { provider: string } }) {
     <Container displayAvatar={false}>
       <div className="text-left">
         <div className="text-2xl text-accent font-bold">
-          {"Accept Privacy Policy & Terms of Service"}
+          {"About Cookies Policy, Privacy Policy & Terms of Service"}
         </div>
         <div className="font-light mt-2">
           {
@@ -97,9 +109,13 @@ export default function Consent({ params }: { params: { provider: string } }) {
             setIsConsent(value);
           }}
         />
+        <CookiesStrictlyCheckBox value={isStrictlyCookiesConsent} handleChange={(value)=> setIsStrictlyCookiesConsent(value)}/>
+
+        <CookiesFunctionalCheckBox value={isFunctionalCookiesConsent} handleChange={(value)=> setIsFunctionalCookiesConsent(value)}/>
+
         <button
-          className={`btn btn-primary btn-sm mr-2 ${
-            !isConsent && "btn-disabled"
+          className={`btn btn-primary btn-sm mr-2 ${(!isStrictlyCookiesConsent ||
+            !isConsent) && "btn-disabled"
           }`}
           onClick={() =>
             // @ts-ignore

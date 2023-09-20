@@ -66,7 +66,7 @@ export interface User {
 
 export interface UserRes {
   isNewUser: boolean;
-  user: User | undefined;
+  token: string | undefined;
   error?: string;
 }
 

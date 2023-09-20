@@ -24,6 +24,8 @@ public class UserRepository : IUserRepository
     public async Task<string> CreateUser(UserDto userDto)
     {
         var newUser = _mapper.Map<User>(userDto);
+        newUser.CreatedAt = DateTime.UtcNow;
+        newUser.UpdatedAt = DateTime.UtcNow;
         await newUser.SaveAsync();
         if (newUser.ID != null) return newUser.ID.ToString();
         return null;

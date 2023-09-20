@@ -11,4 +11,6 @@ public class User : Entity
     public bool IsConsent { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
+    public bool IsStrictlyCookiesConsent { get; set; }
+    public bool IsFunctionalCookiesConsent { get; set; }
 }
