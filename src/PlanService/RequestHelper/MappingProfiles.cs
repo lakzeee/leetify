@@ -10,7 +10,7 @@ public class MappingProfiles : Profile
     public MappingProfiles()
     {
         CreateMap<CreatePlanDto, Plan>()
-            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
+            .ForMember(dest => dest.UserSub, opt => opt.MapFrom(src => src.UserSub))
             .ForMember(dest => dest.QuestionList, opt => opt.MapFrom(src => src.QuestionList));
         CreateMap<PlanQuestionDto, PlanQuestion>();
         CreateMap<Plan, PlanDto>()

@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PlanService.Data;
@@ -7,36 +10,53 @@ using PlanService.Models;
 namespace PlanService.Controllers;
 
 [ApiController]
-[Route("api/plan")]
+[Route("api/plan/saved")]
 public class SavePlanController : ControllerBase
 {
-    private readonly ISavedPlanRepository _repo;
+    private readonly IPlanRepository _planRepo;
+    private readonly ISavedPlanRepository _savedPlanRepo;
 
-    public SavePlanController(ISavedPlanRepository repository)
+    public SavePlanController(IPlanRepository planRepository, ISavedPlanRepository savedPlanRepository)
     {
-        _repo = repository;
+        _planRepo = planRepository;
+        _savedPlanRepo = savedPlanRepository;
     }
 
-    [HttpPost]
-    [Route("save")]
-    public async Task<ActionResult> SavePlanToUser([FromBody] SavePlanDto savePlanDto)
+    [HttpPut("{planId}")]
+    public async Task<ActionResult> SavePlanToUser(string planId)
     {
-        var res = await _repo.SavePlanToUser(savePlanDto.UserId, savePlanDto.PlanId);
+        var res = await _savedPlanRepo.SavePlanToUser(GetUserSubFromToken(), planId);
         return res ? Ok() : BadRequest();
     }
 
-    [HttpPost]
-    [Route("remove")]
-    public async Task<ActionResult> RemoveFromUser([FromBody] SavePlanDto savePlanDto)
+    [HttpDelete("{planId}")]
+    public async Task<ActionResult> RemoveFromUser(string planId)
     {
-        var res = await _repo.RemovePlanFromUser(savePlanDto.UserId, savePlanDto.PlanId);
+        var res = await _savedPlanRepo.RemovePlanFromUser(GetUserSubFromToken(), planId);
         return res ? Ok() : BadRequest();
     }
 
     [HttpGet]
-    [Route("saved/{userId}")]
-    public async Task<SavePlan> GetSavedPlanRecordByUserId(string userId)
+    [Route("list")]
+    public async Task<SavePlan> GetSavedPlanIdListByUserSub()
     {
-        return await _repo.GetSavedPlanRecordByUserId(userId);
+        return await _savedPlanRepo.GetSavedPlanRecordByUserSub(GetUserSubFromToken());
     }
+    
+    [HttpGet]
+    [Route("full")]
+    public async Task<ActionResult<List<PlanDto>>> GetPublicPlansByUserSub()
+    {
+        var savedPlanRecord = await _savedPlanRepo.GetSavedPlanRecordByUserSub(GetUserSubFromToken());
+        return await _planRepo.GetPlansByPlanIds(savedPlanRecord.PlanIds);
+    }
+
+
+    private string GetUserSubFromToken()
+    {
+        var identity = HttpContext.User.Identity as ClaimsIdentity;
+        IList<Claim> claim = identity?.Claims.ToList();
+        return claim?[2].Value;
+    }
+
 }

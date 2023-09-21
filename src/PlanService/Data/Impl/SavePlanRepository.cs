@@ -8,17 +8,17 @@ namespace PlanService.Data.Impl;
 
 public class SavePlanRepository : ISavedPlanRepository
 {
-    public async Task<bool> SavePlanToUser(string userId, string planId)
+    public async Task<bool> SavePlanToUser(string userSub, string planId)
     {
         var userRecord = await DB.Find<SavePlan>()
-            .ManyAsync(x => x.UserId == userId);
+            .ManyAsync(x => x.UserSub == userSub);
         switch (userRecord.Count)
         {
             case 0:
             {
                 var newRecord = new SavePlan()
                 {
-                    UserId = userId,
+                    UserSub = userSub,
                     PlanIds = new List<string>() { planId }
                 };
                 await newRecord.SaveAsync();
@@ -37,10 +37,10 @@ public class SavePlanRepository : ISavedPlanRepository
         }
     }
 
-    public async Task<bool> RemovePlanFromUser(string userId, string planId)
+    public async Task<bool> RemovePlanFromUser(string userSub, string planId)
     {
         var userRecord = await DB.Find<SavePlan>()
-            .ManyAsync(x => x.UserId == userId);
+            .ManyAsync(x => x.UserSub == userSub);
         if (userRecord.Count != 1) return false;
         var existRecord = userRecord[0];
         if (!existRecord.PlanIds.Contains(planId)) return false;
@@ -49,10 +49,10 @@ public class SavePlanRepository : ISavedPlanRepository
         return true;
     }
 
-    public async Task<SavePlan> GetSavedPlanRecordByUserId(string userId)
+    public async Task<SavePlan> GetSavedPlanRecordByUserSub(string userSub)
     {
         var userRecord = await DB.Find<SavePlan>()
-            .ManyAsync(x => x.UserId == userId);
+            .ManyAsync(x => x.UserSub == userSub);
         var record = userRecord[0];
         return userRecord.Count == 1 ? record : null;
     }

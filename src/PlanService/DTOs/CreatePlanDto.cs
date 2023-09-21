@@ -9,7 +9,7 @@ public class CreatePlanDto
     public string Tags { get; set; }
     public string Description { get; set; }
     public bool IsPublic { get; set; }
-    public string UserId { get; set; }
+    public string UserSub { get; set; }
     public List<PlanQuestionDto> QuestionList { get; set; }
 }
 

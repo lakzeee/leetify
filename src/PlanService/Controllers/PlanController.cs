@@ -17,61 +17,61 @@ namespace PlanService.Controllers;
 public class PlanController : ControllerBase
 {
     private readonly IPlanRepository _planRepo;
-    private readonly ISavedPlanRepository _savedPlanRepo;
 
     public PlanController(IPlanRepository planRepository, ISavedPlanRepository savedPlanRepository)
     {
         _planRepo = planRepository;
-        _savedPlanRepo = savedPlanRepository;
     }
 
-    private bool VerifyUserEmail(string email)
-    {
-        var identity = HttpContext.User.Identity as ClaimsIdentity;
-        IList<Claim> claim = identity?.Claims.ToList();
-        return email == claim?[1].Value;
-    }
-
-
-    [HttpGet("{planId}")]
-    public async Task<ActionResult<List<Plan>>> GetPlanById(string planId)
-    {
-        return Ok(await _planRepo.GetPlanById(planId));
-    }
-
-
+    // CRUD of a plan
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult> CreateNewPlan([FromBody] CreatePlanDto createPlanDto)
     {
+        createPlanDto.UserSub = GetUserSubFromToken();
         var res = await _planRepo.SavePlanAsync(createPlanDto);
         if (res == null) return BadRequest("Something went wrong");
         return Ok(new { PlanId = res });
     }
 
+    [Authorize]
+    [HttpGet("{planId}")]
+    public async Task<ActionResult<List<Plan>>> GetPlanById(string planId)
+    {
+        var plan = await _planRepo.GetPlanById(planId);
+        return plan.UserSub == GetUserSubFromToken() ? Ok(plan) : Unauthorized();
+    }
+
+
+    [Authorize]
     [HttpPut("{planId}")]
     public async Task<ActionResult> UpdatePlanById([FromBody] CreatePlanDto createPlanDto, string planId)
     {
+        if (await _planRepo.VerifyPlanOwnerShip(planId, GetUserSubFromToken())) return Unauthorized();
         var res = await _planRepo.UpdatePlanById(createPlanDto, planId);
         if (!res) return StatusCode(500, "Internal Server Error");
         return Ok();
     }
 
+    [Authorize]
     [HttpDelete("{planId}")]
     public async Task<ActionResult> DeletePlanById(string planId)
     {
+        if (await _planRepo.VerifyPlanOwnerShip(planId, GetUserSubFromToken())) return Unauthorized();
         var res = await _planRepo.DeletePlanById(planId);
         if (!res) return StatusCode(500, "Internal Server Error");
         return Ok();
     }
 
+    // Get User Created Plans
     [HttpGet]
-    [Route("user/{userId}")]
+    [Route("user")]
     [Authorize]
-    public async Task<ActionResult<List<PlanDto>>> GetUserCreatedPlan(string userId)
+    public async Task<ActionResult<List<PlanDto>>> GetUserCreatedPlan()
     {
         try
         {
-            return Ok(await _planRepo.GetUserCreatedPlans(userId));
+            return Ok(await _planRepo.GetUserCreatedPlans(GetUserSubFromToken()));
         }
         catch (Exception e)
         {
@@ -94,12 +94,23 @@ public class PlanController : ControllerBase
         return Ok(await _planRepo.GetPublicPlanById(planId));
     }
 
-    [HttpGet]
-    [Route("public/user/{userId}")]
-    public async Task<ActionResult<List<PlanDto>>> GetPublicPlansByUserId(string userId)
+    private string GetUserEmailFromToken()
     {
-        var savedPlanRecord = await _savedPlanRepo.GetSavedPlanRecordByUserId(userId);
-        return await _planRepo.GetPlansByPlanIds(savedPlanRecord.PlanIds);
+        var identity = HttpContext.User.Identity as ClaimsIdentity;
+        IList<Claim> claim = identity?.Claims.ToList();
+        return claim?[1].Value;
+    }
+
+    private string GetUserSubFromToken()
+    {
+        var identity = HttpContext.User.Identity as ClaimsIdentity;
+        IList<Claim> claim = identity?.Claims.ToList();
+        return claim?[2].Value;
+    }
+
+    private bool VerifyUserEmail(string email)
+    {
+        return email == GetUserEmailFromToken();
     }
     
 

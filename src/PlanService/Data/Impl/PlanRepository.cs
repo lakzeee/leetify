@@ -35,10 +35,10 @@ public class PlanRepository : IPlanRepository
         }
     }
 
-    public async Task<List<PlanDto>> GetUserCreatedPlans(string userId)
+    public async Task<List<PlanDto>> GetUserCreatedPlans(string userSub)
     {
         var plans = await DB.Find<Plan>()
-            .ManyAsync(a => a.UserId == userId);
+            .ManyAsync(a => a.UserSub == userSub);
         var userPlans = _mapper.Map<List<Plan>, List<PlanDto>>(plans);
         return userPlans;
     }
@@ -74,6 +74,7 @@ public class PlanRepository : IPlanRepository
         plan.PlanName = createPlanDto.PlanName;
         plan.Description = createPlanDto.Description;
         plan.IsPublic = createPlanDto.IsPublic;
+        plan.Tags = createPlanDto.Tags;
         plan.QuestionList = _mapper.Map<List<PlanQuestionDto>, List<PlanQuestion>>(createPlanDto.QuestionList);
         plan.UpdatedAt = DateTime.UtcNow;
         await plan.SaveAsync();
@@ -85,5 +86,12 @@ public class PlanRepository : IPlanRepository
         var plan = await DB.Find<Plan>().OneAsync(planId);
         await plan.DeleteAsync();
         return true;
+    }
+
+    public async Task<bool> VerifyPlanOwnerShip(string planId, string userSub)
+    {
+        var plan = await DB.Find<Plan>().OneAsync(planId);
+        if (plan != null) return plan.UserSub == userSub;
+        return false;
     }
 }
