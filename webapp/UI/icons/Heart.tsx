@@ -15,7 +15,6 @@ type Props = {
 };
 
 export default function Heart({
-  userId,
   planId,
   showWhenNotSaved = false,
   isClickable = true,
@@ -29,12 +28,8 @@ export default function Heart({
 
   function handleSaveButton() {
     if (!isClickable) return;
-    if (!userId) {
-      toast("Please log in to do that");
-      return;
-    }
     if (isSaved) {
-      RemovePlanFromUser({ planId, userId })
+      RemovePlanFromUser(planId)
         .then((r) => {
           if (r.error) {
             throw r.error;
@@ -44,7 +39,7 @@ export default function Heart({
         .catch();
       removeFromSavedPlan(planId);
     } else {
-      SavePlanToUser({ planId, userId })
+      SavePlanToUser(planId)
         .then((r) => {
           if (r.error) {
             throw r.error;
@@ -66,7 +61,7 @@ export default function Heart({
 
   return (
     <button onClick={handleSaveButton}>
-      {isSaved && userId ? (
+      {isSaved ? (
         <BsBookmarkHeartFill size={28} color="#F250A3" />
       ) : showWhenNotSaved ? (
         <BsBookmarkHeart size={28} />

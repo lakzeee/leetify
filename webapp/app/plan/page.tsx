@@ -18,28 +18,24 @@ export default function MyPlans() {
   const setSavedPlansStore = useSavedPlansStore((state) => state.setSavedPlans);
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId");
-    async function fetchUserSavedPlan(userId: string) {
-      const userSavedPlans = await GetSavedPlanRecordByUserId(userId);
+    async function fetchUserSavedPlan() {
+      const userSavedPlans = await GetSavedPlanRecordByUserId();
       if (userSavedPlans?.planIds?.length > 0) {
         setSavedPlansStore(userSavedPlans.planIds);
       }
     }
-
-    async function fetchUserPlans(userId: string) {
-      const userPlans = await GetUserPlans(userId);
+    async function fetchUserPlans() {
+      const userPlans = await GetUserPlans();
       setUserPlans(userPlans);
     }
-    async function fetchSavedPlans(userId: string) {
-      const savePlans = await GetUserSavedPlans(userId);
+    async function fetchSavedPlans() {
+      const savePlans = await GetUserSavedPlans();
       setSavePlans(savePlans);
     }
-    if (userId) {
-      fetchUserSavedPlan(userId);
-      fetchUserPlans(userId);
-      fetchSavedPlans(userId);
-    }
-  }, []);
+    fetchUserSavedPlan();
+    fetchUserPlans();
+    fetchSavedPlans();
+  }, [setSavedPlansStore]);
   return (
     <Container>
       <div className="flex w-full flex-col justify-start mb-4">

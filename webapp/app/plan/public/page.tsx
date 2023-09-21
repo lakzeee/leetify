@@ -9,34 +9,39 @@ import PlanCard from "@/UI/card/PlanCard";
 import { useEffect, useState } from "react";
 import { PlanQuestionRes } from "@/types";
 import { useSavedPlansStore } from "@/Components/hooks/useSavedPlansStore";
+import { getCurrentUser } from "@/app/session/authUtils";
 
 export default function PublicPlan() {
-  const [userId, setUserId] = useState<string>();
+  const [isLogIn, setIsLogIn] = useState(false);
   const [publicPlansData, setPublicPlansData] = useState<PlanQuestionRes[]>();
   const setSavedPlans = useSavedPlansStore((state) => state.setSavedPlans);
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId");
+    async function isLogIn(){
+      const user = await getCurrentUser();
+      if(user != null) setIsLogIn(true)
+    }
     async function fetchPublicPlan() {
       const publicPlans = await GetAllPublicPlans();
       if (publicPlans && publicPlans.length > 0) {
         setPublicPlansData(publicPlans);
       }
     }
+    isLogIn();
+    fetchPublicPlan();
+  }, []);
 
-    async function fetchUserSavedPlan(userId: string) {
-      const userSavedPlans = await GetSavedPlanRecordByUserId(userId);
+  useEffect(() => {
+    async function fetchUserSavedPlan() {
+      const userSavedPlans = await GetSavedPlanRecordByUserId();
       if (userSavedPlans?.planIds?.length > 0) {
         setSavedPlans(userSavedPlans.planIds);
       }
     }
-    fetchPublicPlan();
-
-    if (userId) {
-      setUserId(userId);
-      fetchUserSavedPlan(userId);
+    if(isLogIn){
+      fetchUserSavedPlan();
     }
-  }, []);
+  }, [isLogIn, setSavedPlans]);
 
   return (
     <Container>
@@ -47,7 +52,6 @@ export default function PublicPlan() {
             <PlanCard
               key={plan.id}
               plan={plan}
-              userId={userId}
               heartClickable={false}
             />
           ))}

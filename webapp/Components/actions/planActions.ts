@@ -1,22 +1,9 @@
 import { fetchWrapper } from "@/Components/utils/fetchWrapper";
 import { CreatePlanReq, PlanQuestionRes } from "@/types";
 
+// CRUD of Plan
 export async function CreateNewPlan(data: CreatePlanReq): Promise<any> {
   return await fetchWrapper.post(`/plan`, data);
-}
-
-export async function GetUserPlans(userId: string): Promise<PlanQuestionRes[]> {
-  return await fetchWrapper.get(`/plan/user/${userId}`);
-}
-
-export async function GetAllPublicPlans(): Promise<PlanQuestionRes[]> {
-  return await fetchWrapper.get(`/plan/public`);
-}
-
-export async function GetPublicPlanById(
-  userId: string,
-): Promise<PlanQuestionRes> {
-  return await fetchWrapper.get(`/plan/public/${userId}`);
 }
 
 export async function GetPlanDetailById(
@@ -36,23 +23,36 @@ export async function DeletePlanById(planId: string): Promise<any> {
   return await fetchWrapper.del(`/plan/${planId}`);
 }
 
-export async function GetSavedPlanRecordByUserId(userId: string) {
-  return await fetchWrapper.get(`/plan/saved/${userId}`);
+// Get users created plans
+export async function GetUserPlans(): Promise<PlanQuestionRes[]> {
+  return await fetchWrapper.get(`/plan/user`);
 }
 
-export async function SavePlanToUser(data: { userId: string; planId: string }) {
-  return await fetchWrapper.post(`/plan/save`, data);
+
+// Public Plan Routes
+export async function GetAllPublicPlans(): Promise<PlanQuestionRes[]> {
+  return await fetchWrapper.get(`/plan/public`);
 }
 
-export async function RemovePlanFromUser(data: {
-  userId: string;
-  planId: string;
-}) {
-  return await fetchWrapper.post(`/plan/remove`, data);
+export async function GetPublicPlanById(
+  planId: string,
+): Promise<PlanQuestionRes> {
+  return await fetchWrapper.get(`/plan/public/${planId}`);
 }
 
-export async function GetUserSavedPlans(
-  userId: string,
-): Promise<PlanQuestionRes[]> {
-  return await fetchWrapper.get(`/plan/public/user/${userId}`);
+// User Saved Plan Routes
+export async function GetUserSavedPlans(): Promise<PlanQuestionRes[]> {
+  return await fetchWrapper.get(`/plan/saved/full`);
 }
+export async function GetSavedPlanRecordByUserId() {
+  return await fetchWrapper.get(`/plan/saved/list`);
+}
+
+export async function SavePlanToUser(planId: string) {
+  return await fetchWrapper.put(`/plan/saved/${planId}`, {});
+}
+
+export async function RemovePlanFromUser( planId: string ) {
+  return await fetchWrapper.del(`/plan/saved/${planId}`);
+}
+

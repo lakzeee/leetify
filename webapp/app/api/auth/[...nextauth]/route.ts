@@ -1,28 +1,30 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
-import GitHubProvider from "next-auth/providers/github";
+import GoogleProvider, { GoogleProfile } from "next-auth/providers/google";
+import GitHubProvider, { GithubProfile } from "next-auth/providers/github";
 import jsonwebtoken from "jsonwebtoken";
 import { JWT } from "next-auth/jwt";
 
 export const authOptions: NextAuthOptions = {
-  // secret: process.env.NEXTAUTH_SECRET,
-  // session: {
-  //   strategy: "jwt",
-  // },
-  // // Configure one or more authentication providers
   providers: [
     GoogleProvider({
+      profile(profile: GoogleProfile){
+        return{
+          ...profile,
+          role: profile.role ?? "user",
+          id: profile.sub
+        }
+      },
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
-      // authorization: {
-      //   params: {
-      //     prompt: "consent",
-      //     access_type: "offline",
-      //     response_type: "code",
-      //   },
-      // },
     }),
     GitHubProvider({
+      profile(profile: GithubProfile){
+        return{
+          ...profile,
+          role: profile.role ?? "user",
+          id: profile.id.toString()
+        }
+      },
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
     }),

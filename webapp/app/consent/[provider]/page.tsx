@@ -37,10 +37,6 @@ export default function Consent({ params }: { params: { provider: string } }) {
               throw r.error;
             }
             if (!r.isNewUser) {
-              setCookie('userJwt', r.token, {
-                path:"/",
-                maxAge: 60*60*24,
-              })
               router.push("/");
             } else {
               fetchUserInfo();
@@ -74,10 +70,6 @@ export default function Consent({ params }: { params: { provider: string } }) {
           if (r.error) {
             throw r.error;
           }
-          setCookie('userJwt', r.token, {
-            path:"/",
-            maxAge: 60*60*24,
-          })
           toast("Thanks for signing up!");
           router.push("/");
         })

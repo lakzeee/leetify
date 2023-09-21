@@ -44,7 +44,6 @@ export interface CreatePlanReq {
   tags?: string;
   description: string;
   isPublic: boolean;
-  userId: string;
   questionList?: PlanQuestion[];
 }
 

@@ -55,13 +55,7 @@ export default function CreatePlanForm({ planDetail, planId }: Props) {
   }, [setFocus]);
 
   function onSubmit(formData: FieldValues) {
-    const userId = localStorage.getItem("userId");
-    if (!userId) {
-      toast.error("Unable to submit, please log in and try again");
-      return;
-    }
     const data = {
-      userId: userId,
       tags: formData.tags,
       description: formData.description,
       isPublic: formData.isPublic,

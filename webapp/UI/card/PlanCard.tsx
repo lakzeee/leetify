@@ -10,7 +10,6 @@ type Props = {
 };
 export default function PlanCard({
   plan,
-  userId,
   heartClickable = true,
 }: Props) {
   const router = useRouter();
@@ -25,7 +24,6 @@ export default function PlanCard({
           <Heart
             planId={plan.id}
             showWhenNotSaved={false}
-            userId={userId}
             isClickable={heartClickable}
           />
         </div>
