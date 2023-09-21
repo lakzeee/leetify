@@ -8,7 +8,7 @@ type Props = {
 export default function FormToggle(props: Props) {
   const { field } = useController({
     ...props,
-    defaultValue: false,
+    defaultValue: true,
   });
 
   return (

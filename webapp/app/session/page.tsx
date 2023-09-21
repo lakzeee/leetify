@@ -16,9 +16,6 @@ export default async function Page() {
         <pre>{JSON.stringify(user, null, 2)}</pre>
       </div>
       <div>
-        <h3>cookie</h3>
-      </div>
-      <div>
         <h3>Token Data</h3>
         <p className="flex-wrap">{JSON.stringify(token, null, 2)}</p>
       </div>

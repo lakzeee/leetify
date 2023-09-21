@@ -14,6 +14,7 @@ export default function CheckBox({value = false, handleChange, children}: Props)
         type="checkbox"
         // @ts-ignore
         value={value}
+        checked={value}
         onChange={(event) => {
           handleChange?.(event.target.checked);
         }}

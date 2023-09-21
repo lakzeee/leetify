@@ -16,8 +16,8 @@ export default function Consent({ params }: { params: { provider: string } }) {
   const router = useRouter();
   const [isNewUser, setIsNewUser] = useState(false);
   const [isConsent, setIsConsent] = useState(false);
-  const [isStrictlyCookiesConsent, setIsStrictlyCookiesConsent] = useState(false);
-  const [isFunctionalCookiesConsent, setIsFunctionalCookiesConsent] = useState(false);
+  const [isStrictlyCookiesConsent, setIsStrictlyCookiesConsent] = useState(true);
+  const [isFunctionalCookiesConsent, setIsFunctionalCookiesConsent] = useState(true);
   const [profileName, setProfileName] = useState("");
   const [user, setUser] = useState<any>();
 
