@@ -1,7 +1,9 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Polly;
 using ProgressService.Data;
+using ProgressService.Data.Impl;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,7 +35,8 @@ builder.Services.AddDbContext<ProgressDbContext>(opt =>
 // builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddMemoryCache();
-
+builder.Services.AddScoped<IRecordRepository, RecordRepository>();
+builder.Services.AddScoped<IDayCountRepository, DayCountRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -50,13 +53,11 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-try
+app.Lifetime.ApplicationStarted.Register(async () =>
 {
-    DbInitializer.InitDb(app);
-}
-catch (Exception e)
-{
-    Console.WriteLine(e);
-}
+    await Policy.Handle<TimeoutException>()
+        .WaitAndRetryAsync(5, _ => TimeSpan.FromSeconds(10))
+        .ExecuteAndCaptureAsync(async () => DbInitializer.InitDb(app));
+});
 
 app.Run();

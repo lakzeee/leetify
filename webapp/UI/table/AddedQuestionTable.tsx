@@ -28,7 +28,7 @@ export default function AddedQuestionTable({
   const groupByGroupName = groupPlanQuestionsByGroupName(data);
   const columTitles = ["no", "title", "topics", "difficulty"];
   if (enableAction) columTitles.push("action");
-  if (enableProgress) columTitles.push("Status", "Last Visit", "Tags");
+  if (enableProgress) columTitles.push("Status", "Tags", "Last Visit");
 
   // Function to toggle the collapse state of a group
   const toggleCollapse = (groupName: string) => {

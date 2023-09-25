@@ -15,5 +15,6 @@ public class DbInitializer
         await DB.Index<User>()
             .Key(x => x.Email, KeyType.Text)
             .CreateAsync();
+        Log.Information("Connection to UserDB Success");
     }
 }

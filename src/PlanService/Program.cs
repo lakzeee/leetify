@@ -65,6 +65,7 @@ builder.Services.AddAuthentication(o =>
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IPlanRepository, PlanRepository>();
 builder.Services.AddScoped<ISavedPlanRepository, SavePlanRepository>();
+builder.Services.AddScoped<IStatusPropRepository, StatusPropRepository>();
 
 var app = builder.Build();
 

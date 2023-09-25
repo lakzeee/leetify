@@ -1,4 +1,4 @@
-import { PlanQuestion } from "@/types";
+import { DndId, DndItem, PlanQuestion, SelectOption } from "@/types";
 
 export function groupPlanQuestionsByGroupName(
   questions: PlanQuestion[],
@@ -47,4 +47,23 @@ export function generateRandomKey(length = 4) {
   }
 
   return randomKey;
+}
+
+export function convertDndItemsToOptions(dndItems: DndItem[]): SelectOption[] {
+  // Use the map function to convert each DndItem to an Option
+  return dndItems.map((dndItem) => {
+    return {
+      id: dndItem.id,
+      value: dndItem.content,
+      label: dndItem.content,
+      columnId: dndItem.columnId,
+    };
+  }) as SelectOption[];
+}
+
+export function badgeColor(columnId: DndId) {
+  if (columnId == "a") return "bg-gray-400";
+  if (columnId == "b") return "bg-orange-400";
+  if (columnId == "c") return "bg-green-400";
+  return "bg-gray-400";
 }

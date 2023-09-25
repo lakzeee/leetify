@@ -77,6 +77,7 @@ export interface ErrorRes {
 }
 
 export type DndId = string | number;
+
 export interface DndColumn {
   id: DndId;
   title: string;
@@ -86,4 +87,12 @@ export interface DndItem {
   id: DndId;
   columnId: DndId;
   content: string;
+}
+
+export interface SelectOption {
+  value: string;
+  label: string;
+  disabled?: boolean;
+  isSelected?: boolean;
+  columnId?: string;
 }

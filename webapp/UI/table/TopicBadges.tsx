@@ -2,6 +2,7 @@ import { useMediaQuery } from "usehooks-ts";
 
 type Props = {
   topics: string;
+  color?: string;
   maxBadge?: number;
   xs?: boolean;
   xl?: boolean;
@@ -19,7 +20,13 @@ function truncateString(strs: string[], maxLength: number) {
   return res;
 }
 
-export default function TopicBadges({ topics, maxBadge = 3, xs, xl }: Props) {
+export default function TopicBadges({
+  topics,
+  maxBadge = 3,
+  xs,
+  xl,
+  color,
+}: Props) {
   const isExtraSmallScreen = useMediaQuery("(max-width: 600px)");
   const isSmallScreen = useMediaQuery("(max-width: 800px)"); // Small screen width limit
   const isMediumScreen = useMediaQuery("(max-width: 1020px)"); // Medium screen width lim
@@ -41,7 +48,7 @@ export default function TopicBadges({ topics, maxBadge = 3, xs, xl }: Props) {
   return (
     <div>
       {listOfTopic.map((t, index) => (
-        <div key={index} className="badge badge-info ml-1 mb-1">
+        <div key={index} className="badge badge-primary ml-1 mb-1">
           {t}
         </div>
       ))}

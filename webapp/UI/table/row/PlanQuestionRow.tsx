@@ -10,6 +10,8 @@ import { useCreatePlanStore } from "@/Components/hooks/useCreatePlanStore";
 import "react-tooltip/dist/react-tooltip.css";
 import { useTablekeyStore } from "@/Components/hooks/useTablekeyStore";
 import LeetCodeLink from "@/UI/link/LeetCodeLink";
+import StatusSelect from "@/UI/table/row/progress/StatusSelect";
+import TagsBox from "@/UI/table/row/progress/TagsBox";
 
 type Props = {
   question: PlanQuestion;
@@ -49,7 +51,7 @@ export default function PlanQuestionRow({
           addedQuestions[existingQuestionIndex]?.groupName ?? existedGroupName,
         );
     }
-  }, [question]);
+  }, [addedQuestions, existedGroupName, question]);
 
   const handleAdd = () => {
     addToAddedQuestion(question, groupName);
@@ -115,9 +117,13 @@ export default function PlanQuestionRow({
         )}
         {enableProgress && (
           <>
-            <td className="px-6 py-4">TO-DO</td>
+            <td className="px-6 py-4">
+              <StatusSelect />
+            </td>
+            <td className="px-6 py-4">
+              <TagsBox />
+            </td>
             <td className="px-6 py-4">Never</td>
-            <td className="px-6 py-4">Tags</td>
           </>
         )}
       </tr>

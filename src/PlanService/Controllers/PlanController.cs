@@ -47,7 +47,7 @@ public class PlanController : ControllerBase
     [HttpPut("{planId}")]
     public async Task<ActionResult> UpdatePlanById([FromBody] CreatePlanDto createPlanDto, string planId)
     {
-        if (await _planRepo.VerifyPlanOwnerShip(planId, GetUserSubFromToken())) return Unauthorized();
+        if (!await _planRepo.VerifyPlanOwnerShip(planId, GetUserSubFromToken())) return Unauthorized();
         var res = await _planRepo.UpdatePlanById(createPlanDto, planId);
         if (!res) return StatusCode(500, "Internal Server Error");
         return Ok();
@@ -57,7 +57,7 @@ public class PlanController : ControllerBase
     [HttpDelete("{planId}")]
     public async Task<ActionResult> DeletePlanById(string planId)
     {
-        if (await _planRepo.VerifyPlanOwnerShip(planId, GetUserSubFromToken())) return Unauthorized();
+        if (!await _planRepo.VerifyPlanOwnerShip(planId, GetUserSubFromToken())) return Unauthorized();
         var res = await _planRepo.DeletePlanById(planId);
         if (!res) return StatusCode(500, "Internal Server Error");
         return Ok();

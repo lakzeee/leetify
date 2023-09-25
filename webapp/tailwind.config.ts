@@ -13,7 +13,9 @@ const config: Config = {
   plugins: [
     require("@tailwindcss/typography"),
     require("daisyui"),
-    require("flowbite/plugin"),
+    require("flowbite/plugin")({
+      charts: true,
+    }),
   ],
   daisyui: {
     themes: ["night", "winter"], // true: all themes | false: only light + dark | array: specific themes like this ["light", "dark", "cupcake"]

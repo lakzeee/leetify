@@ -1,6 +1,6 @@
 "use client";
-import { useMemo, useState } from "react";
-import { DndId, DndColumn, DndItem } from "@/types";
+import { useEffect, useMemo, useState } from "react";
+import { DndColumn, DndId, DndItem } from "@/types";
 import { generateRandomKey } from "@/Components/utils/helpers";
 import ColumnContainer from "@/UI/dnd/ColumnContainer";
 import {
@@ -17,13 +17,15 @@ import { arrayMove, SortableContext } from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
 import ItemCard from "@/UI/dnd/ItemCard";
 
-export default function StatusDnd() {
+export default function DndDemo() {
   const [columns, setColumns] = useState<DndColumn[]>([]);
+  const [items, setItems] = useState<DndItem[]>([]);
+
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
+
   const [activeColumn, setActiveColumn] = useState<DndColumn | null>();
   const [activeItem, setActiveItem] = useState<DndItem | null>();
 
-  const [items, setItems] = useState<DndItem[]>([]);
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -31,6 +33,12 @@ export default function StatusDnd() {
       },
     }),
   );
+
+  useEffect(() => {
+    console.log(items);
+    console.log(columns);
+  }, [items]);
+
   function createNewColum() {
     const columnToAdd: DndColumn = {
       id: generateRandomKey(),
@@ -38,6 +46,7 @@ export default function StatusDnd() {
     };
     setColumns([...columns, columnToAdd]);
   }
+
   function deleteColum(id: DndId) {
     setColumns(columns.filter((c) => c.id != id));
     setItems(items.filter((item) => item.columnId !== id));
@@ -53,6 +62,7 @@ export default function StatusDnd() {
       return;
     }
   }
+
   function onDragEnd(event: DragEndEvent) {
     setActiveItem(null);
     setActiveColumn(null);
@@ -74,7 +84,6 @@ export default function StatusDnd() {
 
   function onDragOver(event: DragOverEvent) {
     const { active, over } = event;
-    console.log(active);
     if (!over) return;
     const activeId = active.id;
     const overId = over.id;
@@ -123,6 +132,7 @@ export default function StatusDnd() {
   function deleteItem(itemId: DndId) {
     setItems(items.filter((item) => item.id != itemId));
   }
+
   function updateItem(itemId: DndId, content: string) {
     const newItems: DndItem[] = items.map((item) => {
       if (item.id !== itemId) return item;
@@ -156,29 +166,32 @@ export default function StatusDnd() {
             />
           ))}
       </SortableContext>
-      {createPortal(
-        <DragOverlay>
-          {activeColumn && (
-            <ColumnContainer
-              column={activeColumn}
-              deleteColumn={deleteColum}
-              updateColumn={updateColumn}
-              createNewItem={createNewItem}
-              items={items.filter((item) => item.columnId === activeColumn.id)}
-              deleteItem={deleteItem}
-              updateItem={updateItem}
-            />
-          )}
-          {activeItem && (
-            <ItemCard
-              item={activeItem}
-              deleteItem={deleteItem}
-              updateItem={updateItem}
-            />
-          )}
-        </DragOverlay>,
-        document.body,
-      )}
+      {typeof window === "object" &&
+        createPortal(
+          <DragOverlay>
+            {activeColumn && (
+              <ColumnContainer
+                column={activeColumn}
+                deleteColumn={deleteColum}
+                updateColumn={updateColumn}
+                createNewItem={createNewItem}
+                items={items.filter(
+                  (item) => item.columnId === activeColumn.id,
+                )}
+                deleteItem={deleteItem}
+                updateItem={updateItem}
+              />
+            )}
+            {activeItem && (
+              <ItemCard
+                item={activeItem}
+                deleteItem={deleteItem}
+                updateItem={updateItem}
+              />
+            )}
+          </DragOverlay>,
+          document.body,
+        )}
     </DndContext>
   );
 }

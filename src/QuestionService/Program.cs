@@ -1,6 +1,7 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Polly;
 using QuestionService.Data;
 using Serilog;
 
@@ -50,13 +51,11 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-try
+app.Lifetime.ApplicationStarted.Register(async () =>
 {
-    DbInitializer.InitDb(app);
-}
-catch (Exception e)
-{
-    Console.WriteLine(e);
-}
+    await Policy.Handle<TimeoutException>()
+        .WaitAndRetryAsync(5, _ => TimeSpan.FromSeconds(10))
+        .ExecuteAndCaptureAsync(async () => DbInitializer.InitDb(app));
+});
 
 app.Run();

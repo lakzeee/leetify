@@ -11,35 +11,76 @@ import TopicBadges from "@/UI/table/TopicBadges";
 import Heart from "@/UI/icons/Heart";
 import { useSavedPlansStore } from "@/Components/hooks/useSavedPlansStore";
 import StatusEditDialog from "@/app/plan/progress/[planId]/StatusEditDialog";
+import { useStatusStore } from "@/Components/hooks/useStatusStore";
+import {
+  GetUserStatusItems,
+  UpdateUserStatusItems,
+} from "@/Components/actions/statusActions";
+import ProgressChart from "@/UI/charts/ProgressChart";
+import RadarChart from "@/UI/charts/RadarChart";
+
 export default function PlanProgress({
   params,
 }: {
-  params: { planId: string };
+  params: {
+    planId: string;
+  };
 }) {
   const [planDetailData, setPlanDetailData] = useState<PlanQuestionRes>();
-  const [userId, setUserId] = useState<string>();
   const setSavedPlans = useSavedPlansStore((state) => state.setSavedPlans);
+  const setItems = useStatusStore((state) => state.setItems);
+  const items = useStatusStore((state) => state.items);
+  const dummyState = useStatusStore((state) => state.dummyState);
+  const dialogFlag = useStatusStore((state) => state.dialogFlag);
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId");
-    async function fetchUserSavedPlan(userId: string) {
-      const userSavedPlans = await GetSavedPlanRecordByUserId(userId);
+    function saveStatusItemsChange() {
+      UpdateUserStatusItems(items)
+        .then((r) => {
+          if (r.error) {
+            throw r.error;
+          }
+        })
+        .catch();
+    }
+
+    if (!dialogFlag && items) {
+      const delay = 1000;
+      setTimeout(saveStatusItemsChange, delay);
+    }
+  }, [dialogFlag, items]);
+
+  useEffect(() => {
+    async function fetchUserStatusItems() {
+      const statusItems = await GetUserStatusItems();
+      if (statusItems.length > 0) setItems(statusItems);
+    }
+
+    async function fetchUserSavedPlan() {
+      const userSavedPlans = await GetSavedPlanRecordByUserId();
       if (userSavedPlans?.planIds?.length > 0) {
         setSavedPlans(userSavedPlans.planIds);
       }
     }
+
     async function fetchPublicPlanDetail() {
       const planDetail = await GetPublicPlanById(params.planId);
       if (planDetail) {
         setPlanDetailData(planDetail);
       }
     }
+
+    fetchUserSavedPlan();
     fetchPublicPlanDetail();
-    if (userId) setUserId(userId);
-  }, [params.planId, setSavedPlans]);
+    fetchUserStatusItems();
+  }, [params.planId, setItems, setSavedPlans]);
 
   return (
     <Container>
+      <div className="w-full grid md:grid-cols-2 mb-4 gap-4">
+        <ProgressChart />
+        <RadarChart />
+      </div>
       <div className="w-full">
         {planDetailData?.questionList && (
           <AddedQuestionTable
@@ -47,11 +88,7 @@ export default function PlanProgress({
             enableAction={false}
             enableProgress={true}
           >
-            <Heart
-              showWhenNotSaved={true}
-              planId={params.planId}
-              userId={userId}
-            />
+            <Heart showWhenNotSaved={true} planId={params.planId} />
             <div className="flex flex-row justify-between items-center">
               <h1 className="uppercase">{planDetailData.planName}</h1>
               {planDetailData.tags && (
@@ -63,7 +100,7 @@ export default function PlanProgress({
             </p>
           </AddedQuestionTable>
         )}
-        <StatusEditDialog />
+        <StatusEditDialog items={items} />
       </div>
     </Container>
   );

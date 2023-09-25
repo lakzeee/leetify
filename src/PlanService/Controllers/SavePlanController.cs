@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlanService.Data;
 using PlanService.DTOs;
@@ -22,6 +23,7 @@ public class SavePlanController : ControllerBase
         _savedPlanRepo = savedPlanRepository;
     }
 
+    [Authorize]
     [HttpPut("{planId}")]
     public async Task<ActionResult> SavePlanToUser(string planId)
     {
@@ -29,6 +31,7 @@ public class SavePlanController : ControllerBase
         return res ? Ok() : BadRequest();
     }
 
+    [Authorize]
     [HttpDelete("{planId}")]
     public async Task<ActionResult> RemoveFromUser(string planId)
     {
@@ -38,6 +41,7 @@ public class SavePlanController : ControllerBase
 
     [HttpGet]
     [Route("list")]
+    [Authorize]
     public async Task<SavePlan> GetSavedPlanIdListByUserSub()
     {
         return await _savedPlanRepo.GetSavedPlanRecordByUserSub(GetUserSubFromToken());
@@ -45,6 +49,7 @@ public class SavePlanController : ControllerBase
     
     [HttpGet]
     [Route("full")]
+    [Authorize]
     public async Task<ActionResult<List<PlanDto>>> GetPublicPlansByUserSub()
     {
         var savedPlanRecord = await _savedPlanRepo.GetSavedPlanRecordByUserSub(GetUserSubFromToken());
