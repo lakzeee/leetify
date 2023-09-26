@@ -6,25 +6,25 @@ import { PlanQuestionRes } from "@/types";
 import { GetPublicPlanById } from "@/Components/actions/planActions";
 import TopicBadges from "@/UI/table/TopicBadges";
 import Heart from "@/UI/icons/Heart";
+
 export default function PublicPlanDetail({
   params,
 }: {
   params: { planId: string };
 }) {
+  const planId = params.planId;
   const [planDetailData, setPlanDetailData] = useState<PlanQuestionRes>();
-  const [userId, setUserId] = useState<string>();
-
   useEffect(() => {
-    const userId = localStorage.getItem("userId");
     async function fetchPublicPlanDetail() {
       const planDetail = await GetPublicPlanById(params.planId);
       if (planDetail) {
         setPlanDetailData(planDetail);
       }
     }
+
     fetchPublicPlanDetail();
-    if (userId) setUserId(userId);
-  }, [params.planId]);
+    console.log("Fetch once");
+  }, [params.planId, planId]);
 
   return (
     <Container>
@@ -34,11 +34,7 @@ export default function PublicPlanDetail({
             data={planDetailData.questionList}
             enableAction={false}
           >
-            <Heart
-              showWhenNotSaved={true}
-              planId={params.planId}
-              userId={userId}
-            />
+            <Heart showWhenNotSaved={true} planId={params.planId} />
             <div className="flex flex-row justify-between items-center">
               <h1 className="uppercase">{planDetailData.planName}</h1>
               {planDetailData.tags && (

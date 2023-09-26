@@ -1,4 +1,4 @@
-import { PlanQuestion } from "@/types";
+import { PlanQuestion, ProgressRecord } from "@/types";
 import TopicBadges from "@/UI/table/TopicBadges";
 import {
   IoIosAddCircle,
@@ -8,10 +8,12 @@ import {
 import { useEffect, useState } from "react";
 import { useCreatePlanStore } from "@/Components/hooks/useCreatePlanStore";
 import "react-tooltip/dist/react-tooltip.css";
-import { useTablekeyStore } from "@/Components/hooks/useTablekeyStore";
+
 import LeetCodeLink from "@/UI/link/LeetCodeLink";
 import StatusSelect from "@/UI/table/row/progress/StatusSelect";
 import TagsBox from "@/UI/table/row/progress/TagsBox";
+import { useStatusStore } from "@/Components/hooks/useStatusStore";
+import { CreateRecord } from "@/Components/actions/progressActions";
 
 type Props = {
   question: PlanQuestion;
@@ -25,17 +27,17 @@ export default function PlanQuestionRow({
   enableAction = true,
   enableProgress = false,
 }: Props) {
+  // managing state for creating or updating plan
   const [groupName, setGroupName] = useState(existedGroupName);
   const [isAdded, setIsAdded] = useState(false);
-
   const addToAddedQuestion = useCreatePlanStore(
     (state) => state.addToAddedQuestions,
   );
-  const addedQuestions = useCreatePlanStore((state) => state.addedQuestions);
   const removeFromAddedQuestions = useCreatePlanStore(
     (state) => state.removeFromAddedQuestions,
   );
-  const { inc } = useTablekeyStore();
+  const addedQuestions = useCreatePlanStore((state) => state.addedQuestions);
+  const dummyState = useCreatePlanStore((state) => state.dummyState);
 
   // Check if current row is added in the plan
   useEffect(() => {
@@ -51,20 +53,57 @@ export default function PlanQuestionRow({
           addedQuestions[existingQuestionIndex]?.groupName ?? existedGroupName,
         );
     }
+    console.log("Check if current row is added in the plan");
   }, [addedQuestions, existedGroupName, question]);
 
   const handleAdd = () => {
     addToAddedQuestion(question, groupName);
     setGroupName(groupName);
     setIsAdded(true);
-    inc();
   };
 
   const handleRemove = () => {
     removeFromAddedQuestions(question.leetCodeNo);
     setIsAdded(false);
-    inc();
   };
+
+  // Progress Section
+  // const [isCreateRecord, setIsCreateRecord] = useState(true);
+  // const statusItems = useStatusStore((state) => state.items);
+  // set initial value for status select box
+  // const [selectedStatus, setSelectedStatus] = useState({
+  //   value: "TO-DO",
+  //   columnId: "a",
+  //   label: "TO-DO",
+  // });
+  //
+  // if (question.progressRecord) {
+  //   const existedStatus = {
+  //     value: question.progressRecord.statusName,
+  //     columnId: question.progressRecord.columnId,
+  //     label: question.progressRecord.statusName,
+  //   };
+  //   setSelectedStatus(existedStatus);
+  //   setIsCreateRecord(false);
+  // }
+
+  //handle user select a new status
+  // const handleStatusChange = (newValue: any) => {
+  //   setSelectedStatus(newValue);
+  //   const data: ProgressRecord = {
+  //     leetCodeNo: question.leetCodeNo,
+  //     statusName: newValue.value,
+  //     columnId: newValue.columnId,
+  //     tags: "default",
+  //   };
+  //   if (isCreateRecord) {
+  //     CreateRecord(data)
+  //       .then((r) => {
+  //         if (r.error) throw r.error;
+  //       })
+  //       .catch();
+  //   }
+  // };
 
   return (
     <>
@@ -115,17 +154,21 @@ export default function PlanQuestionRow({
             </div>
           </td>
         )}
-        {enableProgress && (
-          <>
-            <td className="px-6 py-4">
-              <StatusSelect />
-            </td>
-            <td className="px-6 py-4">
-              <TagsBox />
-            </td>
-            <td className="px-6 py-4">Never</td>
-          </>
-        )}
+        {/*{enableProgress && (*/}
+        {/*  <>*/}
+        {/*    <td className="px-6 py-4">*/}
+        {/*      <StatusSelect*/}
+        {/*        value={selectedStatus}*/}
+        {/*        onChange={handleStatusChange}*/}
+        {/*        statusItems={statusItems}*/}
+        {/*      />*/}
+        {/*    </td>*/}
+        {/*    <td className="px-6 py-4">*/}
+        {/*      <TagsBox />*/}
+        {/*    </td>*/}
+        {/*    <td className="px-6 py-4">Never</td>*/}
+        {/*  </>*/}
+        {/*)}*/}
       </tr>
     </>
   );

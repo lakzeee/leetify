@@ -2,23 +2,33 @@
 import { useEffect, useState } from "react";
 import { useCreatePlanStore } from "@/Components/hooks/useCreatePlanStore";
 import { getQuestionsByQuestionNumbers } from "@/Components/actions/questionActions";
-import PlanQuestionsTable from "@/UI/table/PlanQuestionsTable";
-import { useTablekeyStore } from "@/Components/hooks/useTablekeyStore";
 import { Tooltip } from "react-tooltip";
-import { Simulate } from "react-dom/test-utils";
-import error = Simulate.error;
+import TableWrapper from "@/UI/table/tablebase/TableWrapper";
+import TableHeader from "@/UI/table/tablebase/TableHeader";
+import Row from "@/UI/table/ActionQuestionTable/Row";
+import { PlanQuestion } from "@/types";
 
-export default function EditQuestionDialog() {
+type Props = {
+  existedGroupName: string;
+  handleAdd: (question: PlanQuestion, groupName: string) => void;
+  handleRemove: (leetCodeNo: number) => void;
+  searchResultQuestions?: PlanQuestion[];
+  addedQuestions?: PlanQuestion[];
+  checkSearchResAdded: (leetCodeNo: number) => [boolean, string];
+};
+export default function EditQuestionDialog({
+  handleAdd,
+  handleRemove,
+  searchResultQuestions,
+  checkSearchResAdded,
+}: Props) {
   const [questionNumbers, setQuestionNumbers] = useState("");
-  const questions = useCreatePlanStore((state) => state.questions);
   const setQuestions = useCreatePlanStore((state) => state.setQuestions);
   const resetQuestion = useCreatePlanStore((state) => state.resetQuestions);
-  const { inc } = useTablekeyStore();
 
   function resetSearch() {
     setQuestionNumbers("");
     resetQuestion();
-    inc();
   }
 
   function handleOnChange(value: string) {
@@ -32,13 +42,15 @@ export default function EditQuestionDialog() {
           if (data.error) throw data.error;
           setQuestions(data);
         })
-        .catch((error) => {
+        .catch(() => {
           console.log("Failed getQuestionsByQuestionNumbers");
         });
     }
+    console.log("Fetch Search res once");
   }, [questionNumbers, setQuestions]);
 
-  const columTitles = ["no", "title", "topics", "difficulty"];
+  const columTitles = ["no", "title", "topics", "difficulty", "Action"];
+
   return (
     <>
       <dialog id="edit_question_dialog" className="modal">
@@ -51,8 +63,22 @@ export default function EditQuestionDialog() {
             placeholder="Enter question number, seperate by comma"
             className="input input-primary focus:ring-0 focus:border-none w-full mb-3"
           />
-          {questions && questions.length > 0 && (
-            <PlanQuestionsTable columTitles={columTitles} data={questions} />
+          {searchResultQuestions && searchResultQuestions.length > 0 && (
+            <TableWrapper>
+              <TableHeader columTitles={columTitles} />
+              <tbody>
+                {searchResultQuestions.map((d) => (
+                  <Row
+                    isAdded={checkSearchResAdded(d.leetCodeNo)[0]}
+                    key={d.title}
+                    question={d}
+                    existedGroupName={checkSearchResAdded(d.leetCodeNo)[1]}
+                    handleAdd={handleAdd}
+                    handleRemove={handleRemove}
+                  />
+                ))}
+              </tbody>
+            </TableWrapper>
           )}
         </div>
 

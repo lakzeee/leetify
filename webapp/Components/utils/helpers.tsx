@@ -1,4 +1,11 @@
-import { DndId, DndItem, PlanQuestion, SelectOption } from "@/types";
+import {
+  DndId,
+  DndItem,
+  PlanQuestion,
+  PlanQuestionRes,
+  ProgressRecord,
+  SelectOption,
+} from "@/types";
 
 export function groupPlanQuestionsByGroupName(
   questions: PlanQuestion[],
@@ -66,4 +73,31 @@ export function badgeColor(columnId: DndId) {
   if (columnId == "b") return "bg-orange-400";
   if (columnId == "c") return "bg-green-400";
   return "bg-gray-400";
+}
+
+export function ConcatPlanDetailWithProgressData(
+  planDetail: PlanQuestionRes,
+  progressData: ProgressRecord[],
+): PlanQuestionRes {
+  if (!planDetail.questionList || !progressData) {
+    return planDetail;
+  }
+
+  // Create a mapping of leetCodeNo to ProgressRecord for efficient lookup
+  const progressMap = new Map<number, ProgressRecord>();
+  for (const progressRecord of progressData) {
+    if (progressRecord.leetCodeNo !== undefined) {
+      progressMap.set(progressRecord.leetCodeNo, progressRecord);
+    }
+  }
+
+  // Update each question in the planDetail with the corresponding progress record
+  for (const question of planDetail.questionList) {
+    const leetCodeNo = question.leetCodeNo;
+    if (leetCodeNo !== undefined && progressMap.has(leetCodeNo)) {
+      question.progressRecord = progressMap.get(leetCodeNo);
+    }
+  }
+
+  return planDetail;
 }

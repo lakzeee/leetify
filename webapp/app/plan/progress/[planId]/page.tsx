@@ -2,7 +2,7 @@
 import Container from "@/UI/container";
 import AddedQuestionTable from "@/UI/table/AddedQuestionTable";
 import { useEffect, useState } from "react";
-import { PlanQuestionRes } from "@/types";
+import { PlanQuestionRes, ProgressRecord } from "@/types";
 import {
   GetPublicPlanById,
   GetSavedPlanRecordByUserId,
@@ -18,6 +18,8 @@ import {
 } from "@/Components/actions/statusActions";
 import ProgressChart from "@/UI/charts/ProgressChart";
 import RadarChart from "@/UI/charts/RadarChart";
+import { GetRecordList } from "@/Components/actions/progressActions";
+import { ConcatPlanDetailWithProgressData } from "@/Components/utils/helpers";
 
 export default function PlanProgress({
   params,
@@ -26,13 +28,17 @@ export default function PlanProgress({
     planId: string;
   };
 }) {
+  // Table data
   const [planDetailData, setPlanDetailData] = useState<PlanQuestionRes>();
+  // pass it to heart component
   const setSavedPlans = useSavedPlansStore((state) => state.setSavedPlans);
+  // managing state of status edit dialog
   const setItems = useStatusStore((state) => state.setItems);
   const items = useStatusStore((state) => state.items);
   const dummyState = useStatusStore((state) => state.dummyState);
   const dialogFlag = useStatusStore((state) => state.dialogFlag);
 
+  // save changes of status edit dialog
   useEffect(() => {
     function saveStatusItemsChange() {
       UpdateUserStatusItems(items)
@@ -50,6 +56,7 @@ export default function PlanProgress({
     }
   }, [dialogFlag, items]);
 
+  // fetching info for displaying basic table
   useEffect(() => {
     async function fetchUserStatusItems() {
       const statusItems = await GetUserStatusItems();
@@ -64,8 +71,20 @@ export default function PlanProgress({
     }
 
     async function fetchPublicPlanDetail() {
-      const planDetail = await GetPublicPlanById(params.planId);
+      let planDetail = await GetPublicPlanById(params.planId);
       if (planDetail) {
+        if (planDetail.questionList && planDetail.questionList.length > 0) {
+          const nums = planDetail.questionList
+            .map((item) => item.leetCodeNo)
+            .join(",");
+          GetRecordList(nums)
+            .then((r) => {
+              if (r.error) throw r.error;
+              if (r.length > 0)
+                planDetail = ConcatPlanDetailWithProgressData(planDetail, r);
+            })
+            .catch();
+        }
         setPlanDetailData(planDetail);
       }
     }
@@ -88,6 +107,7 @@ export default function PlanProgress({
             enableAction={false}
             enableProgress={true}
           >
+            {/*Table Caption*/}
             <Heart showWhenNotSaved={true} planId={params.planId} />
             <div className="flex flex-row justify-between items-center">
               <h1 className="uppercase">{planDetailData.planName}</h1>

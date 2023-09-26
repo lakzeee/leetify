@@ -37,6 +37,7 @@ export interface PlanQuestion {
   groupName?: string;
   groupRank?: number;
   groupOrder?: number;
+  progressRecord?: ProgressRecord;
 }
 
 export interface CreatePlanReq {
@@ -95,4 +96,13 @@ export interface SelectOption {
   disabled?: boolean;
   isSelected?: boolean;
   columnId?: string;
+}
+
+export interface ProgressRecord {
+  id?: string;
+  leetCodeNo?: number;
+  statusName: string;
+  columnId: string;
+  tags: string;
+  UpdatedAt?: string;
 }

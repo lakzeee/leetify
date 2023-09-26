@@ -1,11 +1,8 @@
 namespace ProgressService.Dtos;
 
-public class RecordDto
+public class UpdateRecordDto
 {
-    public Guid Id { get; set; }
-    public int LeetCodeNo { get; set; }
     public string StatusName { get; set; }
     public string ColumnId { get; set; }
     public string Tags { get; set; }
-    public DateTime UpdatedAt { get; set; }
 }

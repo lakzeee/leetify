@@ -11,7 +11,7 @@ type State = {
 
 type Actions = {
   setItems: (items: DndItem[]) => void;
-  createNewItem: (columnId: DndId) => void;
+  createNewItem: (columnId: DndId, columnName: string) => void;
   deleteItem: (itemId: DndId) => void;
   updateItem: (itemId: DndId, content: string) => void;
   toggleDialog: () => void;
@@ -32,13 +32,13 @@ export const useStatusStore = createWithEqualityFn<State & Actions>(
     setItems: (items) => {
       set((state) => ({ items: items }));
     },
-    createNewItem: (columnId) => {
+    createNewItem: (columnId, columnName) => {
       set((state) => {
         const items = state.items;
         const newItem: DndItem = {
           id: generateRandomKey(),
           columnId,
-          content: "New Status Name",
+          content: columnName,
         };
         items.push(newItem);
         return { items: items };

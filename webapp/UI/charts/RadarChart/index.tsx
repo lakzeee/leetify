@@ -8,7 +8,10 @@ export default function RadarChart() {
     { count: 30, name: "Hard", color: "pink" },
   ];
   return (
-    <ProgressChartBase title={"Frequent Topics"} badgeData={badgeData}>
+    <ProgressChartBase
+      title={"Completed Frequent Topics"}
+      badgeData={badgeData}
+    >
       <Chart />
     </ProgressChartBase>
   );

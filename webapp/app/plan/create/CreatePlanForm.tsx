@@ -2,35 +2,44 @@
 import FormInput from "@/UI/planform/FormInput";
 import FormToggle from "@/UI/planform/FormToggle";
 import { useCreatePlanStore } from "@/Components/hooks/useCreatePlanStore";
-import AddedQuestionTable from "@/UI/table/AddedQuestionTable";
-import { useTablekeyStore } from "@/Components/hooks/useTablekeyStore";
 import { Tooltip } from "react-tooltip";
 import toast from "react-hot-toast";
 import { FieldValues, useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   CreateNewPlan,
   UpdatePlanDetailById,
 } from "@/Components/actions/planActions";
 import { useRouter } from "next/navigation";
-import { PlanQuestionRes } from "@/types";
+import { PlanQuestion, PlanQuestionRes } from "@/types";
+import ActionQuestionTable from "@/UI/table/ActionQuestionTable";
 
 type Props = {
   planDetail?: PlanQuestionRes;
   planId?: string;
+  handleAdd: (question: PlanQuestion, groupName: string) => void;
+  handleRemove: (leetCodeNo: number) => void;
+  addedQuestions?: PlanQuestion[];
 };
-export default function CreatePlanForm({ planDetail, planId }: Props) {
+export default function CreatePlanForm({
+  planDetail,
+  planId,
+  handleRemove,
+  handleAdd,
+  addedQuestions,
+}: Props) {
   // manage state of the form
   const [loading, setLoading] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
-  const addedQuestions = useCreatePlanStore((state) => state.addedQuestions);
   const resetAddQuestions = useCreatePlanStore(
     (state) => state.resetAddQuestions,
   );
   const setAddedQuestionsFromList = useCreatePlanStore(
     (state) => state.setAddedQuestionsFromList,
   );
-  const { tableKey } = useTablekeyStore();
+  const cacheAddedQuestions = useMemo(() => addedQuestions, [addedQuestions]);
+  const dummyState = useCreatePlanStore((state) => state.dummyState);
+
   const router = useRouter();
 
   const {
@@ -52,7 +61,7 @@ export default function CreatePlanForm({ planDetail, planId }: Props) {
         setAddedQuestionsFromList(planDetail.questionList);
     }
     setFocus("planName");
-  }, [setFocus]);
+  }, [planDetail, reset, setAddedQuestionsFromList, setFocus]);
 
   function onSubmit(formData: FieldValues) {
     const data = {
@@ -130,14 +139,22 @@ export default function CreatePlanForm({ planDetail, planId }: Props) {
             Add a question
           </div>
         </div>
-        {addedQuestions && addedQuestions.length > 0 && (
-          <AddedQuestionTable key={tableKey} data={addedQuestions} />
+        {cacheAddedQuestions && cacheAddedQuestions.length > 0 && (
+          <ActionQuestionTable
+            key={dummyState}
+            data={cacheAddedQuestions}
+            isAdded={true}
+            handleAdd={handleAdd}
+            handleRemove={handleRemove}
+          />
         )}
 
         <div>
           <button
             className={`btn ${
-              (!isValid || !addedQuestions || addedQuestions.length == 0) &&
+              (!isValid ||
+                !cacheAddedQuestions ||
+                cacheAddedQuestions.length == 0) &&
               "btn-disabled"
             }`}
           >

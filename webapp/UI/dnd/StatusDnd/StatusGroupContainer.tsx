@@ -42,7 +42,7 @@ export default function StatusGroupContainer({ column, items }: Props) {
             <button
               className="btn btn-sm w-full bg-base-100 mt-2"
               onClick={() => {
-                createNewItem(column.id);
+                createNewItem(column.id, column.title);
               }}
             >
               <RiAddCircleLine />

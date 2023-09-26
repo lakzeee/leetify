@@ -1,5 +1,8 @@
 using System.Reflection;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Polly;
 using ProgressService.Data;
@@ -32,12 +35,38 @@ builder.Services.AddDbContext<ProgressDbContext>(opt =>
     opt.UseNpgsql(builder.Configuration.GetConnectionString("ProgressDbConnection"));
 });
 
+var jwtSecret = builder.Configuration["Jwt:Key"];
+// Add JWT Authentication
+builder.Services.AddAuthentication(o =>
+    {
+        o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(o =>
+    {
+        o.RequireHttpsMetadata = false;
+        o.TokenValidationParameters = new TokenValidationParameters()
+        {
+            NameClaimType = "email",
+            ValidateIssuer = true,
+            ValidateIssuerSigningKey = true,
+            // only for testing
+            ValidateLifetime = false,
+            ValidateAudience = false,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            IssuerSigningKey =
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret))
+        };
+    });
+
 // builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<IRecordRepository, RecordRepository>();
 builder.Services.AddScoped<IDayCountRepository, DayCountRepository>();
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

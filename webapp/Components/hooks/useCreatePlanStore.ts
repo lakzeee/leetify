@@ -10,6 +10,7 @@ type State = {
   questions?: PlanQuestion[];
   addedQuestions?: PlanQuestion[];
   questionsString: string;
+  dummyState: number;
 };
 
 type Actions = {
@@ -37,6 +38,7 @@ const initialState: State = {
   questions: [],
   addedQuestions: [],
   questionsString: "",
+  dummyState: 0,
 };
 
 export const useCreatePlanStore = createWithEqualityFn<State & Actions>(
@@ -51,7 +53,7 @@ export const useCreatePlanStore = createWithEqualityFn<State & Actions>(
     setQuestions: (questions) => set({ questions: questions }),
     setAddedQuestionsFromList: (questionList) =>
       set({ addedQuestions: questionList }),
-    addToAddedQuestions: (question, groupName) =>
+    addToAddedQuestions: (question, groupName) => {
       set((state) => {
         const addedQuestions = Array.isArray(state.addedQuestions)
           ? state.addedQuestions
@@ -110,7 +112,9 @@ export const useCreatePlanStore = createWithEqualityFn<State & Actions>(
           addedQuestions.push(question);
         }
         return { addedQuestions };
-      }),
+      });
+      set((state) => ({ dummyState: state.dummyState + 1 }));
+    },
     removeFromAddedQuestions: (questionNo) =>
       set((state) => {
         const addedQuestions = Array.isArray(state.addedQuestions)

@@ -1,14 +1,15 @@
 import PlanQuestionRow from "@/UI/table/row/PlanQuestionRow";
-import { PlanQuestion } from "@/types";
+import { PlanQuestion, ProgressRecord } from "@/types";
 import TableWrapper from "@/UI/table/tablebase/TableWrapper";
 import TableHeader from "@/UI/table/tablebase/TableHeader";
 import {
   generateRandomKey,
   groupPlanQuestionsByGroupName,
 } from "@/Components/utils/helpers";
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import TableGroupRow from "@/UI/table/tablebase/TableGroupRow";
 import TableCaption from "@/UI/table/tablebase/TableCaption";
+import { useCreatePlanStore } from "@/Components/hooks/useCreatePlanStore";
 
 type Props = {
   data: PlanQuestion[];
@@ -22,15 +23,20 @@ export default function AddedQuestionTable({
   children,
   enableProgress = false,
 }: Props) {
+  console.log(data);
   // Initialize a state variable to keep track of collapsed groups
-  const [collapsedGroups, setCollapsedGroups] = useState<string[]>([]);
-
-  const groupByGroupName = groupPlanQuestionsByGroupName(data);
   const columTitles = ["no", "title", "topics", "difficulty"];
   if (enableAction) columTitles.push("action");
   if (enableProgress) columTitles.push("Status", "Tags", "Last Visit");
 
+  // const groupByGroupName = groupPlanQuestionsByGroupName(data);
+  const groupByGroupName = useMemo(
+    () => groupPlanQuestionsByGroupName(data),
+    [data],
+  );
+
   // Function to toggle the collapse state of a group
+  const [collapsedGroups, setCollapsedGroups] = useState<string[]>([]);
   const toggleCollapse = (groupName: string) => {
     if (collapsedGroups.includes(groupName)) {
       setCollapsedGroups(
