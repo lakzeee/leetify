@@ -5,6 +5,8 @@ import {
   PlanQuestionRes,
   ProgressRecord,
   SelectOption,
+  StatusCount,
+  TopicsFrequency,
 } from "@/types";
 
 export function groupPlanQuestionsByGroupName(
@@ -95,9 +97,129 @@ export function ConcatPlanDetailWithProgressData(
   for (const question of planDetail.questionList) {
     const leetCodeNo = question.leetCodeNo;
     if (leetCodeNo !== undefined && progressMap.has(leetCodeNo)) {
-      question.progressRecord = progressMap.get(leetCodeNo);
+      question.progressRecordId = progressMap.get(leetCodeNo)?.id;
+      question.statusName = progressMap.get(leetCodeNo)?.statusName;
+      question.columnId = progressMap.get(leetCodeNo)?.columnId;
+      question.tags = progressMap.get(leetCodeNo)?.tags;
+      question.updatedAt = progressMap.get(leetCodeNo)?.updatedAt;
     }
   }
 
   return planDetail;
+}
+
+export function countStatus(progressData?: PlanQuestion[]): StatusCount {
+  // Initialize counts for each status type to zero
+  const counts: StatusCount = {
+    todo: 0,
+    inProgress: 0,
+    complete: 0,
+  };
+  if (!progressData || progressData.length === 0) return counts;
+
+  // Create a lookup table to map columnId values to status types
+  const columnIdToStatusType: { [columnId: string]: keyof StatusCount } = {
+    a: "todo",
+    b: "inProgress",
+    c: "complete",
+    // Add additional mappings for other columnId values if needed
+  };
+
+  // Iterate through the progressData array and count each status type
+  for (const record of progressData) {
+    const statusType = columnIdToStatusType[record.columnId || "unknown"];
+    if (statusType) {
+      counts[statusType]++;
+    }
+  }
+
+  if (
+    counts.todo + counts.inProgress + counts.complete !=
+    progressData.length
+  ) {
+    counts.todo = progressData.length - counts.inProgress - counts.complete;
+  }
+  return counts;
+}
+
+export function getTopFrequentTopicsAndDifficulties(
+  jsonObjects: PlanQuestion[],
+): TopicsFrequency {
+  const topicCounts: any = {};
+  const topicDifficultyCounts = {
+    Easy: Array(6).fill(0),
+    Medium: Array(6).fill(0),
+    Hard: Array(6).fill(0),
+  };
+
+  // Count the frequency of each topic and its corresponding difficulty
+  for (const jsonObject of jsonObjects) {
+    const topics = jsonObject.topics.split(",");
+    const difficulty = jsonObject.difficulty;
+
+    for (const topic of topics) {
+      const trimmedTopic = topic.trim();
+
+      if (topicCounts[trimmedTopic]) {
+        topicCounts[trimmedTopic].count += 1;
+        topicCounts[trimmedTopic].difficulty[difficulty] += 1;
+      } else {
+        topicCounts[trimmedTopic] = {
+          count: 1,
+          difficulty: {
+            Easy: 0,
+            Medium: 0,
+            Hard: 0,
+          },
+        };
+        topicCounts[trimmedTopic].difficulty[difficulty] += 1;
+      }
+    }
+  }
+
+  // Sort topics by frequency in descending order
+  const sortedTopics = Object.keys(topicCounts).sort(
+    (a, b) => topicCounts[b].count - topicCounts[a].count,
+  );
+
+  // Select the top 6 topics or less if there are fewer than 6
+  const top6Topics = sortedTopics.slice(0, 8);
+
+  // Prepare the series data
+  const series = [
+    {
+      name: "Easy",
+      data: top6Topics.map((topic) => topicCounts[topic].difficulty["Easy"]),
+    },
+    {
+      name: "Medium",
+      data: top6Topics.map((topic) => topicCounts[topic].difficulty["Medium"]),
+    },
+    {
+      name: "Hard",
+      data: top6Topics.map((topic) => topicCounts[topic].difficulty["Hard"]),
+    },
+  ];
+
+  return {
+    numbers: top6Topics.length,
+    topics: top6Topics,
+    series: series,
+  };
+}
+
+export function countDifficulty(jsonObjects: any[]): Record<string, number> {
+  const difficultyCounts: Record<string, number> = {};
+
+  for (const obj of jsonObjects) {
+    const difficulty = obj.difficulty;
+
+    if (difficultyCounts[difficulty]) {
+      difficultyCounts[difficulty]++;
+    } else {
+      difficultyCounts[difficulty] = 1;
+    }
+  }
+
+  return difficultyCounts;
 }

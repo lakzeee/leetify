@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProgressService.Data;
 using ProgressService.Dtos;
+using Serilog;
 
 namespace ProgressService.Controllers;
 
@@ -31,20 +32,37 @@ public class RecordController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateRecord([FromBody] RecordDto recordDto)
     {
-        _recordRepo.CreateRecord(GetUserSubFromToken(), recordDto);
-        var result = await _recordRepo.SaveChangesAsync();
-        if (result) return Ok();
-        return BadRequest("Something went wrong while creating record");
+        var existRecord =
+            await _recordRepo.GetRecordEntityByLeetCodeNoAndUserSub(recordDto.LeetCodeNo, GetUserSubFromToken());
+        if (existRecord != null)
+        {
+            existRecord.ColumnId = recordDto.ColumnId;
+            existRecord.StatusName = recordDto.StatusName;
+            existRecord.Tags = recordDto.Tags;
+            existRecord.UpdatedAt = DateTime.UtcNow;
+            var updateResult = await _recordRepo.SaveChangesAsync();
+            if (updateResult) return Ok();
+            return BadRequest("Something went wrong while updating record");
+        }
+        else
+        {
+            _recordRepo.CreateRecord(GetUserSubFromToken(), recordDto);
+            var result = await _recordRepo.SaveChangesAsync();
+            if (result) return Ok();
+            return BadRequest("Something went wrong while creating record");
+        }
+
     }
 
     [Authorize]
     [HttpPut("{id}")]
-    public async Task<ActionResult> UpdateRecord(Guid id, [FromBody] UpdateRecordDto updateRecord)
+    public async Task<ActionResult> UpdateRecord(string id, [FromBody] UpdateRecordDto updateRecord)
     {
         var record = await _recordRepo.GetRecordEntityByIdAsync(id);
         record.ColumnId = updateRecord.ColumnId ?? record.ColumnId;
         record.StatusName = updateRecord.StatusName ?? record.StatusName;
         record.Tags = updateRecord.Tags ?? record.Tags;
+        record.UpdatedAt = DateTime.UtcNow;
         var result = await _recordRepo.SaveChangesAsync();
         if (result) return Ok();
         return BadRequest("Something went wrong while updating record");

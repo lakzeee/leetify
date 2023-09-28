@@ -1,22 +1,33 @@
 import dynamic from "next/dynamic";
+import { TopicsFrequency } from "@/types";
 
 const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-export default function Chart() {
-  const series = [
+type Props = {
+  frequencyCount?: TopicsFrequency;
+};
+export default function Chart({ frequencyCount }: Props) {
+  let series = [
     {
-      name: "Series 1",
-      data: [80, 50, 30, 40, 100, 20, 100],
+      name: "Easy",
+      data: [0],
     },
     {
-      name: "Series 2",
-      data: [90, 33, 45, 67, 2, 1, 190],
+      name: "Medium",
+      data: [0],
     },
     {
-      name: "Series 3",
-      data: [40, 7, 70, 60, 70, 90, 90],
+      name: "Hard",
+      data: [0],
     },
   ];
+  let categories: string[] = [];
+
+  if (frequencyCount) {
+    series = frequencyCount.series;
+    categories = frequencyCount.topics;
+  }
+
   const option = {
     chart: {
       height: "320px",
@@ -36,15 +47,7 @@ export default function Chart() {
       },
     },
     xaxis: {
-      categories: [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-      ],
+      categories: categories,
     },
     yaxis: {
       show: false,

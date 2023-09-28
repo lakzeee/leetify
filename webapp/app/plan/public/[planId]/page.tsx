@@ -1,11 +1,11 @@
 "use client";
 import Container from "@/UI/container";
-import AddedQuestionTable from "@/UI/table/AddedQuestionTable";
 import { useEffect, useState } from "react";
 import { PlanQuestionRes } from "@/types";
 import { GetPublicPlanById } from "@/Components/actions/planActions";
 import TopicBadges from "@/UI/table/TopicBadges";
 import Heart from "@/UI/icons/Heart";
+import ProgressQuestionTable from "@/UI/table/ProgressQuestionTable";
 
 export default function PublicPlanDetail({
   params,
@@ -22,17 +22,17 @@ export default function PublicPlanDetail({
       }
     }
 
+    console.log("fetch once");
     fetchPublicPlanDetail();
-    console.log("Fetch once");
   }, [params.planId, planId]);
 
   return (
     <Container>
       <div className="w-full">
         {planDetailData?.questionList && (
-          <AddedQuestionTable
+          <ProgressQuestionTable
+            enableProgress={false}
             data={planDetailData.questionList}
-            enableAction={false}
           >
             <Heart showWhenNotSaved={true} planId={params.planId} />
             <div className="flex flex-row justify-between items-center">
@@ -44,7 +44,7 @@ export default function PublicPlanDetail({
             <p className="text-base-content font-light pb-2">
               {planDetailData.description}
             </p>
-          </AddedQuestionTable>
+          </ProgressQuestionTable>
         )}
       </div>
     </Container>

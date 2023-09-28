@@ -12,7 +12,7 @@ type Props = {
 };
 
 export default function StatusSelect({ value, onChange, statusItems }: Props) {
-  const [activeColumn, setActiveColumn] = useState("");
+  const [activeColumn, setActiveColumn] = useState(value.columnId);
   const handleChange = (selectedValue: any) => {
     setActiveColumn(selectedValue.columnId);
     onChange(selectedValue);

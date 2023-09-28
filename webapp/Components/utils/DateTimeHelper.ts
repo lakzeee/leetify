@@ -1,6 +1,8 @@
-export function DateTimeHelper(timestamp: string): string {
+export function DateTimeHelper(timestamp?: string): string {
+  if (!timestamp) return "Never";
   const currentTimestamp = Date.now();
-  const targetTimestamp = Date.parse(timestamp);
+  let targetTimestamp = Date.parse(timestamp);
+
   const timeDifference = currentTimestamp - targetTimestamp;
 
   // Define time intervals in milliseconds

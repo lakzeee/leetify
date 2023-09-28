@@ -1,8 +1,6 @@
 "use client";
 import Container from "@/UI/container";
-import AddedQuestionTable from "@/UI/table/AddedQuestionTable";
-import { useEffect, useState } from "react";
-import { PlanQuestionRes, ProgressRecord } from "@/types";
+import { useEffect, useMemo } from "react";
 import {
   GetPublicPlanById,
   GetSavedPlanRecordByUserId,
@@ -17,9 +15,16 @@ import {
   UpdateUserStatusItems,
 } from "@/Components/actions/statusActions";
 import ProgressChart from "@/UI/charts/ProgressChart";
-import RadarChart from "@/UI/charts/RadarChart";
 import { GetRecordList } from "@/Components/actions/progressActions";
-import { ConcatPlanDetailWithProgressData } from "@/Components/utils/helpers";
+import {
+  ConcatPlanDetailWithProgressData,
+  countDifficulty,
+  countStatus,
+  getTopFrequentTopicsAndDifficulties,
+} from "@/Components/utils/helpers";
+import ProgressQuestionTable from "@/UI/table/ProgressQuestionTable";
+import { useProgressStore } from "@/Components/hooks/useProgressStore";
+import RadarChart from "@/UI/charts/RadarChart";
 
 export default function PlanProgress({
   params,
@@ -29,15 +34,30 @@ export default function PlanProgress({
   };
 }) {
   // Table data
-  const [planDetailData, setPlanDetailData] = useState<PlanQuestionRes>();
+  const planDetailData = useProgressStore(
+    (state) => state.progressQuestionDetails,
+  );
+  const setPlanDetailData = useProgressStore(
+    (state) => state.setProgressQuestionDetails,
+  );
+  const dummyState = useProgressStore((state) => state.dummyState);
+  const incDummy = useProgressStore((state) => state.incDummy);
   // pass it to heart component
   const setSavedPlans = useSavedPlansStore((state) => state.setSavedPlans);
   // managing state of status edit dialog
   const setItems = useStatusStore((state) => state.setItems);
   const items = useStatusStore((state) => state.items);
-  const dummyState = useStatusStore((state) => state.dummyState);
   const dialogFlag = useStatusStore((state) => state.dialogFlag);
 
+  // fetch user status items
+  useEffect(() => {
+    async function fetchUserStatusItems() {
+      const statusItems = await GetUserStatusItems();
+      if (statusItems.length > 0) setItems(statusItems);
+    }
+
+    fetchUserStatusItems();
+  }, [setItems]);
   // save changes of status edit dialog
   useEffect(() => {
     function saveStatusItemsChange() {
@@ -52,17 +72,20 @@ export default function PlanProgress({
 
     if (!dialogFlag && items) {
       const delay = 1000;
-      setTimeout(saveStatusItemsChange, delay);
+      const timeoutId = setTimeout(saveStatusItemsChange, delay);
+      // Return a cleanup function
+      return () => clearTimeout(timeoutId);
     }
   }, [dialogFlag, items]);
 
-  // fetching info for displaying basic table
   useEffect(() => {
-    async function fetchUserStatusItems() {
-      const statusItems = await GetUserStatusItems();
-      if (statusItems.length > 0) setItems(statusItems);
-    }
+    const delay = 1000;
+    const timeoutId = setTimeout(incDummy, delay);
+    // Return a cleanup function
+    return () => clearTimeout(timeoutId);
+  }, [incDummy]);
 
+  useEffect(() => {
     async function fetchUserSavedPlan() {
       const userSavedPlans = await GetSavedPlanRecordByUserId();
       if (userSavedPlans?.planIds?.length > 0) {
@@ -70,6 +93,10 @@ export default function PlanProgress({
       }
     }
 
+    fetchUserSavedPlan();
+  }, [setSavedPlans]);
+  // fetching info for displaying basic table
+  useEffect(() => {
     async function fetchPublicPlanDetail() {
       let planDetail = await GetPublicPlanById(params.planId);
       if (planDetail) {
@@ -80,8 +107,9 @@ export default function PlanProgress({
           GetRecordList(nums)
             .then((r) => {
               if (r.error) throw r.error;
-              if (r.length > 0)
+              if (r.length > 0) {
                 planDetail = ConcatPlanDetailWithProgressData(planDetail, r);
+              }
             })
             .catch();
         }
@@ -89,37 +117,90 @@ export default function PlanProgress({
       }
     }
 
-    fetchUserSavedPlan();
     fetchPublicPlanDetail();
-    fetchUserStatusItems();
-  }, [params.planId, setItems, setSavedPlans]);
+  }, [params.planId]);
+
+  const statusCount = useMemo(() => {
+    if (
+      dummyState > 2 &&
+      planDetailData?.questionList &&
+      planDetailData.questionList?.length > 0
+    ) {
+      return countStatus(planDetailData.questionList);
+    }
+    return {
+      todo: 0,
+      inProgress: 0,
+      complete: 0,
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [planDetailData, dummyState]);
+
+  const difficultyCount = useMemo(() => {
+    if (
+      dummyState > 2 &&
+      planDetailData?.questionList &&
+      planDetailData.questionList?.length > 0
+    ) {
+      console.log("count difficulty");
+      return countDifficulty(
+        planDetailData.questionList.filter((q) => q.columnId == "c"),
+      );
+    }
+    return {
+      Easy: 0,
+      Medium: 0,
+      Hard: 0,
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [planDetailData, dummyState]);
+
+  const frequencyCount = useMemo(() => {
+    if (
+      dummyState > 2 &&
+      planDetailData?.questionList &&
+      planDetailData.questionList?.length > 0
+    ) {
+      console.log("count Frequency");
+      return getTopFrequentTopicsAndDifficulties(
+        planDetailData.questionList.filter((q) => q.columnId == "c"),
+      );
+    }
+    return;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [planDetailData, dummyState]);
 
   return (
     <Container>
       <div className="w-full grid md:grid-cols-2 mb-4 gap-4">
-        <ProgressChart />
-        <RadarChart />
+        <ProgressChart statusCount={statusCount} />
+        <RadarChart
+          difficultyCount={difficultyCount}
+          frequencyCount={frequencyCount}
+        />
       </div>
       <div className="w-full">
-        {planDetailData?.questionList && (
-          <AddedQuestionTable
-            data={planDetailData.questionList}
-            enableAction={false}
-            enableProgress={true}
-          >
-            {/*Table Caption*/}
-            <Heart showWhenNotSaved={true} planId={params.planId} />
-            <div className="flex flex-row justify-between items-center">
-              <h1 className="uppercase">{planDetailData.planName}</h1>
-              {planDetailData.tags && (
-                <TopicBadges topics={planDetailData.tags} />
-              )}
-            </div>
-            <p className="text-base-content font-light pb-2">
-              {planDetailData.description}
-            </p>
-          </AddedQuestionTable>
-        )}
+        {planDetailData?.questionList &&
+          planDetailData?.questionList?.length > 0 && (
+            <ProgressQuestionTable
+              key={dummyState}
+              statusItems={items}
+              data={planDetailData.questionList}
+              enableProgress={true}
+            >
+              {/*Table Caption*/}
+              <Heart showWhenNotSaved={true} planId={params.planId} />
+              <div className="flex flex-row justify-between items-center">
+                <h1 className="uppercase">{planDetailData.planName}</h1>
+                {planDetailData.tags && (
+                  <TopicBadges topics={planDetailData.tags} />
+                )}
+              </div>
+              <p className="text-base-content font-light pb-2">
+                {planDetailData.description}
+              </p>
+            </ProgressQuestionTable>
+          )}
         <StatusEditDialog items={items} />
       </div>
     </Container>

@@ -10,9 +10,7 @@ export default function StatusDnd({ items }: Props) {
     { id: "b", title: "In Progress" },
     { id: "c", title: "Complete" },
   ];
-
-  // const [items, setItems] = useState<DndItem[]>(itemsData);
-
+  
   return (
     <>
       {groupsData.map((group) => (

@@ -57,8 +57,6 @@ export default function CreatePlanForm({
       const { planName, isPublic, description, tags } = planDetail;
       reset({ planName, isPublic, description, tags });
       setIsUpdate(true);
-      if (planDetail.questionList)
-        setAddedQuestionsFromList(planDetail.questionList);
     }
     setFocus("planName");
   }, [planDetail, reset, setAddedQuestionsFromList, setFocus]);

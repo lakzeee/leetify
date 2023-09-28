@@ -60,7 +60,6 @@ export default function CreatePlan() {
           />
           <EditQuestionDialog
             searchResultQuestions={searchResultQuestions}
-            existedGroupName={"ungroup"}
             handleAdd={handleAdd}
             handleRemove={handleRemove}
             checkSearchResAdded={checkSearchResAdded}

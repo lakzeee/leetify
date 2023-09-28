@@ -15,6 +15,7 @@ type Actions = {
   deleteItem: (itemId: DndId) => void;
   updateItem: (itemId: DndId, content: string) => void;
   toggleDialog: () => void;
+  incDummy: () => void;
 };
 
 const initialState: State = {
@@ -28,6 +29,9 @@ export const useStatusStore = createWithEqualityFn<State & Actions>(
     ...initialState,
     toggleDialog: () => {
       set((state) => ({ dialogFlag: !state.dialogFlag }));
+    },
+    incDummy: () => {
+      set((state) => ({ dummyState: state.dummyState + 1 }));
     },
     setItems: (items) => {
       set((state) => ({ items: items }));

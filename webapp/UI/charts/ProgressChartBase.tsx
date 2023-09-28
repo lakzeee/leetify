@@ -18,7 +18,7 @@ export default function ProgressChartBase({
   badgeData,
 }: Props) {
   return (
-    <div className="w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
+    <div className="w-full h-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
       <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white pr-1">
         {title}
       </h5>
@@ -29,7 +29,7 @@ export default function ProgressChartBase({
             className={`bg-${data.color}-50 dark:bg-gray-600 rounded-lg flex flex-col items-center justify-center h-[78px]`}
           >
             <dt
-              className={`w-8 h-8 rounded-full bg-${data.color}-100 dark:bg-${data.color}-500 text-${data.color}-400 dark:text-gray-600 text-sm font-medium flex items-center justify-center mb-1`}
+              className={`w-8 h-8 rounded-full bg-${data.color}-100 dark:bg-${data.color}-500 text-${data.color}-400 dark:text-${data.color}-600 text-sm font-medium flex items-center justify-center mb-1`}
             >
               {data.count}
             </dt>
@@ -43,9 +43,7 @@ export default function ProgressChartBase({
       </div>
 
       {/*Chart*/}
-      <div className="w-full flex justify-center items-end mt-8">
-        {children}
-      </div>
+      <div className="w-full flex justify-center mt-8">{children}</div>
     </div>
   );
 }

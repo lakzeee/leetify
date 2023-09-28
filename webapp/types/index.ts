@@ -37,7 +37,11 @@ export interface PlanQuestion {
   groupName?: string;
   groupRank?: number;
   groupOrder?: number;
-  progressRecord?: ProgressRecord;
+  progressRecordId?: string;
+  statusName?: string;
+  columnId?: string;
+  tags?: string;
+  updatedAt?: string;
 }
 
 export interface CreatePlanReq {
@@ -101,8 +105,25 @@ export interface SelectOption {
 export interface ProgressRecord {
   id?: string;
   leetCodeNo?: number;
-  statusName: string;
-  columnId: string;
-  tags: string;
-  UpdatedAt?: string;
+  statusName?: string;
+  columnId?: string;
+  tags?: string;
+  updatedAt?: string;
+}
+
+export interface StatusCount {
+  todo: number;
+  inProgress: number;
+  complete: number;
+}
+
+export interface TopicsFrequency {
+  numbers: number;
+  topics: string[];
+  series: RadarCharSeries[];
+}
+
+export interface RadarCharSeries {
+  name: string;
+  data: number[];
 }

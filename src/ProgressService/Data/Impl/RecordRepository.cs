@@ -24,9 +24,16 @@ public class RecordRepository : IRecordRepository
         return _mapper.Map<List<RecordDto>>(recordEntities);
     }
 
-    public async Task<Record> GetRecordEntityByIdAsync(Guid id)
+    public async Task<Record> GetRecordEntityByIdAsync(string id)
     {
-        return await _context.Record.FirstOrDefaultAsync(x => x.Id == id);
+        return await _context.Record.FirstOrDefaultAsync(x => x.Id == new Guid(id));
+    }
+
+    public async Task<Record> GetRecordEntityByLeetCodeNoAndUserSub(int leetCodeNo, string userSub)
+    {
+        return await _context.Record
+            .Where(r => r.LeetCodeNo == leetCodeNo && r.UserSub == userSub)
+            .FirstOrDefaultAsync();
     }
 
     public void CreateRecord(string userSub, RecordDto recordDto)

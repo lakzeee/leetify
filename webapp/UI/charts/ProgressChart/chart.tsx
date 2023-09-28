@@ -1,10 +1,10 @@
 import dynamic from "next/dynamic";
 
 const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
-export default function Chart() {
-  const series = [90, 10, 70];
-  // complete: complete count /  all count
-
+type Props = {
+  series: number[];
+};
+export default function Chart({ series }: Props) {
   const option = {
     chart: {
       height: "380px",
@@ -55,7 +55,7 @@ export default function Chart() {
       show: false,
       labels: {
         formatter: function (value: any) {
-          return value + "%";
+          return Math.floor(value) + "%";
         },
       },
     },

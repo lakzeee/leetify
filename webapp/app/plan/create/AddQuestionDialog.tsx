@@ -9,7 +9,6 @@ import Row from "@/UI/table/ActionQuestionTable/Row";
 import { PlanQuestion } from "@/types";
 
 type Props = {
-  existedGroupName: string;
   handleAdd: (question: PlanQuestion, groupName: string) => void;
   handleRemove: (leetCodeNo: number) => void;
   searchResultQuestions?: PlanQuestion[];
