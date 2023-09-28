@@ -1,10 +1,25 @@
 "use client"; // if you use app dir, don't forget this line
 
 import dynamic from "next/dynamic";
+import { DayCountsData } from "@/Components/utils/DateTimeHelper";
 
 const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-export function Chart() {
+type Props = {
+  dayCountsData?: DayCountsData;
+};
+
+export function Chart({ dayCountsData }: Props) {
+  const dates = dayCountsData?.dates || [
+    "01 February",
+    "02 February",
+    "03 February",
+    "04 February",
+    "05 February",
+    "06 February",
+    "07 February",
+  ];
+  const data = dayCountsData?.counts || [0, 0, 0, 0, 0, 0, 0, 0, 0];
   const option = {
     chart: {
       height: "100%",
@@ -42,15 +57,7 @@ export function Chart() {
       show: false,
     },
     xaxis: {
-      categories: [
-        "01 February",
-        "02 February",
-        "03 February",
-        "04 February",
-        "05 February",
-        "06 February",
-        "07 February",
-      ],
+      categories: dates,
       labels: {
         show: false,
       },
@@ -74,8 +81,8 @@ export function Chart() {
 
   const series = [
     {
-      name: "series-1",
-      data: [30, 40, 35, 50, 49, 60, 70, 91, 125],
+      name: "",
+      data: data,
     },
   ];
 

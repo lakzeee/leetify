@@ -6,6 +6,7 @@ namespace ProgressService.Data;
 public interface IDayCountRepository
 {
     Task<List<DayCountDto>> GetDayCountsByUserSub(string userSub);
-    void AddDayCount();
+
+    void AddDayCount(string userSub);
     Task<bool> SaveChangesAsync();
 }

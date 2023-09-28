@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProgressService.Data;
 using ProgressService.Dtos;
-using Serilog;
 
 namespace ProgressService.Controllers;
 
@@ -12,10 +11,12 @@ namespace ProgressService.Controllers;
 public class RecordController : ControllerBase
 {
     private readonly IRecordRepository _recordRepo;
+    private readonly IDayCountRepository _dayCountRepo;
 
-    public RecordController(IRecordRepository recordRepository)
+    public RecordController(IRecordRepository recordRepository, IDayCountRepository dayCountRepository)
     {
         _recordRepo = recordRepository;
+        _dayCountRepo = dayCountRepository;
     }
 
     [Authorize]
@@ -32,10 +33,15 @@ public class RecordController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateRecord([FromBody] RecordDto recordDto)
     {
+        var userId = GetUserSubFromToken();
+        if (userId == null) return Forbid();
+        
         var existRecord =
             await _recordRepo.GetRecordEntityByLeetCodeNoAndUserSub(recordDto.LeetCodeNo, GetUserSubFromToken());
+        
         if (existRecord != null)
         {
+            _dayCountRepo.AddDayCount(userId);
             existRecord.ColumnId = recordDto.ColumnId;
             existRecord.StatusName = recordDto.StatusName;
             existRecord.Tags = recordDto.Tags;
@@ -46,7 +52,8 @@ public class RecordController : ControllerBase
         }
         else
         {
-            _recordRepo.CreateRecord(GetUserSubFromToken(), recordDto);
+            _dayCountRepo.AddDayCount(userId);
+            _recordRepo.CreateRecord(userId, recordDto);
             var result = await _recordRepo.SaveChangesAsync();
             if (result) return Ok();
             return BadRequest("Something went wrong while creating record");
@@ -63,6 +70,7 @@ public class RecordController : ControllerBase
         record.StatusName = updateRecord.StatusName ?? record.StatusName;
         record.Tags = updateRecord.Tags ?? record.Tags;
         record.UpdatedAt = DateTime.UtcNow;
+        _dayCountRepo.AddDayCount(GetUserSubFromToken());
         var result = await _recordRepo.SaveChangesAsync();
         if (result) return Ok();
         return BadRequest("Something went wrong while updating record");

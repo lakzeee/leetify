@@ -35,3 +35,55 @@ export function DateTimeHelper(timestamp?: string): string {
     return `${yearsAgo} ${yearsAgo === 1 ? "year" : "years"} ago`;
   }
 }
+
+interface DayCounts {
+  createdAt: string;
+  count: number;
+}
+
+export interface DayCountsData {
+  dates: string[];
+  counts: number[];
+}
+
+export function generateDateCounts(input: DayCounts[]): DayCountsData {
+  // Parse input JSON objects and sort by createdAt in descending order
+  const sortedInput = input
+    .map((obj) => ({
+      date: new Date(obj.createdAt),
+      count: obj.count,
+    }))
+    .sort((a, b) => b.date.getTime() - a.date.getTime());
+
+  // Extract dates and counts
+  const dates: string[] = [];
+  const counts: number[] = [];
+
+  if (sortedInput.length > 0) {
+    const startDate = sortedInput[0].date;
+    const endDate = sortedInput[sortedInput.length - 1].date;
+
+    let currentDate = new Date(startDate);
+
+    while (currentDate >= endDate) {
+      const dateString = currentDate.toLocaleDateString("en-US", {
+        day: "2-digit",
+        month: "short",
+      });
+      dates.push(dateString);
+
+      const matchingEntry = sortedInput.find(
+        (entry) => entry.date.getTime() === currentDate.getTime(),
+      );
+      counts.push(matchingEntry ? matchingEntry.count : 0);
+
+      // Move to the previous day
+      currentDate.setDate(currentDate.getDate() - 1);
+    }
+  }
+
+  return {
+    dates,
+    counts,
+  };
+}

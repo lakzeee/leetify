@@ -17,3 +17,7 @@ export async function UpdateRecord(
 ): Promise<any> {
   return await fetchWrapper.put(`/progress/record/${id}`, data);
 }
+
+export async function getDayCounts() {
+  return await fetchWrapper.get("/progress/daycount");
+}

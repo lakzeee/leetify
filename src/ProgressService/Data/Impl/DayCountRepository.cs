@@ -1,21 +1,50 @@
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using ProgressService.Dtos;
+using ProgressService.Entities;
 
 namespace ProgressService.Data.Impl;
 
 public class DayCountRepository : IDayCountRepository
 {
-    public async Task<List<DayCountDto>> GetDayCountsByUserSub(string userSub)
+    private readonly ProgressDbContext _dbContext;
+    private readonly IMapper _mapper;
+
+    public DayCountRepository(ProgressDbContext dbContext, IMapper mapper)
     {
-        throw new NotImplementedException();
+        _dbContext = dbContext;
+        _mapper = mapper;
     }
 
-    public void AddDayCount()
+    public async Task<List<DayCountDto>> GetDayCountsByUserSub(string userSub)
     {
-        throw new NotImplementedException();
+        var dayCounts = await _dbContext.DayCounts.Where(d => d.UserSub == userSub).ToListAsync();
+        return _mapper.Map<List<DayCountDto>>(dayCounts);
+    }
+
+    public async void AddDayCount(string userSub)
+    {
+        var currentDate = DateTime.UtcNow.Date;
+        var existRecord =
+            await _dbContext.DayCounts.FirstOrDefaultAsync(d => d.UserSub == userSub && d.CreatedAt == currentDate);
+        if (existRecord != null)
+        {
+            existRecord.Count++;
+        }
+        else
+        {
+            var newRecord = new DayCount
+            {
+                UserSub = userSub,
+                CreatedAt = currentDate,
+                Count = 1
+            };
+            _dbContext.DayCounts.Add(newRecord);
+        }
     }
 
     public async Task<bool> SaveChangesAsync()
     {
-        throw new NotImplementedException();
+        return await _dbContext.SaveChangesAsync() > 0;
     }
 }

@@ -1,21 +1,22 @@
 import { Chart } from "@/UI/charts/AreaChart/chart";
 import DashboardChartBase from "@/UI/charts/DashboardChartBase";
+import { DayCountsData } from "@/Components/utils/DateTimeHelper";
 
-type Data = {
-  date: string;
-  count: number;
-};
 type Props = {
-  Data: Data[];
+  dayCountsData?: DayCountsData;
 };
-export default function AreaChart() {
+export default function AreaChart({ dayCountsData }: Props) {
   return (
     <DashboardChartBase
-      title={"40"}
-      subTitle={"Progress this week"}
-      percentage={"10%"}
+      title={
+        dayCountsData?.counts
+          .reduce((total, count) => total + count)
+          .toString() || "0"
+      }
+      subTitle={"Progress of last 30 days"}
+      // percentage={"10%"}
     >
-      <Chart />
+      <Chart dayCountsData={dayCountsData} />
     </DashboardChartBase>
   );
 }

@@ -10,5 +10,6 @@ public class MappingProfiles : Profile
     {
         CreateMap<RecordDto, Record>();
         CreateMap<Record, RecordDto>();
+        CreateMap<DayCount, DayCountDto>();
     }
 }
