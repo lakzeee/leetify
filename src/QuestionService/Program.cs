@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Polly;
 using QuestionService.Data;
+using QuestionService.Services;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,6 +34,7 @@ builder.Services.AddDbContext<QuestionDbContext>(opt =>
 
 builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddGrpc();
 builder.Services.AddMemoryCache();
 
 var app = builder.Build();
@@ -50,6 +52,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapGrpcService<GrpcDifficultiesService>();
+app.MapGrpcService<GrpcTopicsService>();
 
 app.Lifetime.ApplicationStarted.Register(async () =>
 {

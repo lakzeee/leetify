@@ -127,3 +127,8 @@ export interface RadarCharSeries {
   name: string;
   data: number[];
 }
+
+export interface TreeMapDataPoint {
+  x: string;
+  y: number;
+}

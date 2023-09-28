@@ -1,59 +1,32 @@
 import dynamic from "next/dynamic";
+import { TreeMapDataPoint } from "@/types";
+import { useEffect, useState } from "react";
+import { useThemeStore } from "@/Components/hooks/useThemeStore";
 
 const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-export default function Chart() {
+type Props = {
+  data: TreeMapDataPoint[];
+};
+export default function Chart({ data }: Props) {
+  const { isNightMode } = useThemeStore();
+
+  const [storkColor, setStorkColor] = useState("#1F2937");
+
+  useEffect(() => {
+    setStorkColor(isNightMode ? "#1F2937" : "#FFFFFF");
+  }, [isNightMode]);
+  
   const series = [
     {
-      data: [
-        {
-          x: "Linked List",
-          y: 218,
-        },
-        {
-          x: "Array",
-          y: 149,
-        },
-        {
-          x: "Tree",
-          y: 184,
-        },
-        {
-          x: "Graph",
-          y: 55,
-        },
-        {
-          x: "Dynamic programming",
-          y: 84,
-        },
-        {
-          x: "Greedy",
-          y: 31,
-        },
-        {
-          x: "Prefix Sum",
-          y: 70,
-        },
-        {
-          x: "Binary Search",
-          y: 30,
-        },
-        {
-          x: "DFS",
-          y: 44,
-        },
-        {
-          x: "BFD",
-          y: 68,
-        },
-      ],
+      data: data,
     },
   ];
 
   // TODO: change stoke color base on color mode
   const options = {
     stroke: {
-      colors: ["#1F2937"],
+      colors: [storkColor],
     },
     legend: {
       show: false,

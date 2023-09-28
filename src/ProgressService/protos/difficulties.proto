@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option csharp_namespace = "QuestionService";
+
+service GrpcDifficulties {
+  rpc GetDifficulties (GetDifficultiesRequest) returns (GrpcDifficultiesResponse);
+}
+
+message GetDifficultiesRequest {
+  string ids = 1;
+}
+
+message GrpcDifficultiesResponse {
+  repeated int32 difficulties = 1 [packed = true];
+}

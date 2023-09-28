@@ -37,6 +37,7 @@ export default function Chart({ frequencyCount }: Props) {
         show: false,
       },
     },
+    colors: ["#2EC48D", "#FCE96A", "#F05252"],
     grid: {
       show: false,
       padding: {

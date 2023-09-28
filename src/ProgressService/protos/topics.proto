@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option csharp_namespace = "QuestionService";
+
+service GrpcTopics {
+  rpc GetTopics (GetTopicsRequest) returns (GrpcTopicsResponse);
+}
+
+message GetTopicsRequest {
+  string ids = 1;
+}
+
+message GrpcTopicsModel{
+  string x = 1;
+  int32 y = 2;
+}
+
+message GrpcTopicsResponse {
+  repeated GrpcTopicsModel topics = 1;
+}

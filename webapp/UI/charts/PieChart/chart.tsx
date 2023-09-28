@@ -2,12 +2,16 @@ import dynamic from "next/dynamic";
 
 const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-export default function Chart() {
+type Props = {
+  data: number[];
+};
+export default function Chart({ data }: Props) {
   const option = {
     chart: {
       height: 400,
       width: "100%",
     },
+    colors: ["#2EC48D", "#FCE96A", "#F05252"],
     grid: {
       padding: {
         top: -2,
@@ -36,7 +40,7 @@ export default function Chart() {
             total: {
               showAlways: true,
               show: true,
-              label: "Complete Total",
+              label: "Completed Total",
               formatter: function (w: any) {
                 const sum = w.globals.seriesTotals.reduce((a: any, b: any) => {
                   return a + b;
@@ -55,18 +59,15 @@ export default function Chart() {
     },
   };
 
-  const series = [10, 20, 2];
-
   return (
     <>
       <ApexChart
         type="donut"
         // @ts-ignore
         options={option}
-        series={series}
+        series={data}
         height={320}
         width={340}
-        colors={["#16BDCA", "#FDBA8C", "#E74694"]}
       />
     </>
   );

@@ -7,7 +7,7 @@ using ProgressService.Dtos;
 namespace ProgressService.Controllers;
 
 [ApiController]
-[Route("api/progress/[controller]")]
+[Route("api/progress/stat/[controller]")]
 public class DayCountController : ControllerBase
 {
     private readonly IDayCountRepository _dayCountRepo;

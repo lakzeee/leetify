@@ -18,6 +18,14 @@ export async function UpdateRecord(
   return await fetchWrapper.put(`/progress/record/${id}`, data);
 }
 
-export async function getDayCounts() {
-  return await fetchWrapper.get("/progress/daycount");
+export async function getDayCount() {
+  return await fetchWrapper.get("/progress/stat/daycount");
+}
+
+export async function getDifficultiesCount() {
+  return await fetchWrapper.get("/progress/stat/difficulties");
+}
+
+export async function getTopicsCount() {
+  return await fetchWrapper.get("/progress/stat/topics");
 }

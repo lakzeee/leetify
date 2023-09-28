@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using Polly;
 using ProgressService.Data;
 using ProgressService.Data.Impl;
+using ProgressService.Services;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -64,9 +65,8 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<IRecordRepository, RecordRepository>();
 builder.Services.AddScoped<IDayCountRepository, DayCountRepository>();
+builder.Services.AddScoped<GrpcQuestionClient>();
 var app = builder.Build();
-
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
