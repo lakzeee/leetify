@@ -26,7 +26,7 @@ public class StatController : ControllerBase
     public async Task<ActionResult<List<int>>> GetDifficultiesCount()
     {
         var leetCodeNos = await _repository.GetLeetCodeNosByUserSubAndColumn(GetUserSubFromToken(), "c");
-        if (leetCodeNos == null) return NotFound("Questions Not Found");
+        if (string.IsNullOrWhiteSpace(leetCodeNos)) return NotFound("Questions Not Found");
         var difficulties = _grpcClient.GetDifficultiesCount(leetCodeNos);
         if (difficulties.Any()) return Ok(difficulties);
         return BadRequest("Something went wrong while fetching difficulties count");
@@ -37,7 +37,7 @@ public class StatController : ControllerBase
     public async Task<ActionResult<List<GrpcTopicsModel>>> GetTopicsCount()
     {
         var leetCodeNos = await _repository.GetLeetCodeNosByUserSubAndColumn(GetUserSubFromToken(), "c");
-        if (leetCodeNos == null) return NotFound("Questions Not Found");
+        if (string.IsNullOrWhiteSpace(leetCodeNos)) return NotFound("Questions Not Found");
         var topics = _grpcClient.GetTopicsCount(leetCodeNos);
         if (topics.Any()) return Ok(topics);
         return BadRequest("Something went wrong while fetching topics count");

@@ -47,6 +47,7 @@ export default function PlanProgress({
   // managing state of status edit dialog
   const setItems = useStatusStore((state) => state.setItems);
   const items = useStatusStore((state) => state.items);
+  const statusDummy = useStatusStore((state) => state.dummyState);
   const dialogFlag = useStatusStore((state) => state.dialogFlag);
 
   //loading flags
@@ -121,7 +122,7 @@ export default function PlanProgress({
                 planDetail = ConcatPlanDetailWithProgressData(planDetail, r);
               }
             })
-            .catch();
+            .catch(() => {});
         }
         setPlanDetailData(planDetail);
       }
@@ -170,7 +171,6 @@ export default function PlanProgress({
       planDetailData?.questionList &&
       planDetailData.questionList?.length > 0
     ) {
-      console.log("count Frequency");
       return getTopFrequentTopicsAndDifficulties(
         planDetailData.questionList.filter((q) => q.columnId == "c"),
       );

@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using ProgressService.Entities;
 
 namespace ProgressService.Data;
 
@@ -8,12 +7,10 @@ public class DbInitializer
     public static void InitDb(WebApplication app)
     {
         using var scope = app.Services.CreateScope();
-        var context = scope.ServiceProvider.GetService<ProgressDbContext>();
-
-        SeedDayCountData(context);
+        SeedDayCountData(scope.ServiceProvider.GetService<ProgressDbContext>());
     }
 
-    private static void SeedDayCountData(DbContext context)
+    private static void SeedDayCountData(ProgressDbContext context)
     {
         context.Database.Migrate();
     }

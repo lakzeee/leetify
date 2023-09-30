@@ -42,9 +42,11 @@ public class SavePlanController : ControllerBase
     [HttpGet]
     [Route("list")]
     [Authorize]
-    public async Task<SavePlan> GetSavedPlanIdListByUserSub()
+    public async Task<ActionResult<SavePlan>> GetSavedPlanIdListByUserSub()
     {
-        return await _savedPlanRepo.GetSavedPlanRecordByUserSub(GetUserSubFromToken());
+        var savedPlanIdList = await _savedPlanRepo.GetSavedPlanRecordByUserSub(GetUserSubFromToken());
+        if (savedPlanIdList == null) return NotFound("savedPlanIdList found ");
+        return Ok(savedPlanIdList);
     }
     
     [HttpGet]
@@ -52,8 +54,12 @@ public class SavePlanController : ControllerBase
     [Authorize]
     public async Task<ActionResult<List<PlanDto>>> GetPublicPlansByUserSub()
     {
-        var savedPlanRecord = await _savedPlanRepo.GetSavedPlanRecordByUserSub(GetUserSubFromToken());
-        return await _planRepo.GetPlansByPlanIds(savedPlanRecord.PlanIds);
+        var savedPlanIdList = await _savedPlanRepo.GetSavedPlanRecordByUserSub(GetUserSubFromToken());
+        if (savedPlanIdList == null) return NotFound("no savedPlanIdList found ");
+        var plans = await _planRepo.GetPlansByPlanIds(savedPlanIdList.PlanIds);
+        // TODO: handle the situation of then a public plan is being removed, user who save that plan with id fetches a null result
+        if (!plans.Any()) return NotFound("no plan found by saved plan ids");
+        return Ok(plans);
     }
 
 

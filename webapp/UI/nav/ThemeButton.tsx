@@ -16,7 +16,11 @@ export default function ThemeButton() {
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
-    if (savedTheme) setTheme(savedTheme);
+    if (savedTheme) {
+      setTheme(savedTheme);
+    } else {
+      localStorage.setItem("theme", "night");
+    }
   }, []);
 
   useEffect(() => {

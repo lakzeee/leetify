@@ -26,6 +26,26 @@ services:
       - mgdata:/var/lib/mongodb/data
     networks: 
       custom:
+  webapp:
+    image: lak919/leetify-webapp:latest
+    build:
+      context: .
+      dockerfile: webapp/Dockerfile
+    volumes:
+      - /var/lib/web/data
+    environment:
+      - NEXTAUTH_SECRET=V7iy5gPZcCWcaSnnHhRJrXSFqsSxOtLSCjrBFwgpE
+      - NEXTAUTH_URL=https://leetify.live
+      - NEXT_PUBLIC_API_URL=https://api.leetify.live
+      - API_URL=https://api.leetify.live
+      - GOOGLE_ID=3290488604-5nq1hdk948aj31jqfaqe4ro7l5fi0io9.apps.googleusercontent.com
+      - GOOGLE_SECRET=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
+      - GITHUB_ID=d2113a84e9cddfef5140
+      - GITHUB_SECRET=0d30ec94348b7b812a858b8c728292db0b9efa1c
+      - VIRTUAL_HOST=leetify.live
+      - VIRTUAL_PORT=3000
+    networks: 
+      custom:
   gateway-svc:
     image: lak919/leetify-gateway-svc:latest
     build:
@@ -34,8 +54,6 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:80
-      - Jwt__Issuer=http://localhost:3000
-      - Jwt__Key=V7iy5gPZcCWcaSnnHhRJrXSFqsSxOtLSCjrBFwgpE
       - VIRTUAL_HOST=api.leetify.live
     networks:
       custom:
@@ -69,7 +87,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
       - ConnectionStrings__ProgressDbConnection=Server=postgres:5432;User Id=postgres;Password=postgrespw;Database=progress
-      - Jwt__Issuer=http://localhost:3000
+      - Jwt__Issuer=https://leetify.live
       - Jwt__Key=V7iy5gPZcCWcaSnnHhRJrXSFqsSxOtLSCjrBFwgpE
       - GrpcQuestion=http://question-svc:5555
     ports:
@@ -87,7 +105,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
       - ConnectionStrings__MongoDbConnection=mongodb://root:mongopw@mongodb
-      - Jwt__Issuer=http://localhost:3000
+      - Jwt__Issuer=https://leetify.live
       - Jwt__Key=V7iy5gPZcCWcaSnnHhRJrXSFqsSxOtLSCjrBFwgpE
     ports:
       - 5003:80
@@ -104,7 +122,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
       - ConnectionStrings__MongoDbConnection=mongodb://root:mongopw@mongodb
-      - Jwt__Issuer=http://localhost:3000
+      - Jwt__Issuer=https://leetify.live
       - Jwt__Key=V7iy5gPZcCWcaSnnHhRJrXSFqsSxOtLSCjrBFwgpE
     ports:
       - 5002:80

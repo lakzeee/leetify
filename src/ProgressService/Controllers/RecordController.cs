@@ -25,6 +25,7 @@ public class RecordController : ControllerBase
     {
         var numbers = questionNumbers.Split(',').Select(q => int.Parse(q.Trim())).ToList();
         var recordDtos = await _recordRepo.GetRecordListByLeetCodeNoAsync(GetUserSubFromToken(), numbers);
+        if (recordDtos == null) return NotFound();
         if (recordDtos.Count > 0) return Ok(recordDtos);
         return NotFound();
     }

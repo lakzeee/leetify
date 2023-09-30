@@ -21,7 +21,7 @@ public class RecordRepository : IRecordRepository
             .Where(x => x.UserSub == userSub)
             .Where(x => nos.Contains(x.LeetCodeNo))
             .ToListAsync();
-        return _mapper.Map<List<RecordDto>>(recordEntities);
+        return recordEntities.Count == 0 ? null : _mapper.Map<List<RecordDto>>(recordEntities);
     }
 
     public async Task<string> GetLeetCodeNosByUserSubAndColumn(string userSub, string columnId)
@@ -30,6 +30,7 @@ public class RecordRepository : IRecordRepository
             .Where(x => x.UserSub == userSub)
             .Where(x => x.ColumnId == columnId)
             .ToListAsync();
+        if (recordEntities.Count == 0) return null;
         var leetCodeNos = recordEntities.Select(x => x.LeetCodeNo).ToList();
         return string.Join(",", leetCodeNos);
     }

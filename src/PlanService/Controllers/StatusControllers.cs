@@ -26,6 +26,7 @@ public class StatusControllers : ControllerBase
     public async Task<ActionResult<List<StatusItem>>> GetStatusItemsByUserSub()
     {
         var statusProp = await _repo.GetStatusPropByUserSub(GetUserSubFromToken());
+        if (statusProp == null || statusProp.StatusItems.Count == 0) return NotFound("No status items found");
         var statusItems = statusProp.StatusItems;
         return Ok(statusItems);
     }

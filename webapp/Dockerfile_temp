@@ -2,7 +2,7 @@ FROM node:20-alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-COPY webapp/package*.json webapp/yarn.lock ./
+COPY webapp/package*.json yarn.lock ./
 RUN  yarn install --fronzen-lockfile
 
 FROM node:20-alpine AS builder
@@ -21,7 +21,7 @@ WORKDIR /app
 ENV NODE_ENV production
 
 # Install PM2 to manage node processes
-RUN yarn global add pm2
+RUN yarn install pm2 --location=global
 
 ENV NEXT_TELEMETRY_DISABLED 1
 

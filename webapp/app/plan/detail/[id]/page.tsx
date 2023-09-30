@@ -18,6 +18,8 @@ export default function PlanDetail({ params }: { params: { id: string } }) {
       const planDetail = await GetPlanDetailById(params.id);
       if (planDetail) {
         setPlanDetail(planDetail);
+        if (planDetail.questionList)
+          setAddedQuestionsFromList(planDetail.questionList);
       }
     }
 
@@ -29,7 +31,7 @@ export default function PlanDetail({ params }: { params: { id: string } }) {
   const addToAddedQuestion = useCreatePlanStore(
     (state) => state.addToAddedQuestions,
   );
-  const setAddedQuestionsFromLis = useCreatePlanStore(
+  const setAddedQuestionsFromList = useCreatePlanStore(
     (state) => state.setAddedQuestionsFromList,
   );
   const removeFromAddedQuestions = useCreatePlanStore(

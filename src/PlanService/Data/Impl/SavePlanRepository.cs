@@ -53,7 +53,7 @@ public class SavePlanRepository : ISavedPlanRepository
     {
         var userRecord = await DB.Find<SavePlan>()
             .ManyAsync(x => x.UserSub == userSub);
-        var record = userRecord[0];
-        return userRecord.Count == 1 ? record : null;
+        if (!userRecord.Any()) return null;
+        return userRecord.Count == 1 ? userRecord[0] : null;
     }
 }
