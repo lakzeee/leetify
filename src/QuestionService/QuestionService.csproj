@@ -28,7 +28,7 @@
   <ItemGroup>
     <Protobuf Include="protos/difficulties.proto" GrpcSerices="Server"/>
     <Protobuf Include="protos/topics.proto" GrpcSerices="Server"/>
-
+    <Protobuf Include="protos/questions.proto" GrpcSerices="Server"/>
   </ItemGroup>
 
 

@@ -22,7 +22,7 @@ public class DbInitializer
             return;
         }
 
-        var jsonFilePath = Path.Combine("/Users/lak/Downloads/leetify/src/QuestionService/Data/questions.json");
+        var jsonFilePath = Path.Combine(Directory.GetCurrentDirectory(), @"Data/questions.json");
 
         if (File.Exists(jsonFilePath))
         {

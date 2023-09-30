@@ -22,7 +22,7 @@ public class DayCountRepository : IDayCountRepository
         return _mapper.Map<List<DayCountDto>>(dayCounts);
     }
 
-    public async void AddDayCount(string userSub)
+    public async Task AddDayCount(string userSub)
     {
         var currentDate = DateTime.UtcNow.Date;
         var existRecord =

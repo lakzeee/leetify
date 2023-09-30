@@ -1,4 +1,6 @@
 import { useMediaQuery } from "usehooks-ts";
+import TagBadge from "@/UI/badge/TagBadge";
+import { generateRandomKey } from "@/Components/utils/helpers";
 
 type Props = {
   topics: string;
@@ -48,9 +50,7 @@ export default function TopicBadges({
   return (
     <div>
       {listOfTopic.map((t, index) => (
-        <div key={index} className="badge badge-primary ml-1 mb-1">
-          {t}
-        </div>
+        <TagBadge key={generateRandomKey()} name={t} />
       ))}
     </div>
   );

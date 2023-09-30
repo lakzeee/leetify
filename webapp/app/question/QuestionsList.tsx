@@ -9,6 +9,7 @@ import Filters from "@/app/question/Filters";
 
 export default function QuestionsList() {
   const [loading, setLoading] = useState(true);
+
   const params = useQuestionsSearchParamsStore((state) => ({
     pageNumber: state.pageNumber,
     pageSize: state.pageSize,
@@ -17,6 +18,7 @@ export default function QuestionsList() {
     sortOrder: state.sortOrder,
     difficulty: state.difficulty,
   }));
+
   const data = useQuestionsStore((state) => ({
     questions: state.questions,
     totalCount: state.totalCount,
@@ -31,7 +33,7 @@ export default function QuestionsList() {
     setParams({ pageNumber });
   }
 
-  const columTitles = ["No", "title", "topics", "difficulty", "slug"];
+  const columTitles = ["No", "title", "topics", "difficulty"];
   useEffect(() => {
     getQuestionData(queryUrl).then((data) => {
       setData(data);

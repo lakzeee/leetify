@@ -15,29 +15,41 @@ import { useSavedPlansStore } from "@/Components/hooks/useSavedPlansStore";
 export default function MyPlans() {
   const [userPlans, setUserPlans] = useState<PlanQuestionRes[]>();
   const [savedPlans, setSavePlans] = useState<PlanQuestionRes[]>();
+  const [loadingUserPlans, setLoadingUserPlans] = useState(false);
+  const [loadingSavedPlans, setLoadingSavedPlans] = useState(false);
   const setSavedPlansStore = useSavedPlansStore((state) => state.setSavedPlans);
 
   useEffect(() => {
     async function fetchUserSavedPlan() {
+      setLoadingSavedPlans(true);
       const userSavedPlans = await GetSavedPlanRecordByUserId();
       if (userSavedPlans?.planIds?.length > 0) {
         setSavedPlansStore(userSavedPlans.planIds);
       }
+      setLoadingSavedPlans(false);
     }
+
     async function fetchUserPlans() {
+      setLoadingUserPlans(true);
       const userPlans = await GetUserPlans();
       setUserPlans(userPlans);
+      setLoadingUserPlans(false);
     }
+
     async function fetchSavedPlans() {
+      setLoadingSavedPlans(true);
       const savePlans = await GetUserSavedPlans();
       setSavePlans(savePlans);
+      console.log(savePlans);
+      setLoadingSavedPlans(false);
     }
+
     fetchUserSavedPlan();
     fetchUserPlans();
     fetchSavedPlans();
   }, [setSavedPlansStore]);
   return (
-    <Container>
+    <Container isLoading={loadingUserPlans && loadingSavedPlans}>
       <div className="flex w-full flex-col justify-start mb-4">
         <div className="mb-6">
           <a href={"/plan/create"} className="btn btn-primary">

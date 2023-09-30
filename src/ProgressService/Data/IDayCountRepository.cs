@@ -7,6 +7,6 @@ public interface IDayCountRepository
 {
     Task<List<DayCountDto>> GetDayCountsByUserSub(string userSub);
 
-    void AddDayCount(string userSub);
+    Task AddDayCount(string userSub);
     Task<bool> SaveChangesAsync();
 }

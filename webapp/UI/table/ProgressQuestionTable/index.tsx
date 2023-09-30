@@ -15,7 +15,7 @@ type Props = {
   data: PlanQuestion[];
   children?: React.ReactNode;
   enableProgress: boolean;
-  statusItems: DndItem[];
+  statusItems?: DndItem[];
   handleStatusChange?: any;
 };
 export default function ProgressQuestionTable({

@@ -2,7 +2,9 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProgressService.Data;
+using ProgressService.Dtos;
 using ProgressService.Services;
+using QuestionService;
 
 namespace ProgressService.Controllers;
 
@@ -23,7 +25,7 @@ public class StatController : ControllerBase
     [Authorize]
     public async Task<ActionResult<List<int>>> GetDifficultiesCount()
     {
-        var leetCodeNos = await _repository.GetLeetCodeNosByUserSub(GetUserSubFromToken(), "c");
+        var leetCodeNos = await _repository.GetLeetCodeNosByUserSubAndColumn(GetUserSubFromToken(), "c");
         if (leetCodeNos == null) return NotFound("Questions Not Found");
         var difficulties = _grpcClient.GetDifficultiesCount(leetCodeNos);
         if (difficulties.Any()) return Ok(difficulties);
@@ -32,13 +34,40 @@ public class StatController : ControllerBase
 
     [HttpGet("topics")]
     [Authorize]
-    public async Task<ActionResult<List<int>>> GetTopicsCount()
+    public async Task<ActionResult<List<GrpcTopicsModel>>> GetTopicsCount()
     {
-        var leetCodeNos = await _repository.GetLeetCodeNosByUserSub(GetUserSubFromToken(), "c");
+        var leetCodeNos = await _repository.GetLeetCodeNosByUserSubAndColumn(GetUserSubFromToken(), "c");
         if (leetCodeNos == null) return NotFound("Questions Not Found");
         var topics = _grpcClient.GetTopicsCount(leetCodeNos);
         if (topics.Any()) return Ok(topics);
         return BadRequest("Something went wrong while fetching topics count");
+    }
+
+    [HttpGet("questions")]
+    [Authorize]
+    public async Task<ActionResult<List<QuestionDto>>> GetQuestions()
+    {
+        var records = await _repository.GetGetMostRecentUserRecord(GetUserSubFromToken(), 10);
+        if (!records.Any()) return NotFound("Questions Not Found");
+
+        var questions = _grpcClient.GetQuestions(
+            string.Join(",", records.Select(x => x.LeetCodeNo).ToList()));
+
+        if (!questions.Any()) return BadRequest("Something went wrong while fetching questions");
+
+        var joinedData = from record in records
+            join question in questions on record.LeetCodeNo equals question.LeetCodeNo
+            select new QuestionDto
+            {
+                LeetCodeNo = record.LeetCodeNo,
+                StatusName = record.StatusName,
+                ColumnId = record.ColumnId,
+                UpdatedAt = record.UpdatedAt,
+                Title = question.Title,
+                Topics = question.Topics,
+                Difficulty = question.Difficulty
+            };
+        return Ok(joinedData.OrderByDescending(x => x.UpdatedAt));
     }
     
     private string GetUserSubFromToken()

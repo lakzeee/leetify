@@ -10,18 +10,19 @@ import { GetPlanDetailById } from "@/Components/actions/planActions";
 
 export default function PlanDetail({ params }: { params: { id: string } }) {
   const [planDetail, setPlanDetail] = useState<any>();
+  const [loadingPlanDetail, setLoadingPlanDetail] = useState(false);
 
   useEffect(() => {
     async function fetchPlanDetail() {
+      setPlanDetail(true);
       const planDetail = await GetPlanDetailById(params.id);
       if (planDetail) {
         setPlanDetail(planDetail);
-        if (planDetail.questionList)
-          setAddedQuestionsFromLis(planDetail.questionList);
       }
     }
 
     fetchPlanDetail();
+    setPlanDetail(false);
   }, [params.id]);
 
   const addedQuestions = useCreatePlanStore((state) => state.addedQuestions);
@@ -37,7 +38,6 @@ export default function PlanDetail({ params }: { params: { id: string } }) {
   const searchResultQuestions = useCreatePlanStore((state) => state.questions);
   const handleAdd = (question: PlanQuestion, groupName: string) => {
     addToAddedQuestion(question, groupName);
-    console.log(addedQuestions);
   };
   const handleRemove = (leetCodeNo: number) => {
     removeFromAddedQuestions(leetCodeNo);
@@ -54,7 +54,7 @@ export default function PlanDetail({ params }: { params: { id: string } }) {
   }
 
   return (
-    <Container>
+    <Container isLoading={loadingPlanDetail}>
       {planDetail && planDetail.questionList.length > 0 && (
         <CreatePlanForm
           key={generateRandomKey()}

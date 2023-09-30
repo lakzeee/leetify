@@ -29,14 +29,14 @@ export default function StatusSelect({ value, onChange, statusItems }: Props) {
       classNames={{
         // @ts-ignore
         menuButton: ({ data }) =>
-          `flex w-[130px] py-0 flex justify-between text-sm text-white text-gray-500 border-none rounded-full transition-all duration-300 focus:outline-none ${badgeColor(
+          `item-center flex w-[130px] justify-between text-sm text-white text-gray-500 border-none rounded-full transition-all duration-300 focus:outline-none ${badgeColor(
             activeColumn,
           )}`,
         menu: "absolute py-1 z-10 w-full bg-base-100 shadow-lg border-none rounded-lg text-sm text-gray-700 shadow-lg",
       }}
       formatOptionLabel={(data) => (
         <li
-          className={`block transition duration-200 px-3 py-2 mt-2 cursor-pointer select-none truncate text-white text-sm rounded-full ${badgeColor(
+          className={`block transition duration-200 px-3 py-2 mt-2 mb-2 cursor-pointer select-none truncate text-white text-sm rounded-full ${badgeColor(
             // @ts-ignore
             data.columnId,
           )}`}

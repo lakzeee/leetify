@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option csharp_namespace = "QuestionService";
+
+service GrpcQuestions {
+  rpc GetQuestions (GetQuestionsRequest) returns (GrpcQuestionsResponse);
+}
+
+message GetQuestionsRequest {
+  string ids = 1;
+}
+
+message GrpcQuestionsModel{
+  int32 leetCodeNo = 1;
+  string title = 2;
+  string topics = 3;
+  string difficulty = 4;
+}
+
+message GrpcQuestionsResponse {
+  repeated GrpcQuestionsModel questions = 1;
+}

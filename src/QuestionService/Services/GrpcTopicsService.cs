@@ -1,14 +1,7 @@
 using Grpc.Core;
 using QuestionService.Data;
-using Serilog;
 
 namespace QuestionService.Services;
-
-public class TopicCount
-{
-    public string X { get; set; }
-    public int Y { get; set; }
-}
 
 public class GrpcTopicsService : GrpcTopics.GrpcTopicsBase
 {

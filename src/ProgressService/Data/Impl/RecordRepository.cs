@@ -24,7 +24,7 @@ public class RecordRepository : IRecordRepository
         return _mapper.Map<List<RecordDto>>(recordEntities);
     }
 
-    public async Task<string> GetLeetCodeNosByUserSub(string userSub, string columnId)
+    public async Task<string> GetLeetCodeNosByUserSubAndColumn(string userSub, string columnId)
     {
         var recordEntities = await _context.Record
             .Where(x => x.UserSub == userSub)
@@ -32,6 +32,15 @@ public class RecordRepository : IRecordRepository
             .ToListAsync();
         var leetCodeNos = recordEntities.Select(x => x.LeetCodeNo).ToList();
         return string.Join(",", leetCodeNos);
+    }
+
+    public async Task<List<Record>> GetGetMostRecentUserRecord(string userSub, int number)
+    {
+        return await _context.Record
+            .Where(x => x.UserSub == userSub)
+            .OrderByDescending(x => x.UpdatedAt)
+            .Take(number)
+            .ToListAsync();
     }
 
     public async Task<Record> GetRecordEntityByIdAsync(string id)

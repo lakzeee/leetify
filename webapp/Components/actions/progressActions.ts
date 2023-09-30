@@ -29,3 +29,7 @@ export async function getDifficultiesCount() {
 export async function getTopicsCount() {
   return await fetchWrapper.get("/progress/stat/topics");
 }
+
+export async function getRecentVisitQuestions() {
+  return await fetchWrapper.get("/progress/stat/questions");
+}

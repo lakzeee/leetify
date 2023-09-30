@@ -1,6 +1,6 @@
 "use client";
 import Container from "@/UI/container";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   GetPublicPlanById,
   GetSavedPlanRecordByUserId,
@@ -49,6 +49,9 @@ export default function PlanProgress({
   const items = useStatusStore((state) => state.items);
   const dialogFlag = useStatusStore((state) => state.dialogFlag);
 
+  //loading flags
+  const [loadingPlanDetail, setLoadingPlanDetail] = useState(false);
+
   // fetch user status items
   useEffect(() => {
     async function fetchUserStatusItems() {
@@ -80,7 +83,13 @@ export default function PlanProgress({
 
   useEffect(() => {
     const delay = 1000;
-    const timeoutId = setTimeout(incDummy, delay);
+
+    function inc() {
+      incDummy();
+      setLoadingPlanDetail(false);
+    }
+
+    const timeoutId = setTimeout(inc, delay);
     // Return a cleanup function
     return () => clearTimeout(timeoutId);
   }, [incDummy]);
@@ -98,6 +107,7 @@ export default function PlanProgress({
   // fetching info for displaying basic table
   useEffect(() => {
     async function fetchPublicPlanDetail() {
+      setLoadingPlanDetail(true);
       let planDetail = await GetPublicPlanById(params.planId);
       if (planDetail) {
         if (planDetail.questionList && planDetail.questionList.length > 0) {
@@ -118,7 +128,7 @@ export default function PlanProgress({
     }
 
     fetchPublicPlanDetail();
-  }, [params.planId]);
+  }, [params.planId, setPlanDetailData]);
 
   const statusCount = useMemo(() => {
     if (
@@ -142,7 +152,6 @@ export default function PlanProgress({
       planDetailData?.questionList &&
       planDetailData.questionList?.length > 0
     ) {
-      console.log("count difficulty");
       return countDifficulty(
         planDetailData.questionList.filter((q) => q.columnId == "c"),
       );
@@ -171,7 +180,7 @@ export default function PlanProgress({
   }, [planDetailData, dummyState]);
 
   return (
-    <Container>
+    <Container isLoading={loadingPlanDetail}>
       <div className="w-full grid md:grid-cols-2 mb-4 gap-4">
         <ProgressChart statusCount={statusCount} />
         <RadarChart

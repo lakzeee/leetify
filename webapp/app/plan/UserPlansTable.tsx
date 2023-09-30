@@ -3,6 +3,7 @@ import TableWrapper from "@/UI/table/tablebase/TableWrapper";
 import TableHeader from "@/UI/table/tablebase/TableHeader";
 import React from "react";
 import UserPlanRow from "@/UI/table/row/UserPlanRow";
+
 type Props = {
   userPlans: PlanQuestionRes[];
   enableAction?: boolean;

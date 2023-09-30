@@ -13,11 +13,12 @@ import {
 import { generateRandomKey } from "@/Components/utils/helpers";
 import { DateTimeHelper } from "@/Components/utils/DateTimeHelper";
 import { useProgressStore } from "@/Components/hooks/useProgressStore";
+import DifficultyBadge from "@/UI/badge/DifficultyBadge";
 
 type Props = {
   question: PlanQuestion;
   enableProgress?: boolean;
-  statusItems: DndItem[];
+  statusItems?: DndItem[];
   handleStatusChange?: any;
   statusName?: string;
 };
@@ -109,13 +110,16 @@ export default function Row({
             {question.leetCodeNo}
           </div>
         </td>
+
         <td className="px-6 py-4 text-gray-900 lg:whitespace-nowrap dark:text-white">
           <LeetCodeLink title={question.title}>{question.title}</LeetCodeLink>
         </td>
         <td className="px-6 py-4 text-gray-900 lg:whitespace-nowrap dark:text-white">
           <TopicBadges topics={question.topics} maxBadge={3} xs={true} />
         </td>
-        <td className="px-6 py-4">{question.difficulty}</td>
+        <td className="px-6 py-4">
+          <DifficultyBadge name={question.difficulty} />
+        </td>
         {enableProgress && (
           <>
             <td className="px-6 py-4">
@@ -126,7 +130,7 @@ export default function Row({
                 statusItems={statusItems}
               />
             </td>
-            <td className="px-6 py-4">
+            <td className="px-6 py-4 whitespace-nowrap">
               <TagsBox
                 onChange={handleTagChange}
                 value={tagsValue}

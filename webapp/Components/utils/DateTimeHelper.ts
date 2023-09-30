@@ -56,8 +56,8 @@ export function generateDateCounts(input: DayCounts[]): DayCountsData {
     .sort((a, b) => b.date.getTime() - a.date.getTime());
 
   // Extract dates and counts
-  const dates: string[] = [];
-  const counts: number[] = [];
+  let dates: string[] = [];
+  let counts: number[] = [];
 
   if (sortedInput.length > 0) {
     const startDate = sortedInput[0].date;
@@ -82,6 +82,8 @@ export function generateDateCounts(input: DayCounts[]): DayCountsData {
     }
   }
 
+  dates = dates.reverse();
+  counts = counts.reverse();
   return {
     dates,
     counts,

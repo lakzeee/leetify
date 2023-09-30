@@ -41,7 +41,7 @@ public class RecordController : ControllerBase
         
         if (existRecord != null)
         {
-            _dayCountRepo.AddDayCount(userId);
+            await _dayCountRepo.AddDayCount(userId);
             existRecord.ColumnId = recordDto.ColumnId;
             existRecord.StatusName = recordDto.StatusName;
             existRecord.Tags = recordDto.Tags;
@@ -52,7 +52,7 @@ public class RecordController : ControllerBase
         }
         else
         {
-            _dayCountRepo.AddDayCount(userId);
+            await _dayCountRepo.AddDayCount(userId);
             _recordRepo.CreateRecord(userId, recordDto);
             var result = await _recordRepo.SaveChangesAsync();
             if (result) return Ok();
@@ -70,10 +70,12 @@ public class RecordController : ControllerBase
         record.StatusName = updateRecord.StatusName ?? record.StatusName;
         record.Tags = updateRecord.Tags ?? record.Tags;
         record.UpdatedAt = DateTime.UtcNow;
-        _dayCountRepo.AddDayCount(GetUserSubFromToken());
+        await _dayCountRepo.AddDayCount(GetUserSubFromToken());
         var result = await _recordRepo.SaveChangesAsync();
-        if (result) return Ok();
-        return BadRequest("Something went wrong while updating record");
+        if (result)
+            return Ok();
+        else
+            return BadRequest("Something went wrong while updating record");
     }
 
     private string GetUserSubFromToken()

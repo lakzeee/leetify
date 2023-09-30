@@ -46,7 +46,11 @@ public class PlanRepository : IPlanRepository
     public async Task<List<PlanDto>> GetPlansByPlanIds(List<string> planIds)
     {
         var savedPlans = new List<Plan>();
-        foreach (var planId in planIds) savedPlans.Add(await DB.Find<Plan>().OneAsync(planId));
+        foreach (var planId in planIds)
+        {
+            var plan = await DB.Find<Plan>().OneAsync(planId);
+            if (plan != null) savedPlans.Add(plan);
+        }
         return _mapper.Map<List<Plan>, List<PlanDto>>(savedPlans);
     }
 

@@ -22,18 +22,18 @@ export default function GroupRow({
           <span className="font-bold uppercase whitespace-nowrap">
             {groupName}
           </span>
-          {enableProgress && (
-            <div className="flex justify-center gap-6 items-center">
-              <progress
-                className="progress progress-success w-64"
-                value={completedQuestionCount}
-                max={questionCount}
-              />
-              <span className="font-bold">
-                ({completedQuestionCount}/{questionCount})
-              </span>
-            </div>
-          )}
+          {/*{enableProgress && (*/}
+          {/*  <div className="flex justify-center gap-6 items-center">*/}
+          {/*    <progress*/}
+          {/*      className="progress w-64"*/}
+          {/*      value={completedQuestionCount}*/}
+          {/*      max={questionCount}*/}
+          {/*    />*/}
+          {/*    <span className="font-bold">*/}
+          {/*      ({completedQuestionCount}/{questionCount})*/}
+          {/*    </span>*/}
+          {/*  </div>*/}
+          {/*)}*/}
         </div>
       </td>
     </tr>

@@ -1,5 +1,6 @@
 import { Question } from "@/types";
 import TopicBadges from "@/UI/table/TopicBadges";
+import DifficultyBadge from "@/UI/badge/DifficultyBadge";
 
 type Props = {
   question: Question;
@@ -12,8 +13,9 @@ export default function QuestionRow({ question }: Props) {
       <td className="px-6 py-4">
         <TopicBadges topics={question.topics} />
       </td>
-      <td className="px-6 py-4">{question.difficulty}</td>
-      <td className="px-6 py-4">{question.slug}</td>
+      <td className="px-6 py-4">
+        <DifficultyBadge name={question.difficulty} />
+      </td>
     </tr>
   );
 }

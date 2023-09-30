@@ -34,6 +34,7 @@
   <ItemGroup>
     <Protobuf Include="protos/difficulties.proto" GrpcSerices="Client"/>
     <Protobuf Include="protos/topics.proto" GrpcSerices="Client"/>
+    <Protobuf Include="protos/questions.proto" GrpcSerices="Client"/>
   </ItemGroup>
 
 </Project>

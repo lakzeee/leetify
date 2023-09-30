@@ -1,6 +1,7 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Npgsql;
 using Polly;
 using QuestionService.Data;
 using QuestionService.Services;
@@ -54,12 +55,10 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapGrpcService<GrpcDifficultiesService>();
 app.MapGrpcService<GrpcTopicsService>();
+app.MapGrpcService<GrpcQuestionsService>();
 
-app.Lifetime.ApplicationStarted.Register(async () =>
-{
-    await Policy.Handle<TimeoutException>()
-        .WaitAndRetryAsync(5, _ => TimeSpan.FromSeconds(10))
-        .ExecuteAndCaptureAsync(async () => DbInitializer.InitDb(app));
-});
+DbInitializer.InitDb(app);
+
+app.Run();
 
 app.Run();

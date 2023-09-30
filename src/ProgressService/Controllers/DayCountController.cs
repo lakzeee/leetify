@@ -52,7 +52,7 @@ public class DayCountController : ControllerBase
                 dayCountDtos.Add(new DayCountDto
                 {
                     Count = 0,
-                    CreatedAt = maxDate.AddDays(30)
+                    CreatedAt = maxDate.AddDays(-30)
                 });
         }
 

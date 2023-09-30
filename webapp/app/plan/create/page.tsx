@@ -52,7 +52,7 @@ export default function CreatePlan() {
           subTitle={"Click the avatar button to sign up or log in"}
         />
       ) : (
-        <>
+        <div className="min-w-full">
           <CreatePlanForm
             addedQuestions={addedQuestions}
             handleAdd={handleAdd}
@@ -64,7 +64,7 @@ export default function CreatePlan() {
             handleRemove={handleRemove}
             checkSearchResAdded={checkSearchResAdded}
           />
-        </>
+        </div>
       )}
     </Container>
   );
