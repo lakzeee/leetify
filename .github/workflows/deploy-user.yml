@@ -1,4 +1,4 @@
-name: Deploy Question Server
+name: Deploy User Server
 
 on:
   workflow_dispatch: 

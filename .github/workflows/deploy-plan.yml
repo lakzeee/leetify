@@ -1,16 +1,15 @@
-name: Deploy Question Server
+name: Deploy Plan Server
 
 on:
   workflow_dispatch: 
   push:
     branches: [ "main" ]
     paths:
-      - 'src/QuestionService/**'
+      - 'src/PlanService/**'
 
 env:
-  REGISTRY_IMAGE: leetify-question-svc
-  DOCKERFILE: src/QuestionService/Dockerfile
-  SVC_NAME: auction-svc
+  REGISTRY_IMAGE: leetify-plan-svc
+  DOCKERFILE: src/PlanService/Dockerfile
 
 jobs:
   build:

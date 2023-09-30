@@ -1,4 +1,4 @@
-name: Deploy Question Server
+name: Deploy Progress Server
 
 on:
   workflow_dispatch: 
