@@ -8,7 +8,7 @@ on:
       - 'src/QuestionService/**'
 
 env:
-  REGISTRY_IMAGE: lak919/leetify-question-svc
+  REGISTRY_IMAGE: leetify-question-svc
   DOCKERFILE: src/QuestionService/Dockerfile
   SVC_NAME: auction-svc
 
