@@ -3,7 +3,7 @@ import { getTokenWorkAround } from "@/app/session/authUtils";
 const baseUrl =
   process.env.NODE_ENV === "production"
     ? "https://api.leetify.live"
-    : process.env.API_URL;
+    : process.env.NEXT_PUBLIC_API_URL;
 
 async function get(url: string) {
   const requestOptions = {

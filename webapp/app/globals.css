@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+    background-color: #fff
+}
+
+[data-theme="night"] body {
+    background: #111827;
+}
+
+[data-theme="winter"] body {
+    background: #fff;
+}

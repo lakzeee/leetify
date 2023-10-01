@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 import { TreeMapDataPoint } from "@/types";
 import { useEffect, useState } from "react";
-import { useThemeStore } from "@/Components/hooks/useThemeStore";
+import { useTheme } from "next-themes";
 
 const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
@@ -9,14 +9,13 @@ type Props = {
   data: TreeMapDataPoint[];
 };
 export default function Chart({ data }: Props) {
-  const { isNightMode } = useThemeStore();
-
   const [storkColor, setStorkColor] = useState("#1F2937");
+  const { theme } = useTheme();
 
   useEffect(() => {
-    setStorkColor(isNightMode ? "#1F2937" : "#FFFFFF");
-  }, [isNightMode]);
-  
+    setStorkColor(theme === "night" ? "#1F2937" : "#FFFFFF");
+  }, [theme]);
+
   const series = [
     {
       data: data,

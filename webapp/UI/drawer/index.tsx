@@ -11,8 +11,12 @@ export default function Drawer() {
             {/* Sidebar content here */}
 
             <li>
+              <a href="/dashboard">Dashboard</a>
+            </li>
+            <li>
               <a href="/plan">My Plans</a>
             </li>
+
             <li>
               <a href="/session">Session(Dev Only)</a>
             </li>

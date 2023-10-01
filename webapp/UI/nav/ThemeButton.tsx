@@ -1,49 +1,54 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { FiMoon, FiSun } from "react-icons/fi";
-import { useThemeStore } from "@/Components/hooks/useThemeStore";
+import { useTheme } from "next-themes";
 
 export default function ThemeButton() {
-  const [theme, setTheme] = useState("");
-  const { toggleNightMode } = useThemeStore();
-  const toggleTheme = () => {
-    if (theme === "night") {
-      setTheme("winter");
-    } else if (theme === "winter") {
-      setTheme("night");
-    }
-  };
-
+  const [mounted, setMounted] = useState(false);
+  const { theme, setTheme } = useTheme();
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme) {
-      setTheme(savedTheme);
-    } else {
-      localStorage.setItem("theme", "night");
-    }
+    setMounted(true);
   }, []);
 
   useEffect(() => {
-    const body = document.documentElement;
-    body.setAttribute("data-theme", theme);
-    if (theme === "winter") {
-      localStorage.setItem("theme", "winter");
-      document.documentElement.classList.remove("dark");
-      toggleNightMode(false);
-    } else if (theme == "night") {
-      localStorage.setItem("theme", "night");
+    if (theme === "night") {
       document.documentElement.classList.add("dark");
-      toggleNightMode(true);
+    } else {
+      document.documentElement.classList.remove("dark");
     }
-  }, [theme, toggleNightMode]);
+  }, [theme]);
+
+  function setNightMode() {
+    setTheme("night");
+    document.documentElement.classList.add("dark");
+  }
+
+  function setDayMode() {
+    setTheme("winter");
+    document.documentElement.classList.remove("dark");
+  }
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
-    <button className="btn btn-md btn-ghost btn-circle" onClick={toggleTheme}>
-      {theme === "night" ? (
-        <FiMoon className="w-5 h-5" />
+    <>
+      {theme == "night" ? (
+        <button
+          className="btn btn-md btn-ghost btn-circle"
+          onClick={() => setDayMode()}
+        >
+          <FiMoon className="w-5 h-5" />
+        </button>
       ) : (
-        <FiSun className="w-5 h-5" />
+        <button
+          className="btn btn-md btn-ghost btn-circle"
+          onClick={() => setNightMode()}
+        >
+          <FiSun className="w-5 h-5" />
+        </button>
       )}
-    </button>
+    </>
   );
 }

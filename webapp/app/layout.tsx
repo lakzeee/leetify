@@ -2,6 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import ToasterProvider from "@/Components/providers/ToasterProvider";
 import React from "react";
+import MyThemeProvider from "@/Components/providers/MyThemeProvider";
 
 export const metadata: Metadata = {
   title: "Leetify",
@@ -13,10 +14,10 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" data-theme="night">
+    <html lang="en">
       <body>
         <ToasterProvider />
-        <main>{children}</main>
+        <MyThemeProvider>{children}</MyThemeProvider>
       </body>
     </html>
   );
