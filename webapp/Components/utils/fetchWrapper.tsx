@@ -1,6 +1,9 @@
 import { getTokenWorkAround } from "@/app/session/authUtils";
 
-const baseUrl = process.env.API_URL;
+const baseUrl =
+  process.env.NODE_ENV === "production"
+    ? "http://gateway-svc"
+    : process.env.API_URL;
 
 async function get(url: string) {
   const requestOptions = {
