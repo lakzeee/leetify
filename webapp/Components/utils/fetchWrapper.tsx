@@ -2,7 +2,7 @@ import { getTokenWorkAround } from "@/app/session/authUtils";
 
 const baseUrl =
   process.env.NODE_ENV === "production"
-    ? "http://gateway-svc"
+    ? "https://api.leetify.live"
     : process.env.API_URL;
 
 async function get(url: string) {
