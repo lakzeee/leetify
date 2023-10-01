@@ -1,6 +1,6 @@
 import { getTokenWorkAround } from "@/app/session/authUtils";
 
-const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+const baseUrl = process.env.API_URL;
 
 async function get(url: string) {
   const requestOptions = {
@@ -39,6 +39,7 @@ async function del(url: string) {
   const response = await fetch(baseUrl + url, requestOptions);
   return await handleResponse(response);
 }
+
 async function getHears() {
   const token = await getTokenWorkAround(true);
   const headers = { "Content-type": "application/json" } as any;

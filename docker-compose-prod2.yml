@@ -19,7 +19,7 @@ services:
     volumes:
       - mgdata:/var/lib/mongodb/data
   webapp:
-    image: lak919/leetify-webapp:latest
+    image: zhc01.azurecr.io/leetify-webapp:latest
     build:
       context: .
       dockerfile: webapp/Dockerfile
@@ -35,9 +35,10 @@ services:
       - GITHUB_ID=d2113a84e9cddfef5140
       - GITHUB_SECRET=0d30ec94348b7b812a858b8c728292db0b9efa1c
       - VIRTUAL_HOST=leetify.live
+      - LETSENCRYPT_HOST=leetify.live
       - VIRTUAL_PORT=3000
   gateway-svc:
-    image: lak919/leetify-gateway-svc:latest
+    image: zhc01.azurecr.io/leetify-gateway-svc:latest
     build:
       context: .
       dockerfile: src/GatewayService/Dockerfile
@@ -45,8 +46,10 @@ services:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:80
       - VIRTUAL_HOST=api.leetify.live
+      - Jwt__Issuer=https://
+      - Jwt__Key=V7iy5gPZcCWcaSnnHhRJrXSFqsSxOtLSCjrBFwgpE
   question-svc:
-    image: lak919/leetify-question-svc:latest
+    image: zhc01.azurecr.io/leetify-question-svc:latest
     build:
       context: .
       dockerfile: src/QuestionService/Dockerfile
@@ -65,7 +68,7 @@ services:
     depends_on:
       - postgres
   progress-svc:
-    image: lak919/leetify-progress-svc:latest
+    image: zhc01.azurecr.io/leetify-progress-svc:latest
     build:
       context: .
       dockerfile: src/ProgressService/Dockerfile
@@ -81,7 +84,7 @@ services:
     depends_on:
       - postgres
   user-svc:
-    image: lak919/leetify-user-svc:latest
+    image: zhc01.azurecr.io/leetify-user-svc:latest
     build:
       context: .
       dockerfile: src/UserService/Dockerfile
@@ -96,7 +99,7 @@ services:
     depends_on:
       - mongodb
   plan-svc:
-    image: lak919/leetify-plan-svc:latest
+    image: zhc01.azurecr.io/leetify-plan-svc:latest
     build:
       context: .
       dockerfile: src/PlanService/Dockerfile
@@ -134,6 +137,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 volumes:
   pgdata:
+  mgdata:
   conf:
   vhost:
   html:
