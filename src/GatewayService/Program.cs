@@ -45,7 +45,7 @@ builder.Services.AddCors(options =>
                 .AllowAnyMethod();
         });
 });
-
+Console.WriteLine(builder.Configuration["Jwt:Issuer"]);
 var app = builder.Build();
 
 app.UseCors("customPolicy");
