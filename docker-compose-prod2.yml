@@ -9,6 +9,7 @@ services:
       - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
+
   mongodb:
     image: mongo
     environment:
@@ -18,6 +19,7 @@ services:
       - 27017:27017
     volumes:
       - mgdata:/var/lib/mongodb/data
+
   webapp:
     image: zhc01.azurecr.io/leetify-webapp:latest
     build:
@@ -27,9 +29,8 @@ services:
       - /var/lib/web/data
     environment:
       - NEXTAUTH_SECRET=V7iy5gPZcCWcaSnnHhRJrXSFqsSxOtLSCjrBFwgpE
-      - NEXTAUTH_URL=https://leetify.live
-      - NEXT_PUBLIC_API_URL=https://api.leetify.live
-      - API_URL=https://api.leetify.live
+      - NEXTAUTH_URL=http://leetify.live
+      - API_URL=http://gateway-svc
       - GOOGLE_ID=3290488604-5nq1hdk948aj31jqfaqe4ro7l5fi0io9.apps.googleusercontent.com
       - GOOGLE_SECRET=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
       - GITHUB_ID=d2113a84e9cddfef5140
@@ -37,6 +38,7 @@ services:
       - VIRTUAL_HOST=leetify.live
       - LETSENCRYPT_HOST=leetify.live
       - VIRTUAL_PORT=3000
+
   gateway-svc:
     image: zhc01.azurecr.io/leetify-gateway-svc:latest
     build:
@@ -46,7 +48,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:80
       - VIRTUAL_HOST=api.leetify.live
-      - Jwt__Issuer=https://
+      - LETSENCRYPT_HOST=api.leetify.live
+      - Jwt__Issuer=https://leetify.live
       - Jwt__Key=V7iy5gPZcCWcaSnnHhRJrXSFqsSxOtLSCjrBFwgpE
   question-svc:
     image: zhc01.azurecr.io/leetify-question-svc:latest
