@@ -39,7 +39,7 @@ builder.Services.AddCors(options =>
         b =>
         {
             b
-                .WithOrigins(builder.Configuration["Jwt:Issuer"])
+                .WithOrigins("https://leetify.live", "http://localhost:3000")
                 .AllowAnyHeader()
                 .AllowCredentials()
                 .AllowAnyMethod();
