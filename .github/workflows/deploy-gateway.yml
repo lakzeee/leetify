@@ -36,8 +36,7 @@ jobs:
           file: ${{ env.DOCKERFILE }}
           context: ./
   deploy:
-    name: login to ssh
-    needs: build
+    name: deploy through ssh
     runs-on: ubuntu-latest
     steps:
     - name: executing remote ssh commands using password
@@ -49,4 +48,8 @@ jobs:
         port: ${{ secrets.SSH_PORT }}
         script: |
           whoami
-          
+          sudo docker login zhc01.azurecr.io -u ${{ secrets.AZURE_REGISTRY_USERNAME }} -p ${{ secrets.AZURE_REGISTRY_PASSWORD }}
+          sudo docker pull ${{ env.REGISTRY_IMAGE }}
+          cd /var/app
+          docker compose up -d
+      
