@@ -50,6 +50,6 @@ jobs:
         script: |
           whoami
           sudo docker login zhc01.azurecr.io -u ${{ secrets.AZURE_REGISTRY_USERNAME }} -p ${{ secrets.AZURE_REGISTRY_PASSWORD }}
-          sudo docker pull ${{ env.REGISTRY_IMAGE }}
+          sudo docker pull zhc01.azurecr.io/${{ env.REGISTRY_IMAGE }}:latest
           cd /var/app
           docker compose up -d
