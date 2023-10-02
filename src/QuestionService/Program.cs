@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Npgsql;
 using Polly;
+using Prometheus;
 using QuestionService.Data;
 using QuestionService.Services;
 using Serilog;
@@ -49,13 +50,15 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseHttpMetrics();
 app.UseAuthorization();
 
+app.MapMetrics();
 app.MapControllers();
 app.MapGrpcService<GrpcDifficultiesService>();
 app.MapGrpcService<GrpcTopicsService>();
 app.MapGrpcService<GrpcQuestionsService>();
+
 
 DbInitializer.InitDb(app);
 

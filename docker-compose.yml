@@ -36,7 +36,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - Jwt__Issuer=http://localhost:3000
       - Jwt__Key=V7iy5gPZcCWcaSnnHhRJrXSFqsSxOtLSCjrBFwgpE
-      - VIRTUAL_HOST=api.leetify.live
+      - VIRTUAL_HOST=api.leetify.com
     networks:
       custom:
   question-svc:
@@ -122,6 +122,24 @@ services:
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./devcerts:/etc/nginx/certs
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./infra/metrics:/etc/prometheus
+    depends_on:
+      - question-svc
+    networks:
+      custom:
+  grafana:
+    image: grafana/grafana-enterprise
+    environment:
+      - VIRTUAL_HOST=gf.leetify.com
+    depends_on:
+      - prometheus
+    networks:
+      custom:
 volumes:
   pgdata:
   mgdata:
