@@ -37,7 +37,8 @@ jobs:
           context: ./
   deploy:
     name: login to ssh
-    runs-on: ubunti-lastest
+    needs: build
+    runs-on: ubuntu-latest
     steps:
     - name: executing remote ssh commands using password
       uses: appleboy/ssh-action@v1.0.0
