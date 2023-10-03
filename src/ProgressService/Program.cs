@@ -8,6 +8,7 @@ using Polly;
 using ProgressService.Data;
 using ProgressService.Data.Impl;
 using ProgressService.Services;
+using Prometheus;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -77,9 +78,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseHttpMetrics();
 app.UseAuthorization();
-
+app.MapMetrics();
 app.MapControllers();
 
 DbInitializer.InitDb(app);
