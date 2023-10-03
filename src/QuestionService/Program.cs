@@ -1,8 +1,6 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Npgsql;
-using Polly;
 using Prometheus;
 using QuestionService.Data;
 using QuestionService.Services;

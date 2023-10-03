@@ -21,6 +21,13 @@ public class UserRepository : IUserRepository
             .ExecuteFirstAsync();
     }
 
+    public async Task<User> GetUserByUserSub(string userSub)
+    {
+        return await DB.Find<User>()
+            .Match(u => u.Sub == userSub)
+            .ExecuteFirstAsync();
+    }
+
     public async Task<string> CreateUser(UserDto userDto)
     {
         var newUser = _mapper.Map<User>(userDto);
