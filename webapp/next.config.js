@@ -4,6 +4,9 @@ const nextConfig = {
     serverActions: true,
   },
   output: "standalone",
+  images: {
+    domains: ["avatars.githubusercontent.com", "lh3.googleusercontent.com"],
+  },
 };
 
 module.exports = nextConfig;

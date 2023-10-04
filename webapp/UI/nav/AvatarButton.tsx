@@ -3,12 +3,15 @@ import { User } from "next-auth";
 import { BiLogIn, BiLogOut, BiUserPin } from "react-icons/bi";
 import AuthModal from "@/UI/nav/AuthModal";
 import { LogOut } from "@/Components/utils/authHelper";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 type Props = {
-  avatarChar?: string;
   user?: User;
+  alt: string;
 };
-export default function AvatarButton({ avatarChar, user }: Props) {
+export default function AvatarButton({ user, alt }: Props) {
+  const router = useRouter();
   return (
     <>
       <div className="dropdown dropdown-left">
@@ -16,13 +19,9 @@ export default function AvatarButton({ avatarChar, user }: Props) {
           tabIndex={0}
           className="btn btn-ghost btn-circle avatar placeholder"
         >
-          <div
-            className={`${
-              avatarChar ? "bg-accent" : "bg-neutral-content"
-            } rounded-full w-9`}
-          >
-            {avatarChar ? (
-              <span className="text-accent-content">{avatarChar}</span>
+          <div className="bg-neutral-content rounded-full w-9">
+            {user?.image ? (
+              <Image alt={alt} src={user.image} width={30} height={30} />
             ) : (
               <AiOutlineUser className="text-accent-content" size={24} />
             )}
@@ -49,9 +48,9 @@ export default function AvatarButton({ avatarChar, user }: Props) {
           {user && (
             <>
               <li>
-                <button>
+                <button onClick={() => router.push("/me")}>
                   <BiUserPin />
-                  My Plans
+                  Profile
                 </button>
               </li>
               <li>

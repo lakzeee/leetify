@@ -28,6 +28,16 @@ public class UserRepository : IUserRepository
             .ExecuteFirstAsync();
     }
 
+    public async Task<bool> UpdateUserProfileName(string id, string newProfileName, string userSub)
+    {
+        var user = await DB.Find<User>().OneAsync(id);
+        if (user == null) return false;
+        if (user.Sub != userSub) return false;
+        user.ProfileName = newProfileName;
+        await user.SaveAsync();
+        return true;
+    }
+
     public async Task<string> CreateUser(UserDto userDto)
     {
         var newUser = _mapper.Map<User>(userDto);

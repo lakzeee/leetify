@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
 using UserService.DTOs;
 using UserService.Models;
 
@@ -8,5 +7,6 @@ public interface IUserRepository
 {
     public Task<User> GetUserByEmail(string email);
     public Task<User> GetUserByUserSub(string userSub);
+    public Task<bool> UpdateUserProfileName(string id, string newProfileName, string userSub);
     public Task<string> CreateUser(UserDto userDto);
 }

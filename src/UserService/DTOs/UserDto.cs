@@ -7,6 +7,7 @@ public class UserDto
     public string Sub { get; set; }
     public string Email { get; set; }
     public string AuthProvider { get; set; }
+    public string Image { get; set; }
     public bool IsConsent { get; set; }
     public bool IsStrictlyCookiesConsent { get; set; }
     public bool IsFunctionalCookiesConsent { get; set; }

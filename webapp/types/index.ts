@@ -62,10 +62,11 @@ export interface User {
   name: string;
   email: string;
   authProvider: string;
-  isConsent: boolean;
+  isConsent?: boolean;
   createdAt: string;
-  updatedAt: string;
+  updatedAt?: string;
   id: string;
+  profileName: string;
 }
 
 export interface UserRes {

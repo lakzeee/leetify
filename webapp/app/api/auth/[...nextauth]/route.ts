@@ -7,23 +7,25 @@ import { JWT } from "next-auth/jwt";
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
-      profile(profile: GoogleProfile){
-        return{
+      profile(profile: GoogleProfile) {
+        return {
           ...profile,
           role: profile.role ?? "user",
-          id: profile.sub
-        }
+          id: profile.sub,
+          image: profile.picture,
+        };
       },
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
     }),
     GitHubProvider({
-      profile(profile: GithubProfile){
-        return{
+      profile(profile: GithubProfile) {
+        return {
           ...profile,
           role: profile.role ?? "user",
-          id: profile.id.toString()
-        }
+          id: profile.id.toString(),
+          image: profile.avatar_url,
+        };
       },
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,

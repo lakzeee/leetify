@@ -57,6 +57,7 @@ export default function Consent({ params }: { params: { provider: string } }) {
     const data = {
       name: "",
       email: "",
+      image: "",
       authProvider: params.provider,
       isConsent: isConsent,
       isStrictlyCookiesConsent: isStrictlyCookiesConsent,
@@ -66,6 +67,7 @@ export default function Consent({ params }: { params: { provider: string } }) {
     if (user) {
       data.name = user.name;
       data.email = user.email;
+      data.image = user.image;
       createUser(data)
         .then((r) => {
           if (r.error) {

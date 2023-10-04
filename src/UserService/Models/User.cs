@@ -8,6 +8,7 @@ public class User : Entity
     public string ProfileName { get; set; }
     public string Sub { get; set; }
     public string Email { get; set; }
+    public string Image { get; set; }
     public string AuthProvider { get; set; }
     public bool IsConsent { get; set; }
     public DateTime CreatedAt { get; set; }

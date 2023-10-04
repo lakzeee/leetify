@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -17,11 +18,13 @@ public class UserController : ControllerBase
 {
     private readonly IUserRepository _repo;
     private readonly IConfiguration _configuration;
+    private readonly IMapper _mapper;
 
-    public UserController(IUserRepository userRepository, IConfiguration configuration)
+    public UserController(IUserRepository userRepository, IConfiguration configuration, IMapper mapper)
     {
         _repo = userRepository;
         _configuration = configuration;
+        _mapper = mapper;
     }
 
     private string GetUserEmailFromToken()
@@ -45,7 +48,7 @@ public class UserController : ControllerBase
     
 
     [Authorize]
-    [HttpGet]
+    [HttpGet("isNew")]
     public async Task<ActionResult<User>> GetUserByEmail()
     {
         try
@@ -61,7 +64,23 @@ public class UserController : ControllerBase
             return StatusCode(500, "Internal Server Error");
         }
     }
-    
+
+    [Authorize]
+    [HttpGet]
+    public async Task<ActionResult<UserInfoDto>> GetUserByUserSub()
+    {
+        try
+        {
+            var user = await _repo.GetUserByUserSub(GetUserSubFromToken());
+            if (user == null) return NotFound();
+            return Ok(_mapper.Map<UserInfoDto>(user));
+        }
+        catch (Exception ex)
+        {
+            Log.Error($"Internal Server Error: {ex.Message}");
+            return StatusCode(500, "Internal Server Error");
+        }
+    }
 
     [HttpPost]
     [Authorize]
@@ -87,6 +106,22 @@ public class UserController : ControllerBase
             return StatusCode(500, "Internal Server Error");
         }
     }
-    
-    
+
+    [Authorize]
+    [HttpPut]
+    public async Task<ActionResult> UpdateUserProfileName([FromBody] UpdateUserDto updateUserDto)
+    {
+        try
+        {
+            var res = await _repo.UpdateUserProfileName(updateUserDto.Id, updateUserDto.ProfileName,
+                GetUserSubFromToken());
+            if (res) return Ok();
+            return BadRequest();
+        }
+        catch (Exception ex)
+        {
+            Log.Error($"Internal Server Error: {ex.Message}");
+            return StatusCode(500, "Internal Server Error");
+        }
+    }
 }

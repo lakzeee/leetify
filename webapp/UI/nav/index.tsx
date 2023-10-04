@@ -43,7 +43,7 @@ export default function Nav({ displayAvatar = true }: Props) {
         </div>
 
         <ThemeButton />
-        {displayAvatar && <AvatarButton avatarChar={avatarChar} user={user} />}
+        {displayAvatar && <AvatarButton user={user} alt={avatarChar} />}
       </div>
     </>
   );
