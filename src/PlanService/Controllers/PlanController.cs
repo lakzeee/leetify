@@ -105,7 +105,7 @@ public class PlanController : ControllerBase
     {
         var identity = HttpContext.User.Identity as ClaimsIdentity;
         IList<Claim> claim = identity?.Claims.ToList();
-        return claim?[2].Value;
+        return claim?[3].Value;
     }
 
     private bool VerifyUserEmail(string email)
