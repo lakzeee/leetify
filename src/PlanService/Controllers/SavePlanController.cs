@@ -42,10 +42,10 @@ public class SavePlanController : ControllerBase
     [HttpGet]
     [Route("list")]
     [Authorize]
-    public async Task<ActionResult<SavePlan>> GetSavedPlanIdListByUserSub()
+    public async Task<ActionResult> GetSavedPlanIdListByUserSub()
     {
         var savedPlanIdList = await _savedPlanRepo.GetSavedPlanRecordByUserSub(GetUserSubFromToken());
-        if (savedPlanIdList == null) return NotFound("savedPlanIdList found ");
+        if (savedPlanIdList == null) return NotFound("not savedPlanIdList found ");
         return Ok(savedPlanIdList);
     }
     
@@ -61,7 +61,6 @@ public class SavePlanController : ControllerBase
         if (!plans.Any()) return NotFound("no plan found by saved plan ids");
         return Ok(plans);
     }
-
 
     private string GetUserSubFromToken()
     {

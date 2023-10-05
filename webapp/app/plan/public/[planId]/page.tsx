@@ -4,16 +4,20 @@ import { useEffect, useState } from "react";
 import { PlanQuestionRes } from "@/types";
 import { GetPublicPlanById } from "@/Components/actions/planActions";
 import TopicBadges from "@/UI/table/TopicBadges";
-import Heart from "@/UI/icons/Heart";
 import ProgressQuestionTable from "@/UI/table/ProgressQuestionTable";
+import Image from "next/image";
+import Heart from "@/UI/icons/Heart";
+import { getCurrentUser } from "@/app/session/authUtils";
 
 export default function PublicPlanDetail({
   params,
 }: {
-  params: { planId: string };
+  params: {
+    planId: string;
+  };
 }) {
-  const planId = params.planId;
   const [planDetailData, setPlanDetailData] = useState<PlanQuestionRes>();
+  const [isLogIn, setIsLogIn] = useState(false);
 
   useEffect(() => {
     async function fetchPublicPlanDetail() {
@@ -23,8 +27,14 @@ export default function PublicPlanDetail({
       }
     }
 
+    async function checkIfLogin() {
+      const user = await getCurrentUser();
+      if (user) setIsLogIn(true);
+    }
+
     fetchPublicPlanDetail();
-  }, [params.planId, planId]);
+    checkIfLogin();
+  }, [params.planId]);
 
   return (
     <Container>
@@ -34,7 +44,6 @@ export default function PublicPlanDetail({
             enableProgress={false}
             data={planDetailData.questionList}
           >
-            <Heart showWhenNotSaved={true} planId={params.planId} />
             <div className="flex flex-row justify-between items-center">
               <h1 className="uppercase">{planDetailData.planName}</h1>
               {planDetailData.tags && (
@@ -44,6 +53,25 @@ export default function PublicPlanDetail({
             <p className="text-base-content font-light pb-2">
               {planDetailData.description}
             </p>
+            <div className="flex flex-row items-center justify-between gap-2">
+              <div className="flex flex-row items-center gap-2">
+                <div className="avatar">
+                  <div className="w-6 rounded-full">
+                    <Image
+                      src={planDetailData.image || ""}
+                      width={15}
+                      height={15}
+                      alt="/"
+                    />
+                  </div>
+                </div>
+                <p className="text-sm">{planDetailData.profileName} </p>
+              </div>
+              <div className="mr-1 flex flex-row justify-center gap-2">
+                <Heart showWhenNotSaved={true} planId={params.planId} />
+                <span>{planDetailData.savesCount}</span>
+              </div>
+            </div>
           </ProgressQuestionTable>
         )}
       </div>

@@ -59,6 +59,7 @@ export interface PlanQuestionRes extends CreatePlanReq {
   userSub?: string;
   profileName?: string;
   image?: string;
+  savesCount?: number;
 }
 
 export interface User {

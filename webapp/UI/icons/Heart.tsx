@@ -1,4 +1,3 @@
-import { BsBookmarkHeart, BsBookmarkHeartFill } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import { useSavedPlansStore } from "@/Components/hooks/useSavedPlansStore";
 import toast from "react-hot-toast";
@@ -6,15 +5,17 @@ import {
   RemovePlanFromUser,
   SavePlanToUser,
 } from "@/Components/actions/planActions";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
 type Props = {
-  userId?: string;
+  isLogIn?: boolean;
   planId: string;
   showWhenNotSaved?: boolean;
   isClickable?: boolean;
 };
 
 export default function Heart({
+  isLogIn,
   planId,
   showWhenNotSaved = false,
   isClickable = true,
@@ -27,6 +28,10 @@ export default function Heart({
   );
 
   function handleSaveButton() {
+    if (!isLogIn) {
+      toast.error("Please Log In To Do this.");
+      return;
+    }
     if (!isClickable) return;
     if (isSaved) {
       RemovePlanFromUser(planId)
@@ -62,9 +67,9 @@ export default function Heart({
   return (
     <button onClick={handleSaveButton}>
       {isSaved ? (
-        <BsBookmarkHeartFill size={28} color="#F250A3" />
+        <AiFillHeart size={20} color="#F250A3" />
       ) : showWhenNotSaved ? (
-        <BsBookmarkHeart size={28} />
+        <AiOutlineHeart size={20} />
       ) : (
         <></>
       )}

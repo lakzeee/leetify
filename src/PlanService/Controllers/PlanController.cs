@@ -19,12 +19,15 @@ namespace PlanService.Controllers;
 public class PlanController : ControllerBase
 {
     private readonly IPlanRepository _planRepo;
+    private readonly ISavedPlanRepository _savedPlanRepository;
     private readonly GrpcUserClient _grpcUserClient;
     private readonly IMapper _mapper;
 
-    public PlanController(IPlanRepository planRepository, GrpcUserClient grpcUserClient, IMapper mapper)
+    public PlanController(IPlanRepository planRepository, ISavedPlanRepository savedPlanRepository,
+        GrpcUserClient grpcUserClient, IMapper mapper)
     {
         _planRepo = planRepository;
+        _savedPlanRepository = savedPlanRepository;
         _grpcUserClient = grpcUserClient;
         _mapper = mapper;
     }
@@ -100,12 +103,14 @@ public class PlanController : ControllerBase
         try
         {
             var plan = await _planRepo.GetPublicPlanById(planId);
+            var savesCount = await _savedPlanRepository.CountSaves(planId);
             if (plan == null) return NotFound();
             var publicPlanDto = _mapper.Map<PublicPlanDto>(plan);
             var publicUserInfoDto = _grpcUserClient.GetPublicUserInfoDto(plan.UserSub);
             if (publicUserInfoDto == null) return NotFound("Couldn't find user information");
             publicPlanDto.Image = publicUserInfoDto.Image;
             publicPlanDto.ProfileName = publicUserInfoDto.ProfileName;
+            publicPlanDto.SavesCount = savesCount;
             return Ok(publicPlanDto);
         }
         catch (Exception e)

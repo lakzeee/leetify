@@ -17,7 +17,7 @@ export default function PlanCard({ plan, heartClickable = true }: Props) {
       className="card w-80 relative min-w-90 shadow-xl cursor-pointer dark:bg-gray-800"
     >
       <div className="-z-0 min-w-md">
-        <div className="absolute right-0 mr-8">
+        <div className="absolute right-0 mr-8 mt-8">
           <Heart
             planId={plan.id}
             showWhenNotSaved={false}
