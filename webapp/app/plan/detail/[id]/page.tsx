@@ -12,21 +12,6 @@ export default function PlanDetail({ params }: { params: { id: string } }) {
   const [planDetail, setPlanDetail] = useState<any>();
   const [loadingPlanDetail, setLoadingPlanDetail] = useState(false);
 
-  useEffect(() => {
-    async function fetchPlanDetail() {
-      setPlanDetail(true);
-      const planDetail = await GetPlanDetailById(params.id);
-      if (planDetail) {
-        setPlanDetail(planDetail);
-        if (planDetail.questionList)
-          setAddedQuestionsFromList(planDetail.questionList);
-      }
-    }
-
-    fetchPlanDetail();
-    setPlanDetail(false);
-  }, [params.id]);
-
   const addedQuestions = useCreatePlanStore((state) => state.addedQuestions);
   const addToAddedQuestion = useCreatePlanStore(
     (state) => state.addToAddedQuestions,
@@ -55,6 +40,21 @@ export default function PlanDetail({ params }: { params: { id: string } }) {
     return [false, groupName];
   }
 
+  useEffect(() => {
+    async function fetchPlanDetail() {
+      setPlanDetail(true);
+      const planDetail = await GetPlanDetailById(params.id);
+      if (planDetail) {
+        setPlanDetail(planDetail);
+        if (planDetail.questionList)
+          setAddedQuestionsFromList(planDetail.questionList);
+      }
+    }
+
+    fetchPlanDetail();
+    setPlanDetail(false);
+  }, [params.id, setAddedQuestionsFromList]);
+  
   return (
     <Container isLoading={loadingPlanDetail}>
       {planDetail && planDetail.questionList.length > 0 && (

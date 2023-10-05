@@ -198,21 +198,24 @@ export default function PlanProgress({
               enableProgress={true}
             >
               {/*Table Caption*/}
-              <Heart
-                showWhenNotSaved={true}
-                planId={params.planId}
-                count={planDetailData.savesCount || 0}
-                isLogIn={true}
-              />
-              <div className="flex flex-row justify-between items-center">
-                <h1 className="uppercase">{planDetailData.planName}</h1>
-                {planDetailData.tags && (
-                  <TopicBadges topics={planDetailData.tags} />
-                )}
+              <div className="flex flex-col justify-start items-start">
+                <div className="flex flex-row gap-4">
+                  <h1 className="uppercase">{planDetailData.planName}</h1>
+                  {planDetailData.tags && (
+                    <TopicBadges topics={planDetailData.tags} />
+                  )}
+                </div>
+
+                <p className="text-base-content font-light pb-2">
+                  {planDetailData.description}
+                </p>
+                <Heart
+                  showWhenNotSaved={true}
+                  planId={params.planId}
+                  count={planDetailData.savesCount || 0}
+                  isLogIn={true}
+                />
               </div>
-              <p className="text-base-content font-light pb-2">
-                {planDetailData.description}
-              </p>
             </ProgressQuestionTable>
           )}
         <StatusEditDialog items={items} />
