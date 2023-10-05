@@ -198,7 +198,12 @@ export default function PlanProgress({
               enableProgress={true}
             >
               {/*Table Caption*/}
-              <Heart showWhenNotSaved={true} planId={params.planId} />
+              <Heart
+                showWhenNotSaved={true}
+                planId={params.planId}
+                count={planDetailData.savesCount || 0}
+                isLogIn={true}
+              />
               <div className="flex flex-row justify-between items-center">
                 <h1 className="uppercase">{planDetailData.planName}</h1>
                 {planDetailData.tags && (

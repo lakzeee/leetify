@@ -91,9 +91,16 @@ public class PlanController : ControllerBase
 
     [HttpGet]
     [Route("public")]
-    public async Task<ActionResult<List<Plan>>> GetAllPublicPlan()
+    public async Task<ActionResult> GetAllPublicPlan()
     {
-        return Ok(await _planRepo.GetAllPublicPlan());
+        var publicPlan = await _planRepo.GetAllPublicPlan();
+        foreach (var plan in publicPlan)
+        {
+            var savesCount = await _savedPlanRepository.CountSaves(plan.Id);
+            plan.SavesCount = savesCount;
+        }
+
+        return Ok(publicPlan);
     }
 
     [HttpGet]

@@ -16,7 +16,7 @@ type Props = {
 };
 
 export default function Heart({
-  isLogIn,
+  isLogIn = false,
   planId,
   showWhenNotSaved = false,
   isClickable = true,
@@ -70,7 +70,7 @@ export default function Heart({
   }, [planId, savedPlans, addToSavedPlans, removeFromSavedPlan]);
 
   return (
-    <>
+    <div className="flex flex-row justify-center gap-2">
       <button onClick={handleSaveButton}>
         {isSaved ? (
           <AiFillHeart size={20} color="#F250A3" />
@@ -81,6 +81,6 @@ export default function Heart({
         )}
       </button>
       <span>{savesCount}</span>
-    </>
+    </div>
   );
 }

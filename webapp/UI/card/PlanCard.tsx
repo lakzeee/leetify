@@ -20,8 +20,9 @@ export default function PlanCard({ plan, heartClickable = true }: Props) {
         <div className="absolute right-0 mr-8 mt-8">
           <Heart
             planId={plan.id}
-            showWhenNotSaved={false}
+            showWhenNotSaved={true}
             isClickable={heartClickable}
+            count={plan.savesCount || 0}
           />
         </div>
         <div className="card-body">
