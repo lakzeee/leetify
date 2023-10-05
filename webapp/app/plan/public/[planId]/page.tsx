@@ -68,8 +68,12 @@ export default function PublicPlanDetail({
                 <p className="text-sm">{planDetailData.profileName} </p>
               </div>
               <div className="mr-1 flex flex-row justify-center gap-2">
-                <Heart showWhenNotSaved={true} planId={params.planId} />
-                <span>{planDetailData.savesCount}</span>
+                <Heart
+                  isLogIn={isLogIn}
+                  showWhenNotSaved={true}
+                  planId={params.planId}
+                  count={planDetailData.savesCount || 0}
+                />
               </div>
             </div>
           </ProgressQuestionTable>

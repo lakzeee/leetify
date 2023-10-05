@@ -9,6 +9,7 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
 type Props = {
   isLogIn?: boolean;
+  count: number;
   planId: string;
   showWhenNotSaved?: boolean;
   isClickable?: boolean;
@@ -19,8 +20,10 @@ export default function Heart({
   planId,
   showWhenNotSaved = false,
   isClickable = true,
+  count,
 }: Props) {
   const [isSaved, setIsSaved] = useState(false);
+  const [savesCount, setSavesCount] = useState(count);
   const savedPlans = useSavedPlansStore((state) => state.savedPlans);
   const addToSavedPlans = useSavedPlansStore((state) => state.addToSavedPlans);
   const removeFromSavedPlan = useSavedPlansStore(
@@ -40,6 +43,7 @@ export default function Heart({
             throw r.error;
           }
           toast.success("Plan Removed");
+          setSavesCount(savesCount - 1);
         })
         .catch();
       removeFromSavedPlan(planId);
@@ -50,6 +54,7 @@ export default function Heart({
             throw r.error;
           }
           toast.success("Plan Saved");
+          setSavesCount(savesCount + 1);
         })
         .catch();
       addToSavedPlans(planId);
@@ -65,14 +70,17 @@ export default function Heart({
   }, [planId, savedPlans, addToSavedPlans, removeFromSavedPlan]);
 
   return (
-    <button onClick={handleSaveButton}>
-      {isSaved ? (
-        <AiFillHeart size={20} color="#F250A3" />
-      ) : showWhenNotSaved ? (
-        <AiOutlineHeart size={20} />
-      ) : (
-        <></>
-      )}
-    </button>
+    <>
+      <button onClick={handleSaveButton}>
+        {isSaved ? (
+          <AiFillHeart size={20} color="#F250A3" />
+        ) : showWhenNotSaved ? (
+          <AiOutlineHeart size={20} />
+        ) : (
+          <></>
+        )}
+      </button>
+      <span>{savesCount}</span>
+    </>
   );
 }
