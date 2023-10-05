@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PlanService.Data;
 using PlanService.Data.Impl;
+using PlanService.Services;
 using Polly;
 using Serilog;
 
@@ -66,7 +67,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IPlanRepository, PlanRepository>();
 builder.Services.AddScoped<ISavedPlanRepository, SavePlanRepository>();
 builder.Services.AddScoped<IStatusPropRepository, StatusPropRepository>();
-
+builder.Services.AddScoped<GrpcUserClient>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

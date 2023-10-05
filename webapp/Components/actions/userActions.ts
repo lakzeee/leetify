@@ -5,6 +5,10 @@ export async function getUserByEmail(): Promise<UserRes> {
   return await fetchWrapper.get(`/user/isNew`);
 }
 
+export async function getUserPublicInfo(userSub: string): Promise<User> {
+  return await fetchWrapper.get(`/user/public/${userSub}`);
+}
+
 export async function getUserByUserSub(): Promise<User | any> {
   return await fetchWrapper.get(`/user`);
 }

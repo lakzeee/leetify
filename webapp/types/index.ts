@@ -56,6 +56,9 @@ export interface PlanQuestionRes extends CreatePlanReq {
   createdAt: string;
   updatedAt: string;
   id: string;
+  userSub?: string;
+  profileName?: string;
+  image?: string;
 }
 
 export interface User {
@@ -67,6 +70,7 @@ export interface User {
   updatedAt?: string;
   id: string;
   profileName: string;
+  image?: string;
 }
 
 export interface UserRes {

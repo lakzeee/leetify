@@ -6,6 +6,7 @@ using Microsoft.OpenApi.Models;
 using Polly;
 using Serilog;
 using UserService.Data;
+using UserService.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,6 +57,7 @@ builder.Services.AddAuthentication(o =>
 // add automapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddGrpc();
 
 var app = builder.Build();
 
@@ -73,6 +75,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapGrpcService<GrpcUserPublicInfoService>();
 
 app.Lifetime.ApplicationStarted.Register(async () =>
 {

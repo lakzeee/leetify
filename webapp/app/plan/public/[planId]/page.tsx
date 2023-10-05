@@ -14,6 +14,7 @@ export default function PublicPlanDetail({
 }) {
   const planId = params.planId;
   const [planDetailData, setPlanDetailData] = useState<PlanQuestionRes>();
+
   useEffect(() => {
     async function fetchPublicPlanDetail() {
       const planDetail = await GetPublicPlanById(params.planId);
@@ -22,7 +23,6 @@ export default function PublicPlanDetail({
       }
     }
 
-    console.log("fetch once");
     fetchPublicPlanDetail();
   }, [params.planId, planId]);
 

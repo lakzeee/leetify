@@ -89,7 +89,12 @@ services:
       - ConnectionStrings__MongoDbConnection=mongodb://root:mongopw@mongodb
       - Jwt__Issuer=http://localhost:3000
       - Jwt__Key=V7iy5gPZcCWcaSnnHhRJrXSFqsSxOtLSCjrBFwgpE
+      - Kestrel__Endpoints__Grpc__Protocols=Http2
+      - Kestrel__Endpoints__Grpc__Url=http://+:5556
+      - Kestrel__Endpoints__WebApi__Protocols=Http1
+      - Kestrel__Endpoints__WebApi__Url=http://+:80
     ports:
+      - 5556:5556
       - 5003:80
     networks:
       custom:
@@ -106,6 +111,7 @@ services:
       - ConnectionStrings__MongoDbConnection=mongodb://root:mongopw@mongodb
       - Jwt__Issuer=http://localhost:3000
       - Jwt__Key=V7iy5gPZcCWcaSnnHhRJrXSFqsSxOtLSCjrBFwgpE
+      - GrpcUser=http://user-svc:5556
     ports:
       - 5002:80
     networks:

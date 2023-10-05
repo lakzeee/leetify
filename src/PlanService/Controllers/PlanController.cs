@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlanService.Data;
 using PlanService.DTOs;
 using PlanService.Models;
+using PlanService.Services;
 using Serilog;
 
 namespace PlanService.Controllers;
@@ -17,10 +19,14 @@ namespace PlanService.Controllers;
 public class PlanController : ControllerBase
 {
     private readonly IPlanRepository _planRepo;
+    private readonly GrpcUserClient _grpcUserClient;
+    private readonly IMapper _mapper;
 
-    public PlanController(IPlanRepository planRepository, ISavedPlanRepository savedPlanRepository)
+    public PlanController(IPlanRepository planRepository, GrpcUserClient grpcUserClient, IMapper mapper)
     {
         _planRepo = planRepository;
+        _grpcUserClient = grpcUserClient;
+        _mapper = mapper;
     }
 
     // CRUD of a plan
@@ -89,9 +95,25 @@ public class PlanController : ControllerBase
 
     [HttpGet]
     [Route("public/{planId}")]
-    public async Task<ActionResult<List<Plan>>> GetPublicPlanById(string planId)
+    public async Task<ActionResult<Plan>> GetPublicPlanById(string planId)
     {
-        return Ok(await _planRepo.GetPublicPlanById(planId));
+        try
+        {
+            var plan = await _planRepo.GetPublicPlanById(planId);
+            if (plan == null) return NotFound();
+            var publicPlanDto = _mapper.Map<PublicPlanDto>(plan);
+            var publicUserInfoDto = _grpcUserClient.GetPublicUserInfoDto(plan.UserSub);
+            if (publicUserInfoDto == null) return NotFound("Couldn't find user information");
+            publicPlanDto.Image = publicUserInfoDto.Image;
+            publicPlanDto.ProfileName = publicUserInfoDto.ProfileName;
+            return Ok(publicPlanDto);
+        }
+        catch (Exception e)
+        {
+            Log.Error(e.Message);
+            return StatusCode(500, "Interval server error");
+        }
+
     }
 
     private string GetUserEmailFromToken()

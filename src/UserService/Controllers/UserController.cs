@@ -82,6 +82,22 @@ public class UserController : ControllerBase
         }
     }
 
+    [HttpGet("public/{sub}")]
+    public async Task<ActionResult<PublicUserInfoDto>> GetPublicUserInfo(string sub)
+    {
+        try
+        {
+            var user = await _repo.GetUserByUserSub(sub);
+            if (user == null) return NotFound();
+            return Ok(_mapper.Map<PublicUserInfoDto>(user));
+        }
+        catch (Exception ex)
+        {
+            Log.Error($"Internal Server Error: {ex.Message}");
+            return StatusCode(500, "Internal Server Error");
+        }
+    }
+
     [HttpPost]
     [Authorize]
     public async Task<ActionResult> CreateUser([FromBody] UserDto userDto)

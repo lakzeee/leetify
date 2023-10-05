@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option csharp_namespace = "UserService";
+
+service GrpcUserPublicInfo {
+  rpc GetUserPublicInfo (GetUserPublicInfoRequest) returns (GrpcUserPublicInfoResponse);
+}
+
+message GetUserPublicInfoRequest {
+  string userSub = 1;
+}
+
+message GrpcUserPublicInfoResponse {
+  string profileName = 1;
+  string image = 2;
+}
