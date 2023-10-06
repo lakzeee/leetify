@@ -138,10 +138,23 @@ public class PlanController : ControllerBase
             var plan = await _planRepo.GetPublicPlanById(planId);
             if (plan == null) return NotFound();
             var nos = plan.QuestionList.Select(q => q.LeetCodeNo).ToList();
-            var progressRecords =
-                _grpcProgressClient.GetProgressRecordByLeetCodeNosAndUserSub(GetUserSubFromToken(), nos);
+
+            List<ProgressRecordDto> progressRecords = null;
+
+            try
+            {
+                progressRecords =
+                    _grpcProgressClient.GetProgressRecordByLeetCodeNosAndUserSub(GetUserSubFromToken(), nos);
+            }
+            catch (Exception e)
+            {
+                Log.Error("Something went wrong getting response from GetProgressRecordByLeetCodeNosAndUserSub");
+            }
+            
             var progressPlan = _mapper.Map<ProgressPlanDto>(plan);
 
+            if (progressRecords == null || !progressRecords.Any()) return Ok(progressPlan);
+            
             foreach (var record in progressRecords)
             {
                 var matchingQuestion = progressPlan.QuestionList.FirstOrDefault(q => q.LeetCodeNo == record.LeetCodeNo);

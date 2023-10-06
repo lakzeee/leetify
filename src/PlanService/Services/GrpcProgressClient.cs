@@ -29,6 +29,7 @@ public class GrpcProgressClient
         try
         {
             var reply = client.GetProgressStatuses(request);
+            if (!reply.ProgressStatuses.Any()) return null;
             var recordDtos = reply.ProgressStatuses.Select(r => new ProgressRecordDto
             {
                 ColumnId = r.ColumnId,
