@@ -2,7 +2,7 @@
 import Container from "@/UI/container";
 import { useEffect, useMemo, useState } from "react";
 import {
-  GetPublicPlanById,
+  GetPlanAndProgressDetailById,
   GetSavedPlanRecordByUserId,
 } from "@/Components/actions/planActions";
 import TopicBadges from "@/UI/table/TopicBadges";
@@ -15,9 +15,7 @@ import {
   UpdateUserStatusItems,
 } from "@/Components/actions/statusActions";
 import ProgressChart from "@/UI/charts/ProgressChart";
-import { GetRecordList } from "@/Components/actions/progressActions";
 import {
-  ConcatPlanDetailWithProgressData,
   countDifficulty,
   countStatus,
   getTopFrequentTopicsAndDifficulties,
@@ -62,6 +60,7 @@ export default function PlanProgress({
 
     fetchUserStatusItems();
   }, [setItems]);
+
   // save changes of status edit dialog
   useEffect(() => {
     function saveStatusItemsChange() {
@@ -105,26 +104,14 @@ export default function PlanProgress({
 
     fetchUserSavedPlan();
   }, [setSavedPlans]);
+
   // fetching info for displaying basic table
   useEffect(() => {
     async function fetchPublicPlanDetail() {
       setLoadingPlanDetail(true);
-      let planDetail = await GetPublicPlanById(params.planId);
-      if (planDetail) {
-        if (planDetail.questionList && planDetail.questionList.length > 0) {
-          const nums = planDetail.questionList
-            .map((item) => item.leetCodeNo)
-            .join(",");
-          GetRecordList(nums)
-            .then((r) => {
-              if (r.error) throw r.error;
-              if (r.length > 0) {
-                planDetail = ConcatPlanDetailWithProgressData(planDetail, r);
-              }
-            })
-            .catch(() => {});
-        }
-        setPlanDetailData(planDetail);
+      let progress = await GetPlanAndProgressDetailById(params.planId);
+      if (progress) {
+        setPlanDetailData(progress);
       }
     }
 

@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option csharp_namespace = "ProgressService";
+
+service GrpcProgressStatuses {
+  rpc GetProgressStatuses (GetProgressStatusesRequest) returns (GrpcProgressStatusesResponse);
+}
+
+message GetProgressStatusesRequest {
+  string UserSub = 1;
+  repeated int32 Ids = 2;
+}
+
+message GrpcProgressStatusModel{
+  string Id = 1;
+  string StatusName = 2;
+  string ColumnId = 3;
+  string Tags = 4;
+  string UpdatedAt = 5;
+  int32 LeetCodeNo = 6;
+}
+
+message GrpcProgressStatusesResponse {
+  repeated GrpcProgressStatusModel progressStatuses = 1;
+}

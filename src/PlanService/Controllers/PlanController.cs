@@ -22,14 +22,16 @@ public class PlanController : ControllerBase
     private readonly ISavedPlanRepository _savedPlanRepository;
     private readonly GrpcUserClient _grpcUserClient;
     private readonly IMapper _mapper;
+    private readonly GrpcProgressClient _grpcProgressClient;
 
     public PlanController(IPlanRepository planRepository, ISavedPlanRepository savedPlanRepository,
-        GrpcUserClient grpcUserClient, IMapper mapper)
+        GrpcUserClient grpcUserClient, IMapper mapper, GrpcProgressClient grpcProgressClient)
     {
         _planRepo = planRepository;
         _savedPlanRepository = savedPlanRepository;
         _grpcUserClient = grpcUserClient;
         _mapper = mapper;
+        _grpcProgressClient = grpcProgressClient;
     }
 
     // CRUD of a plan
@@ -125,9 +127,40 @@ public class PlanController : ControllerBase
             Log.Error(e.Message);
             return StatusCode(500, "Interval server error");
         }
-
     }
 
+    [HttpGet]
+    [Route("progress/{planId}")]
+    public async Task<ActionResult<Plan>> GetPlanAndProgressDetailById(string planId)
+    {
+        try
+        {
+            var plan = await _planRepo.GetPublicPlanById(planId);
+            if (plan == null) return NotFound();
+            var nos = plan.QuestionList.Select(q => q.LeetCodeNo).ToList();
+            var progressRecords =
+                _grpcProgressClient.GetProgressRecordByLeetCodeNosAndUserSub(GetUserSubFromToken(), nos);
+            var progressPlan = _mapper.Map<ProgressPlanDto>(plan);
+
+            foreach (var record in progressRecords)
+            {
+                var matchingQuestion = progressPlan.QuestionList.FirstOrDefault(q => q.LeetCodeNo == record.LeetCodeNo);
+                if (matchingQuestion == null) continue;
+                matchingQuestion.StatusName = record.StatusName;
+                matchingQuestion.ColumnId = record.ColumnId;
+                matchingQuestion.Tags = record.Tags;
+                matchingQuestion.UpdatedAt = record.UpdatedAt;
+            }
+
+            return Ok(progressPlan);
+        }
+        catch (Exception e)
+        {
+            Log.Error(e.Message);
+            return StatusCode(500, "Interval server error");
+        }
+    }
+    
     private string GetUserEmailFromToken()
     {
         var identity = HttpContext.User.Identity as ClaimsIdentity;

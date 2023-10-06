@@ -11,6 +11,8 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Google.Protobuf" Version="3.24.3"/>
+    <PackageReference Include="Grpc.AspNetCore" Version="2.57.0"/>
+    <PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="2.57.0"/>
     <PackageReference Include="Grpc.Net.Client" Version="2.57.0"/>
     <PackageReference Include="Grpc.Tools" Version="2.58.0">
       <PrivateAssets>all</PrivateAssets>
@@ -36,6 +38,7 @@
     <Protobuf Include="protos/difficulties.proto" GrpcSerices="Client"/>
     <Protobuf Include="protos/topics.proto" GrpcSerices="Client"/>
     <Protobuf Include="protos/questions.proto" GrpcSerices="Client"/>
+    <Protobuf Include="protos/progress_statuses.proto" GrpcSerices="Server"/>
   </ItemGroup>
 
 </Project>

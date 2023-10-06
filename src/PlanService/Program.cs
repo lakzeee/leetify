@@ -68,6 +68,7 @@ builder.Services.AddScoped<IPlanRepository, PlanRepository>();
 builder.Services.AddScoped<ISavedPlanRepository, SavePlanRepository>();
 builder.Services.AddScoped<IStatusPropRepository, StatusPropRepository>();
 builder.Services.AddScoped<GrpcUserClient>();
+builder.Services.AddScoped<GrpcProgressClient>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

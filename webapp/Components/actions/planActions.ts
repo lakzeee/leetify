@@ -28,7 +28,6 @@ export async function GetUserPlans(): Promise<PlanQuestionRes[]> {
   return await fetchWrapper.get(`/plan/user`);
 }
 
-
 // Public Plan Routes
 export async function GetAllPublicPlans(): Promise<PlanQuestionRes[]> {
   return await fetchWrapper.get(`/plan/public`);
@@ -40,10 +39,17 @@ export async function GetPublicPlanById(
   return await fetchWrapper.get(`/plan/public/${planId}`);
 }
 
+export async function GetPlanAndProgressDetailById(
+  planId: string,
+): Promise<PlanQuestionRes> {
+  return await fetchWrapper.get(`/plan/progress/${planId}`);
+}
+
 // User Saved Plan Routes
 export async function GetUserSavedPlans(): Promise<PlanQuestionRes[]> {
   return await fetchWrapper.get(`/plan/saved/full`);
 }
+
 export async function GetSavedPlanRecordByUserId() {
   return await fetchWrapper.get(`/plan/saved/list`);
 }
@@ -52,7 +58,6 @@ export async function SavePlanToUser(planId: string) {
   return await fetchWrapper.put(`/plan/saved/${planId}`, {});
 }
 
-export async function RemovePlanFromUser( planId: string ) {
+export async function RemovePlanFromUser(planId: string) {
   return await fetchWrapper.del(`/plan/saved/${planId}`);
 }
-

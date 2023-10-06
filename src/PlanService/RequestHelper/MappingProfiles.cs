@@ -19,5 +19,8 @@ public class MappingProfiles : Profile
         CreateMap<Plan, PublicPlanDto>()
             .ForMember(dest => dest.QuestionList, opt => opt.MapFrom(src => src.QuestionList));
         CreateMap<PlanQuestion, PublicPlanQuestion>();
+        CreateMap<Plan, ProgressPlanDto>()
+            .ForMember(dest => dest.QuestionList, opt => opt.MapFrom(src => src.QuestionList));
+        CreateMap<PlanQuestion, ProgressPlanQuestion>();
     }
 }

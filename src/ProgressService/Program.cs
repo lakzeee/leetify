@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Polly;
 using ProgressService.Data;
 using ProgressService.Data.Impl;
 using ProgressService.Services;
@@ -67,6 +66,8 @@ builder.Services.AddMemoryCache();
 builder.Services.AddScoped<IRecordRepository, RecordRepository>();
 builder.Services.AddScoped<IDayCountRepository, DayCountRepository>();
 builder.Services.AddScoped<GrpcQuestionClient>();
+builder.Services.AddGrpc();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -77,11 +78,14 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Progress Service Api V1"));
 }
 
+
 app.UseHttpsRedirection();
 app.UseHttpMetrics();
 app.UseAuthorization();
 app.MapMetrics();
 app.MapControllers();
+app.MapGrpcService<GrpcProgressStatusesService>();
+app.MapGrpcReflectionService();
 
 DbInitializer.InitDb(app);
 
