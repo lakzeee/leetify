@@ -20,7 +20,12 @@ public class GrpcProgressStatusesService : GrpcProgressStatuses.GrpcProgressStat
         var ids = request.Ids.ToList();
         if (!ids.Any())
             throw new RpcException(new Status(StatusCode.InvalidArgument, "Need to pass a list of plan id"));
+        
         var records = await _repository.GetRecordListByLeetCodeNoAsync(request.UserSub, ids);
+
+        if (!records.Any() || records == null)
+            throw new RpcException(new Status(StatusCode.NotFound, "No Record Found"));
+            
         var responseModel = records.Select(q => new GrpcProgressStatusModel
         {
             ColumnId = q.ColumnId,

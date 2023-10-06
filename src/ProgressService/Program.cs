@@ -67,6 +67,7 @@ builder.Services.AddScoped<IRecordRepository, RecordRepository>();
 builder.Services.AddScoped<IDayCountRepository, DayCountRepository>();
 builder.Services.AddScoped<GrpcQuestionClient>();
 builder.Services.AddGrpc();
+builder.Services.AddGrpcReflection();
 
 var app = builder.Build();
 
@@ -85,7 +86,9 @@ app.UseAuthorization();
 app.MapMetrics();
 app.MapControllers();
 app.MapGrpcService<GrpcProgressStatusesService>();
-app.MapGrpcReflectionService();
+
+if (app.Environment.IsDevelopment()) app.MapGrpcReflectionService();
+
 
 DbInitializer.InitDb(app);
 

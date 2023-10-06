@@ -2,6 +2,8 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using ProgressService.Dtos;
 using ProgressService.Entities;
+using Serilog;
+
 namespace ProgressService.Data.Impl;
 
 public class RecordRepository : IRecordRepository
@@ -21,6 +23,7 @@ public class RecordRepository : IRecordRepository
             .Where(x => x.UserSub == userSub)
             .Where(x => nos.Contains(x.LeetCodeNo))
             .ToListAsync();
+        if (!recordEntities.Any()) return null;
         return recordEntities.Count == 0 ? null : _mapper.Map<List<RecordDto>>(recordEntities);
     }
 
