@@ -87,7 +87,7 @@ export interface ErrorRes {
   };
 }
 
-export type DndId = string;
+export type DndId = string | number;
 
 export interface DndColumn {
   id: DndId;

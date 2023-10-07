@@ -55,7 +55,7 @@ export default function NewStatusSelect({
                 className="hover:scale-105 transition-transform duration-300"
               >
                 <StatusBadge
-                  columnId={item.columnId}
+                  columnId={item.columnId as string}
                   statusName={item.content}
                 />
               </div>

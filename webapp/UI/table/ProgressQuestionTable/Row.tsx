@@ -44,7 +44,7 @@ export default function Row({
     setSelectedStatus(value);
     const data: ProgressRecord = {
       statusName: value.content,
-      columnId: value.columnId,
+      columnId: value.columnId as string,
       tags: tagsValue,
     };
     if (!question.progressRecordId) {
@@ -65,7 +65,7 @@ export default function Row({
     updateProgressStatus(
       question.leetCodeNo,
       value.content,
-      value.columnId,
+      value.columnId as string,
       tagsValue,
     );
   };
@@ -97,7 +97,7 @@ export default function Row({
     updateProgressStatus(
       question.leetCodeNo,
       selectedStatus.content,
-      selectedStatus.columnId,
+      selectedStatus.columnId as string,
       tagsValue,
     );
   }
