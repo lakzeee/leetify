@@ -1,7 +1,6 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Prometheus;
 using QuestionService.Data;
 using QuestionService.Services;
 using Serilog;

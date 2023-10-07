@@ -7,7 +7,6 @@ using Microsoft.OpenApi.Models;
 using ProgressService.Data;
 using ProgressService.Data.Impl;
 using ProgressService.Services;
-using Prometheus;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
