@@ -198,6 +198,7 @@ export default function PlanProgress({
                   {planDetailData.description}
                 </p>
                 <Heart
+                  showCount={false}
                   showWhenNotSaved={true}
                   planId={params.planId}
                   count={planDetailData.savesCount || 0}

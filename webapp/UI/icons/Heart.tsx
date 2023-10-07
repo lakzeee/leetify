@@ -13,6 +13,7 @@ type Props = {
   planId: string;
   showWhenNotSaved?: boolean;
   isClickable?: boolean;
+  showCount?: boolean;
 };
 
 export default function Heart({
@@ -20,6 +21,7 @@ export default function Heart({
   planId,
   showWhenNotSaved = false,
   isClickable = true,
+  showCount = true,
   count,
 }: Props) {
   const [isSaved, setIsSaved] = useState(false);
@@ -80,7 +82,7 @@ export default function Heart({
           <></>
         )}
       </button>
-      <span>{savesCount}</span>
+      {showCount && <span>{savesCount}</span>}
     </div>
   );
 }
