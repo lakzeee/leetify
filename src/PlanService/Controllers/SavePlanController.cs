@@ -28,6 +28,7 @@ public class SavePlanController : ControllerBase
     public async Task<ActionResult> SavePlanToUser(string planId)
     {
         var res = await _savedPlanRepo.SavePlanToUser(GetUserSubFromToken(), planId);
+        await _planRepo.UpdateSavesCount(planId, true);
         return res ? Ok() : BadRequest();
     }
 
@@ -36,6 +37,7 @@ public class SavePlanController : ControllerBase
     public async Task<ActionResult> RemoveFromUser(string planId)
     {
         var res = await _savedPlanRepo.RemovePlanFromUser(GetUserSubFromToken(), planId);
+        await _planRepo.UpdateSavesCount(planId, false);
         return res ? Ok() : BadRequest();
     }
 

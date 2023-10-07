@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using MongoDB.Entities;
@@ -12,10 +13,12 @@ namespace PlanService.Data.Impl;
 public class PlanRepository : IPlanRepository
 {
     private readonly IMapper _mapper;
+    private readonly ISavedPlanRepository _savedPlanRepository;
 
-    public PlanRepository(IMapper mapper)
+    public PlanRepository(IMapper mapper, ISavedPlanRepository savedPlanRepository)
     {
         _mapper = mapper;
+        _savedPlanRepository = savedPlanRepository;
     }
 
     public async Task<string> SavePlanAsync(CreatePlanDto createPlanDto)
@@ -54,11 +57,21 @@ public class PlanRepository : IPlanRepository
         return _mapper.Map<List<Plan>, List<PlanDto>>(savedPlans);
     }
 
-    public async Task<List<PlanDto>> GetAllPublicPlan()
+    public async Task<(List<PlanDto>, long, long)> GetAllPublicPlan(int pageNumber, int pageSize, bool orderByNewest,
+        bool orderByMostSaved)
     {
-        var plans = await DB.Find<Plan>().ManyAsync(a => a.IsPublic == true);
-        var publicPlan = _mapper.Map<List<Plan>, List<PlanDto>>(plans);
-        return publicPlan;
+        var query = DB.PagedSearch<Plan>();
+
+        if (orderByNewest) query.Sort(x => x.Descending(a => a.CreatedAt));
+        else if (orderByMostSaved) query.Sort(x => x.Descending(a => a.SavesCount));
+        else query.Sort(x => x.Descending(a => a.PlanName));
+
+        query.PageNumber(pageNumber);
+        query.PageSize(pageSize);
+
+        var plans = await query.ExecuteAsync();
+        var planDtos = _mapper.Map<List<Plan>, List<PlanDto>>(plans.Results.ToList());
+        return (planDtos, plans.PageCount, plans.TotalCount);
     }
     public async Task<Plan> GetPlanById(string planId)
     {
@@ -97,5 +110,13 @@ public class PlanRepository : IPlanRepository
         var plan = await DB.Find<Plan>().OneAsync(planId);
         if (plan != null) return plan.UserSub == userSub;
         return false;
+    }
+
+    public async Task UpdateSavesCount(string planId, bool isInc)
+    {
+        var plan = await DB.Find<Plan>().OneAsync(planId);
+        if (isInc) plan.SavesCount += 1;
+        else plan.SavesCount -= 1;
+        await plan.SaveAsync();
     }
 }

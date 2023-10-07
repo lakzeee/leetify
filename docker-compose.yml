@@ -134,24 +134,6 @@ services:
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./devcerts:/etc/nginx/certs
-  prometheus:
-    image: prom/prometheus:latest
-    ports:
-      - 9090:9090
-    volumes:
-      - ./infra/metrics:/etc/prometheus
-    depends_on:
-      - question-svc
-    networks:
-      custom:
-  grafana:
-    image: grafana/grafana-enterprise
-    environment:
-      - VIRTUAL_HOST=gf.leetify.com
-    depends_on:
-      - prometheus
-    networks:
-      custom:
 volumes:
   pgdata:
   mgdata:

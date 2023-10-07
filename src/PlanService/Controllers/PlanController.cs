@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using PlanService.Data;
 using PlanService.DTOs;
 using PlanService.Models;
+using PlanService.RequestHelper;
 using PlanService.Services;
 using Serilog;
 
@@ -93,16 +94,17 @@ public class PlanController : ControllerBase
 
     [HttpGet]
     [Route("public")]
-    public async Task<ActionResult> GetAllPublicPlan()
+    public async Task<ActionResult> GetAllPublicPlan([FromQuery] PublicPlanParams planParams)
     {
-        var publicPlan = await _planRepo.GetAllPublicPlan();
-        foreach (var plan in publicPlan)
-        {
-            var savesCount = await _savedPlanRepository.CountSaves(plan.Id);
-            plan.SavesCount = savesCount;
-        }
+        var res = await _planRepo.GetAllPublicPlan(planParams.PageNumber, planParams.PageSize,
+            planParams.OrderByNewest, planParams.OrderByMostSaved);
 
-        return Ok(publicPlan);
+        return Ok(new
+        {
+            results = res.Item1,
+            pageCount = res.Item2,
+            totalCount = res.Item3
+        });
     }
 
     [HttpGet]

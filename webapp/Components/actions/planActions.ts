@@ -1,5 +1,5 @@
 import { fetchWrapper } from "@/Components/utils/fetchWrapper";
-import { CreatePlanReq, PlanQuestionRes } from "@/types";
+import { CreatePlanReq, PageResult, PlanQuestionRes } from "@/types";
 
 // CRUD of Plan
 export async function CreateNewPlan(data: CreatePlanReq): Promise<any> {
@@ -29,8 +29,10 @@ export async function GetUserPlans(): Promise<PlanQuestionRes[]> {
 }
 
 // Public Plan Routes
-export async function GetAllPublicPlans(): Promise<PlanQuestionRes[]> {
-  return await fetchWrapper.get(`/plan/public`);
+export async function GetAllPublicPlans(
+  query: string,
+): Promise<PageResult<PlanQuestionRes>> {
+  return await fetchWrapper.get(`/plan/public${query}`);
 }
 
 export async function GetPublicPlanById(

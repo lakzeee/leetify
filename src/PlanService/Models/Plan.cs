@@ -15,6 +15,8 @@ public class Plan : Entity
     public List<PlanQuestion> QuestionList { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
+
+    public int SavesCount { get; set; } = 0;
 }
 
 public class PlanQuestion
