@@ -44,7 +44,7 @@ export default function NewStatusSelect({
         </label>
         <ul
           tabIndex={0}
-          className="menu dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-40 gap-2"
+          className="menu dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-auto gap-2"
         >
           {statusItems &&
             statusItems.length > 0 &&
@@ -52,7 +52,7 @@ export default function NewStatusSelect({
               <div
                 key={generateRandomKey()}
                 onClick={() => handleItemClick(item)}
-                className="hover:scale-105 transition-transform duration-300"
+                className="hover:scale-105 transition-transform duration-300 flex"
               >
                 <StatusBadge
                   columnId={item.columnId as string}
