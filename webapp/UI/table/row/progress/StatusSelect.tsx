@@ -4,11 +4,12 @@ import {
   badgeColor,
   convertDndItemsToOptions,
 } from "@/Components/utils/helpers";
+import { DndItem } from "@/types";
 
 type Props = {
   value: any;
   onChange: (value: any) => void;
-  statusItems: any;
+  statusItems: DndItem[];
 };
 
 export default function StatusSelect({ value, onChange, statusItems }: Props) {

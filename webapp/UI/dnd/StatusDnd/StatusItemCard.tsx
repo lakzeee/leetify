@@ -1,9 +1,8 @@
 import { BiTrashAlt } from "react-icons/bi";
 import { useState } from "react";
 import { DndItem } from "@/types";
-import { GoDotFill } from "react-icons/go";
 import { useStatusStore } from "@/Components/hooks/useStatusStore";
-import { badgeColor } from "@/Components/utils/helpers";
+import StatusBadge from "@/UI/badge/StatusBadge";
 
 type Props = {
   item: DndItem;
@@ -28,10 +27,10 @@ export default function StatusItemCard({ item }: Props) {
       className={`bg-base-200 rounded-full h-10 px-3 flex flex-row items-center justify-between cursor-pointer hover:ring-2 hover:ring-inset hover:ring-base-100`}
     >
       {!editMode && (
-        <div className={`badge text-white py-3 ${badgeColor(item.columnId)}`}>
-          <GoDotFill />
-          {item.content}
-        </div>
+        <StatusBadge
+          columnId={item.columnId.toString()}
+          statusName={item.content}
+        />
       )}
 
       {editMode && (

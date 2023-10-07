@@ -3,23 +3,23 @@ import TopicBadges from "@/UI/table/TopicBadges";
 import "react-tooltip/dist/react-tooltip.css";
 
 import LeetCodeLink from "@/UI/link/LeetCodeLink";
-import StatusSelect from "@/UI/table/row/progress/StatusSelect";
 import TagsBox from "@/UI/table/row/progress/TagsBox";
 import { useState } from "react";
 import {
   CreateRecord,
   UpdateRecord,
 } from "@/Components/actions/progressActions";
-import { generateRandomKey } from "@/Components/utils/helpers";
 import { DateTimeHelper } from "@/Components/utils/DateTimeHelper";
 import { useProgressStore } from "@/Components/hooks/useProgressStore";
 import DifficultyBadge from "@/UI/badge/DifficultyBadge";
+import NewStatusSelect from "@/UI/table/row/progress/NewStatusSelect";
+import { generateRandomKey } from "@/Components/utils/helpers";
 
 type Props = {
   question: PlanQuestion;
   enableProgress?: boolean;
   statusItems?: DndItem[];
-  handleStatusChange?: any;
+  handleStatusChange?: (item: DndItem) => void;
   statusName?: string;
 };
 export default function Row({
@@ -29,21 +29,21 @@ export default function Row({
 }: Props) {
   // set initial value for status select box
   const initStatus = {
-    value: question.statusName || "No Started",
+    id: generateRandomKey(),
+    content: question.statusName || "No Started",
     columnId: question.columnId || "a",
-    label: question.statusName || "TO-DO",
   };
-  const [selectedStatus, setSelectedStatus] = useState(initStatus);
+  const [selectedStatus, setSelectedStatus] = useState<DndItem>(initStatus);
   const [tagsValue, setTagsValue] = useState(question.tags || "+");
   const [tagsEditMode, setTagsEditMode] = useState(false);
   const [updatedAt, setUpdatedAt] = useState(question.updatedAt);
   const updateProgressStatus = useProgressStore(
     (state) => state.updateProgressStatus,
   );
-  const handleStatusChange = (value: any) => {
+  const handleStatusChange = (value: DndItem) => {
     setSelectedStatus(value);
     const data: ProgressRecord = {
-      statusName: value.value,
+      statusName: value.content,
       columnId: value.columnId,
       tags: tagsValue,
     };
@@ -64,7 +64,7 @@ export default function Row({
     setUpdatedAt(new Date(Date.now()).toString());
     updateProgressStatus(
       question.leetCodeNo,
-      value.value,
+      value.content,
       value.columnId,
       tagsValue,
     );
@@ -96,7 +96,7 @@ export default function Row({
     setUpdatedAt(new Date(Date.now()).toString());
     updateProgressStatus(
       question.leetCodeNo,
-      selectedStatus.value,
+      selectedStatus.content,
       selectedStatus.columnId,
       tagsValue,
     );
@@ -122,12 +122,12 @@ export default function Row({
         </td>
         {enableProgress && (
           <>
-            <td className="px-6 py-4">
-              <StatusSelect
+            <td className="px-6 py-4 whitespace-nowrap">
+              <NewStatusSelect
                 key={generateRandomKey()}
+                statusItems={statusItems}
                 value={selectedStatus}
                 onChange={handleStatusChange}
-                statusItems={statusItems}
               />
             </td>
             <td className="px-6 py-4 whitespace-nowrap">

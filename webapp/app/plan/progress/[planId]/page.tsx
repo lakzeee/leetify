@@ -110,6 +110,7 @@ export default function PlanProgress({
     async function fetchPublicPlanDetail() {
       setLoadingPlanDetail(true);
       let progress = await GetPlanAndProgressDetailById(params.planId);
+      console.log(progress);
       if (progress) {
         setPlanDetailData(progress);
       }
