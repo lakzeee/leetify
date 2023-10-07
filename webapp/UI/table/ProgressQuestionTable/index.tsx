@@ -63,9 +63,9 @@ export default function ProgressQuestionTable({
                 onClick={() => toggleCollapse(groupName)} // Add click event handler to toggle collapse
               />
               {!collapsedGroups.includes(groupName) && // Check if the group is not collapsed
-                groupQuestions.map((question) => (
+                groupQuestions.map((question, index) => (
                   <Row
-                    key={generateRandomKey()}
+                    key={index}
                     question={question}
                     enableProgress={enableProgress}
                     statusItems={statusItems}

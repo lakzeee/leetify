@@ -81,9 +81,7 @@ if (app.Environment.IsDevelopment())
 
 
 app.UseHttpsRedirection();
-app.UseHttpMetrics();
 app.UseAuthorization();
-app.MapMetrics();
 app.MapControllers();
 app.MapGrpcService<GrpcProgressStatusesService>();
 
