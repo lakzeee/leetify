@@ -48,6 +48,8 @@ export default function PlanProgress({
   const statusDummy = useStatusStore((state) => state.dummyState);
   const dialogFlag = useStatusStore((state) => state.dialogFlag);
 
+  // dummy state for force rerender data vis
+  const [dataVisDummyState, setDataVisDummyState] = useState(0);
   //loading flags
   const [loadingPlanDetail, setLoadingPlanDetail] = useState(false);
 
@@ -86,6 +88,7 @@ export default function PlanProgress({
 
     function inc() {
       incDummy();
+      setDataVisDummyState(dataVisDummyState + 1);
       setLoadingPlanDetail(false);
     }
 
@@ -169,7 +172,10 @@ export default function PlanProgress({
 
   return (
     <Container isLoading={loadingPlanDetail}>
-      <div className="w-full grid md:grid-cols-2 mb-4 gap-4">
+      <div
+        key={dataVisDummyState}
+        className="w-full grid md:grid-cols-2 mb-4 gap-4"
+      >
         <ProgressChart statusCount={statusCount} />
         <RadarChart
           difficultyCount={difficultyCount}
