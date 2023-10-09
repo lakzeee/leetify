@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { cookies, headers } from "next/headers";
 import { NextApiRequest } from "next";
 import { getToken } from "next-auth/jwt";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 
 export async function getSession() {
   return await getServerSession(authOptions);
