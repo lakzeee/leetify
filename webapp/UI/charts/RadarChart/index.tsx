@@ -1,3 +1,4 @@
+"use client";
 import ProgressChartBase, { BadgeData } from "@/UI/charts/ProgressChartBase";
 import Chart from "@/UI/charts/RadarChart/chart";
 import { TopicsFrequency } from "@/types";

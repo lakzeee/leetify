@@ -8,6 +8,7 @@ type Props = {
 export default function AreaChart({ dayCountsData }: Props) {
   return (
     <DashboardChartBase
+      large
       title={
         dayCountsData?.counts
           .reduce((total, count) => total + count)

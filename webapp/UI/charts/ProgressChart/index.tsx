@@ -1,3 +1,4 @@
+"use client";
 import Chart from "@/UI/charts/ProgressChart/chart";
 import ProgressChartBase, { BadgeData } from "@/UI/charts/ProgressChartBase";
 import { StatusCount } from "@/types";

@@ -2,31 +2,40 @@
 import React, { useEffect, useState } from "react";
 import Nav from "@/UI/nav";
 import Drawer from "@/UI/drawer";
+import Footer from "@/UI/homepage/Footer";
 
 type Props = {
   isLoading?: boolean;
   displayAvatar?: boolean;
   children: React.ReactNode;
+  scrollThreshold?: number;
 };
 export default function Container({
   displayAvatar,
   children,
   isLoading,
+  scrollThreshold,
 }: Props) {
   const [isChildrenLoaded, setIsChildrenLoaded] = useState(false);
 
   useEffect(() => {
+    let timeoutId: any;
     if (!isLoading) {
-      // Use a timeout to simulate a delay (you can adjust the duration)
-      const delay = 1000; // 1 second
-      setTimeout(() => {
+      const delay = 1000;
+      timeoutId = setTimeout(() => {
         setIsChildrenLoaded(true);
       }, delay);
     }
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
   }, [isLoading]);
+
   return (
     <>
-      <Nav displayAvatar={displayAvatar} />
+      <Nav scrollThreshold={scrollThreshold} displayAvatar={displayAvatar} />
       <Drawer />
       <div className="container mx-auto min-h-full px-4 pt-24 z-0 flex flex-col items-center">
         {/* Toggle button */}
@@ -38,11 +47,12 @@ export default function Container({
         <div
           className={`${
             isChildrenLoaded ? "opacity-100" : "opacity-0"
-          } transition-opacity duration-500 ease-in-out max-w-6xl w-full`}
+          } transition-opacity duration-500 ease-in-out max-w-6xl w-full min-h-screen`}
         >
           {children}
         </div>
       </div>
+      <Footer />
     </>
   );
 }

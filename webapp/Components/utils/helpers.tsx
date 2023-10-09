@@ -223,3 +223,198 @@ export function countDifficulty(jsonObjects: any[]): Record<string, number> {
 
   return difficultyCounts;
 }
+
+export function generateRandomDateArrayAndRandomIntegers() {
+  const currentDate = new Date();
+  const dateArray = [];
+  const randomIntegers = [];
+
+  for (let i = 0; i < 30; i++) {
+    const date = new Date(currentDate);
+    date.setDate(currentDate.getDate() - i);
+    const formattedDate = `${(date.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")} ${date.getDate().toString().padStart(2, "0")}`;
+    dateArray.push(formattedDate);
+
+    // Generate random integers between 0 and 9
+    randomIntegers.push(Math.floor(Math.random() * 10));
+  }
+
+  return { dateArray, randomIntegers };
+}
+
+export const mockTopicCountData = [
+  {
+    x: "Hash Table",
+    y: 2,
+  },
+  {
+    x: "String",
+    y: 4,
+  },
+  {
+    x: "Sliding Window",
+    y: 1,
+  },
+  {
+    x: "Dynamic Programming",
+    y: 1,
+  },
+  {
+    x: "Array",
+    y: 2,
+  },
+  {
+    x: "Binary Search",
+    y: 1,
+  },
+  {
+    x: "Divide and Conquer",
+    y: 1,
+  },
+  {
+    x: "Math",
+    y: 3,
+  },
+  {
+    x: "Linked List",
+    y: 1,
+  },
+  {
+    x: "Recursion",
+    y: 1,
+  },
+];
+
+export const tableData = [
+  {
+    leetCodeNo: 217,
+    statusName: "Complete",
+    columnId: "c",
+    updatedAt: "2023-10-09T00:05:58.364786Z",
+    title: "Contains Duplicate",
+    topics: "Array,Hash Table,Sorting",
+    difficulty: "Easy",
+  },
+  {
+    leetCodeNo: 242,
+    statusName: "Complete",
+    columnId: "c",
+    updatedAt: "2023-10-08T23:58:34.736526Z",
+    title: "Valid Anagram",
+    topics: "Hash Table,String,Sorting",
+    difficulty: "Easy",
+  },
+  {
+    leetCodeNo: 424,
+    statusName: "In Progress",
+    columnId: "b",
+    updatedAt: "2023-10-08T23:58:31.68206Z",
+    title: "Longest Repeating Character Replacement",
+    topics: "Hash Table,String,Sliding Window",
+    difficulty: "Medium",
+  },
+  {
+    leetCodeNo: 3,
+    statusName: "In Progress",
+    columnId: "b",
+    updatedAt: "2023-10-08T23:57:37.821679Z",
+    title: "Longest Substring Without Repeating Characters",
+    topics: "Hash Table,String,Sliding Window",
+    difficulty: "Medium",
+  },
+  {
+    leetCodeNo: 5,
+    statusName: "Complete",
+    columnId: "c",
+    updatedAt: "2023-10-08T01:37:59.030466Z",
+    title: "Longest Palindromic Substring",
+    topics: "String,Dynamic Programming",
+    difficulty: "Medium",
+  },
+  {
+    leetCodeNo: 1,
+    statusName: "Complete",
+    columnId: "c",
+    updatedAt: "2023-10-08T01:37:55.402832Z",
+    title: "Two Sum",
+    topics: "Array,Hash Table",
+    difficulty: "Easy",
+  },
+  {
+    leetCodeNo: 6,
+    statusName: "Complete",
+    columnId: "c",
+    updatedAt: "2023-10-08T01:37:47.626865Z",
+    title: "Zigzag Conversion",
+    topics: "String",
+    difficulty: "Medium",
+  },
+  {
+    leetCodeNo: 4,
+    statusName: "Complete",
+    columnId: "c",
+    updatedAt: "2023-10-08T01:37:37.895229Z",
+    title: "Median of Two Sorted Arrays",
+    topics: "Array,Binary Search,Divide and Conquer",
+    difficulty: "Hard",
+  },
+  {
+    leetCodeNo: 2,
+    statusName: "Complete",
+    columnId: "c",
+    updatedAt: "2023-10-07T03:15:55.919451Z",
+    title: "Add Two Numbers",
+    topics: "Linked List,Math,Recursion",
+    difficulty: "Medium",
+  },
+  {
+    leetCodeNo: 9,
+    statusName: "Complete",
+    columnId: "c",
+    updatedAt: "2023-10-07T03:15:50.246588Z",
+    title: "Palindrome Number",
+    topics: "Math",
+    difficulty: "Easy",
+  },
+];
+
+export const diffData = {
+  Easy: 5,
+  Medium: 4,
+  Hard: 4,
+};
+
+export const progressData = {
+  todo: 10,
+  inProgress: 8,
+  complete: 25,
+};
+export const freqData = {
+  numbers: 8,
+  topics: [
+    "Array",
+    "Hash Table",
+    "String",
+    "Sorting",
+    "Two Pointers",
+    "Sliding Window",
+    "Dynamic Programming",
+    "Greedy",
+  ],
+  series: [
+    {
+      name: "Easy",
+      data: [3, 3, 2, 2, 1, 7, 4, 3],
+    },
+    {
+      name: "Medium",
+      data: [5, 6, 1, 4, 4, 3, 3, 6],
+    },
+    {
+      name: "Hard",
+      data: [4, 3, 2, 1, 4, 2, 3, 6],
+    },
+  ],
+};

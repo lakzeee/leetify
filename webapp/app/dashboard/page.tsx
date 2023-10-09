@@ -68,6 +68,7 @@ export default function Home() {
       .then((r) => {
         if (r.error) throw r.error;
         setRecentVisitQuestions(r);
+        console.log(r);
         setLoadingRecent(false);
       })
       .catch(() => {});

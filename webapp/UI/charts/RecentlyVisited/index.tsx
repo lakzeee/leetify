@@ -7,8 +7,9 @@ import RecentRow from "@/UI/charts/RecentlyVisited/RecentRow";
 
 type Props = {
   data?: PlanQuestion[];
+  xl?: boolean;
 };
-export default function RecentVisit({ data }: Props) {
+export default function RecentVisit({ data, xl }: Props) {
   const columTitles = [
     "Title",
     "LastVisit",
@@ -17,7 +18,7 @@ export default function RecentVisit({ data }: Props) {
     "Topics",
   ];
   return (
-    <DashboardChartBase title={"Recently visited"} large>
+    <DashboardChartBase title={"Recently visited"} large xl>
       <TableWrapper>
         <TableHeader columTitles={columTitles} />
         <tbody>

@@ -7,6 +7,7 @@ type Props = {
   subTitle?: string;
   percentage?: string;
   large?: boolean;
+  xl?: boolean;
 };
 export default function DashboardChartBase({
   children,
@@ -17,7 +18,7 @@ export default function DashboardChartBase({
 }: Props) {
   return (
     <div
-      className={`w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6 overflow-y-scroll ${
+      className={`w-full flex flex-col justify-center bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6 overflow-y-scroll ${
         large ? "max-w-sm lg:max-w-3xl" : "max-w-sm"
       }`}
     >
