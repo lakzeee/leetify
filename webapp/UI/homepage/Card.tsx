@@ -25,7 +25,7 @@ export default function Card({
           <h2 className="font-bold text-gray-900 text-2xl lg:text-4xl dark:text-white text-center">
             {title}
           </h2>
-          <p className="font-light text-gray-500 dark:text-gray-200">
+          <p className="font-light text-gray-500 dark:text-gray-200 text-center">
             {subTitle}
           </p>
         </div>
@@ -48,7 +48,11 @@ export default function Card({
         <h2 className="font-bold text-gray-900 text-2xl lg:text-4xl dark:text-white ">
           {title}
         </h2>
-        <p className="font-light text-gray-500 dark:text-gray-200">
+        <p
+          className={`font-light text-gray-500 dark:text-gray-200 text-center md:text-left ${
+            reverse && "md:text-right"
+          }`}
+        >
           {subTitle}
         </p>
       </div>
