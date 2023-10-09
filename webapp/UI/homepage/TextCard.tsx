@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { FaFireAlt } from "react-icons/fa";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
@@ -33,7 +34,13 @@ export default function TextCard({
       <p className="text-lg font-normal text-gray-500 dark:text-gray-400 mb-6">
         {subTitle}
       </p>
-      <button className="btn bg-blue-600 rounded-full text-white border-none hover:bg-blue-500">
+      <button
+        onClick={() =>
+          // @ts-ignore
+          document.getElementById("auth_modal").showModal()
+        }
+        className="btn bg-blue-600 rounded-full text-white border-none hover:bg-blue-500"
+      >
         {buttonText}
         <MdOutlineKeyboardArrowRight size={20} />
       </button>

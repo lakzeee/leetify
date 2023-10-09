@@ -38,7 +38,7 @@ export default function Consent({ params }: { params: { provider: string } }) {
               throw r.error;
             }
             if (!r.isNewUser) {
-              router.push("/");
+              router.push("/dashboard");
             } else {
               fetchUserInfo();
               setIsNewUser(true);

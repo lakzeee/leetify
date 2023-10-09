@@ -19,11 +19,11 @@ export default function AvatarButton({ user, alt }: Props) {
           tabIndex={0}
           className="btn btn-ghost btn-circle avatar placeholder"
         >
-          <div className="bg-neutral-content rounded-full w-9">
+          <div className="bg-gray-100 rounded-full w-9">
             {user?.image ? (
               <Image alt={alt} src={user.image} width={30} height={30} />
             ) : (
-              <AiOutlineUser className="text-accent-content" size={24} />
+              <AiOutlineUser className="text-gray-600" size={24} />
             )}
           </div>
         </div>
