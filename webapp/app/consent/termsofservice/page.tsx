@@ -1,3 +1,5 @@
+import Container from "@/UI/container";
+
 export default function TermsOfService() {
-  return <p>TermsOfService</p>;
+  return <Container>TermsOfService</Container>;
 }

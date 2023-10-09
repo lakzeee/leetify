@@ -1,31 +1,39 @@
+import { AiFillGithub, AiFillLinkedin } from "react-icons/ai";
+
 export default function Footer() {
   return (
     <div className="bg-white rounded-lg shadow m-4 dark:bg-gray-800">
-      <div className="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
-        <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">
+      <div className="w-full mx-auto p-4 flex flex-col md:flex-row items-center justify-between">
+        <span className="text-sm text-gray-500 text-center dark:text-gray-400">
           © 2023{" "}
-          <a href="https://flowbite.com/" className="hover:underline">
+          <a href="https://leetify.live" className="hover:underline">
             Leetify.live
-          </a>
-          . All Rights Reserved.
+          </a>{" "}
+          All Rights Reserved.
         </span>
-        <ul className="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
-          <li>
-            <a href="#" className="mr-4 hover:underline md:mr-6 ">
-              About
+
+        <div className="flex flex-row gap-4 justify-center items-center mt-2 md:mt-0">
+          <ul className="flex flex-row text-sm font-medium text-gray-500 dark:text-gray-400">
+            <li>
+              <a href="/consent/privacypolicy" className="hover:underline mr-2">
+                Privacy
+              </a>
+            </li>
+            <li>
+              <a href="/consent/termsofservice" className="hover:underline">
+                Terms
+              </a>
+            </li>
+          </ul>
+          <div className="text-gray-500 dark:text-gray-400 w-auto flex items-end justify-center gap-4">
+            <a href="https://github.com/lakzeee">
+              <AiFillGithub size={20} />
             </a>
-          </li>
-          <li>
-            <a href="#" className="mr-4 hover:underline md:mr-6">
-              Privacy Policy
+            <a href="https://www.linkedin.com/in/zehucai/">
+              <AiFillLinkedin size={20} />
             </a>
-          </li>
-          <li>
-            <a href="#" className="hover:underline">
-              Contact
-            </a>
-          </li>
-        </ul>
+          </div>
+        </div>
       </div>
     </div>
   );

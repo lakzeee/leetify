@@ -123,7 +123,7 @@ export default function PlanProgress({
 
   const statusCount = useMemo(() => {
     if (
-      dummyState > 2 &&
+      dummyState > 1 &&
       planDetailData?.questionList &&
       planDetailData.questionList?.length > 0
     ) {
@@ -139,7 +139,7 @@ export default function PlanProgress({
 
   const difficultyCount = useMemo(() => {
     if (
-      dummyState > 2 &&
+      dummyState > 1 &&
       planDetailData?.questionList &&
       planDetailData.questionList?.length > 0
     ) {
@@ -157,7 +157,7 @@ export default function PlanProgress({
 
   const frequencyCount = useMemo(() => {
     if (
-      dummyState > 2 &&
+      dummyState > 1 &&
       planDetailData?.questionList &&
       planDetailData.questionList?.length > 0
     ) {

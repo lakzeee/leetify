@@ -1,3 +1,5 @@
+import Container from "@/UI/container";
+
 export default function PrivacyPolicy() {
-  return <p>PrivacyPolicy</p>;
+  return <Container>Privacy Policy</Container>;
 }

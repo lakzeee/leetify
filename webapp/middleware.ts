@@ -4,7 +4,13 @@ import { NextRequest, NextResponse } from "next/server";
 export { default } from "next-auth/middleware";
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/plan/:path*", "/me/:path*"],
+  matcher: [
+    "/dashboard/:path*",
+    "/plan/create/:path*",
+    "/plan/progress/:path*",
+    "/plan/detail/:path*",
+    "/me/:path*",
+  ],
 };
 
 const secret = process.env.NEXTAUTH_SECRET;
