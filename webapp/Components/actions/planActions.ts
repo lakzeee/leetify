@@ -63,3 +63,7 @@ export async function SavePlanToUser(planId: string) {
 export async function RemovePlanFromUser(planId: string) {
   return await fetchWrapper.del(`/plan/saved/${planId}`);
 }
+
+export async function GetUserCreatedPlanCount() {
+  return await fetchWrapper.get(`/plan/count`);
+}

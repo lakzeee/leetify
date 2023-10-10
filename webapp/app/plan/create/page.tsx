@@ -7,13 +7,24 @@ import Heading from "@/UI/heading";
 import { useCreatePlanStore } from "@/Components/hooks/useCreatePlanStore";
 import { PlanQuestion } from "@/types";
 import { useEffect, useState } from "react";
+import { GetUserCreatedPlanCount } from "@/Components/actions/planActions";
 
 export default function CreatePlan() {
   const [user, setUser] = useState<any>();
+  const [exceedList, setExceedLimit] = useState(false);
+
   useEffect(() => {
+    async function fetchCount() {
+      const count = await GetUserCreatedPlanCount();
+      if (count > 10) setExceedLimit(true);
+    }
+
     async function fetchUser() {
       const user = await getCurrentUser();
-      if (user) setUser(user);
+      if (user) {
+        setUser(user);
+        fetchCount();
+      }
     }
 
     fetchUser();
@@ -46,12 +57,21 @@ export default function CreatePlan() {
 
   return (
     <Container>
-      {!user ? (
+      {!user && (
         <Heading
+          center
           title={"You Need Log In to Create Plan"}
           subTitle={"Click the avatar button to sign up or log in"}
         />
-      ) : (
+      )}
+      {exceedList && (
+        <Heading
+          center
+          title={"Plan Creation Exceed Limit"}
+          subTitle={"Currently user are only allow to create 10 plans."}
+        />
+      )}
+      {user && !exceedList && (
         <div className="min-w-full">
           <CreatePlanForm
             addedQuestions={addedQuestions}

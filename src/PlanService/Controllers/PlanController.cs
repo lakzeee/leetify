@@ -53,7 +53,7 @@ public class PlanController : ControllerBase
         var plan = await _planRepo.GetPlanById(planId);
         return plan.UserSub == GetUserSubFromToken() ? Ok(plan) : Unauthorized();
     }
-
+    
 
     [Authorize]
     [HttpPut("{planId}")]
@@ -90,6 +90,14 @@ public class PlanController : ControllerBase
             Log.Error("GetUserCreatedPlan Error: ", e.Message);
             return StatusCode(500, "Internal Server Error");
         }
+    }
+
+    [Authorize]
+    [HttpGet("count")]
+    public async Task<ActionResult> GetNumberOfUserCreatedPlan()
+    {
+        var count = (int)await _planRepo.GetUserCreatedPlansCount(GetUserSubFromToken());
+        return Ok(count);
     }
 
     [HttpGet]

@@ -19,4 +19,5 @@ public interface IPlanRepository
 
     public Task<bool> VerifyPlanOwnerShip(string planId, string userSub);
     public Task UpdateSavesCount(string planId, bool isInc);
+    public Task<long> GetUserCreatedPlansCount(string userSub);
 }

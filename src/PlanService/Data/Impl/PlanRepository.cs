@@ -119,4 +119,9 @@ public class PlanRepository : IPlanRepository
         else plan.SavesCount -= 1;
         await plan.SaveAsync();
     }
+
+    public async Task<long> GetUserCreatedPlansCount(string userSub)
+    {
+        return await DB.CountAsync<Plan>(x => x.UserSub == userSub);
+    }
 }

@@ -40,7 +40,6 @@ export default function MyPlans() {
       setLoadingSavedPlans(true);
       const savePlans = await GetUserSavedPlans();
       setSavePlans(savePlans);
-      console.log(savePlans);
       setLoadingSavedPlans(false);
     }
 
@@ -52,12 +51,21 @@ export default function MyPlans() {
     <Container isLoading={loadingUserPlans && loadingSavedPlans}>
       <div className="flex w-full flex-col justify-start mb-4">
         <div className="mb-6">
-          <a href={"/plan/create"} className="btn btn-primary">
+          <a
+            href={"/plan/create"}
+            className={`btn btn-primary ${
+              userPlans && userPlans?.length > 10 && "btn-disabled"
+            } `}
+          >
             Create a plan
           </a>
         </div>
-        <Heading title={"My Plans"} />
-        <div className="mb-4">
+        <Heading
+          title={"My Plans"}
+          subTitle={`Available Creation of Plan (${userPlans?.length || 0}/10)`}
+        />
+
+        <div className="mb-4 mt-2">
           {userPlans && userPlans.length > 0 && (
             <UserPlansTable key={generateRandomKey()} userPlans={userPlans} />
           )}
