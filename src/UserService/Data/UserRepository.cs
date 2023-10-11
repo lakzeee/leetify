@@ -47,4 +47,9 @@ public class UserRepository : IUserRepository
         if (newUser.ID != null) return newUser.ID.ToString();
         return null;
     }
+
+    public async Task<long> GetUsersCount()
+    {
+        return await DB.CountAsync<User>();
+    }
 }

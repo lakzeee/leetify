@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using MongoDB.Entities;
 using Serilog;
 using UserService.Data;
 using UserService.DTOs;
@@ -41,22 +42,53 @@ public class UserController : ControllerBase
         return claim?[3].Value;
     }
 
-    private bool VerifyUserEmail(string email)
+    private string GetUserImageFromToken()
     {
-        return email == GetUserEmailFromToken();
+        var identity = HttpContext.User.Identity as ClaimsIdentity;
+        IList<Claim> claim = identity?.Claims.ToList();
+        return claim?[2].Value;
+    }
+
+    private string GetUserUserNameFromToken()
+    {
+        var identity = HttpContext.User.Identity as ClaimsIdentity;
+        IList<Claim> claim = identity?.Claims.ToList();
+        return claim?[0].Value;
     }
     
 
     [Authorize]
-    [HttpGet("isNew")]
-    public async Task<ActionResult<User>> GetUserByEmail()
+    [HttpGet("login/{provider}")]
+    public async Task<ActionResult<User>> GetUserByEmail(string provider)
     {
         try
         {
             var email = GetUserEmailFromToken();
             var user = await _repo.GetUserByEmail(email);
-            if (user == null) return Ok(new { IsNewUser = true });
-            return Ok(new { IsNewUser = false });
+
+            if (user == null)
+            {
+                var newUser = new User
+                {
+                    Email = email,
+                    AuthProvider = provider,
+                    Sub = GetUserSubFromToken(),
+                    Image = GetUserImageFromToken(),
+                    Name = GetUserUserNameFromToken(),
+                    ProfileName = GetUserUserNameFromToken(),
+                    IsConsent = true,
+                    IsStrictlyCookiesConsent = true,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
+                };
+                await newUser.SaveAsync();
+                return Ok(new { IsNewUser = true });
+            }
+            else
+            {
+                return Ok(new { IsNewUser = false });
+            }
+            
         }
         catch (Exception ex)
         {
@@ -98,31 +130,6 @@ public class UserController : ControllerBase
         }
     }
 
-    [HttpPost]
-    [Authorize]
-    public async Task<ActionResult> CreateUser([FromBody] UserDto userDto)
-    {
-        try
-        {
-            if (!VerifyUserEmail(userDto.Email)) return Forbid();
-            
-            var user = await _repo.GetUserByEmail(userDto.Email);
-            
-            if (user != null) return BadRequest("User existed");
-            if (!userDto.IsConsent || !userDto.IsStrictlyCookiesConsent) return BadRequest("User not consent");
-            userDto.Sub = GetUserSubFromToken();
-            var userId = await _repo.CreateUser(userDto);
-            if (userId == null) return BadRequest("Unexpected Error");
-
-            return StatusCode(201);
-        }
-        catch (Exception ex)
-        {
-            Log.Error($"Internal Server Error: {ex.Message}");
-            return StatusCode(500, "Internal Server Error");
-        }
-    }
-
     [Authorize]
     [HttpPut]
     public async Task<ActionResult> UpdateUserProfileName([FromBody] UpdateUserDto updateUserDto)
@@ -140,4 +147,20 @@ public class UserController : ControllerBase
             return StatusCode(500, "Internal Server Error");
         }
     }
+
+    [HttpGet("count")]
+    public async Task<ActionResult> GetUsersCount()
+    {
+        try
+        {
+            var count = (int)await _repo.GetUsersCount();
+            return Ok(count);
+        }
+        catch (Exception ex)
+        {
+            Log.Error($"Internal Server Error: {ex.Message}");
+            return StatusCode(500, "Internal Server Error");
+        }
+    }
+    
 }

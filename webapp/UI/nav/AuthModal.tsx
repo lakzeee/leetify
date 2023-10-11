@@ -9,9 +9,24 @@ export default function AuthModal() {
         <Heading
           title={"Log In"}
           subTitle={
-            "If you don't have an account, log in to create one for you"
+            "If you don't have an account, log in to create one for you.\n"
           }
         />
+        <span className="font-light">
+          By logging in, you agree to Leetify's
+          <a className="text-primary" href={"/consent/privacypolicy"}>
+            {" "}
+            Privacy Policy,{" "}
+          </a>
+          <a className="text-primary" href={"/consent/termsofservice"}>
+            {" "}
+            Terms of Service.{" "}
+          </a>
+          And the use of strictly necessary{" "}
+          <a className="text-primary" href={"/consent/cookies"}>
+            cookies.
+          </a>
+        </span>
         <div className="flex flex-row gap-4 mt-4">
           <button
             onClick={() => signIn("github", { callbackUrl: "/consent/github" })}

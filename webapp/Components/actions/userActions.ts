@@ -1,8 +1,8 @@
 import { User, UserRes } from "@/types";
 import { fetchWrapper } from "@/Components/utils/fetchWrapper";
 
-export async function getUserByEmail(): Promise<UserRes> {
-  return await fetchWrapper.get(`/user/isNew`);
+export async function getUserByEmail(provider: string): Promise<UserRes> {
+  return await fetchWrapper.get(`/user/login/${provider}`);
 }
 
 export async function getUserPublicInfo(userSub: string): Promise<User> {
@@ -22,4 +22,8 @@ export async function updateUserProfileName(
   profileName: string,
 ): Promise<UserRes> {
   return await fetchWrapper.put(`/user`, { id, profileName });
+}
+
+export async function GetUsersCount(): Promise<number> {
+  return await fetchWrapper.get(`/user/count`);
 }
