@@ -21,21 +21,13 @@ function truncateString(str: string, maxLength: number) {
   }
 }
 
-// Example usage:
-const shortString = "This is a short string.";
-const longString =
-  "This is a long string that needs to be truncated if it exceeds 20 characters.";
-
-console.log(truncateString(shortString, 20)); // Output: "This is a short string.\n"
-console.log(truncateString(longString, 20)); // Output: "This is a long strin..."
-
 export default function PlanCard({ plan, heartClickable = true }: Props) {
   const router = useRouter();
 
   return (
     <div
       onClick={() => router.push(`/plan/public/${plan.id}`)}
-      className="card max-h-40 w-80 rounded-lg relative min-w-90 shadow-xl cursor-pointer dark:bg-gray-800"
+      className="card max-h-40 h-40 w-80 rounded-lg relative min-w-90 shadow-xl cursor-pointer dark:bg-gray-800"
     >
       <div className="-z-0 min-w-md">
         <div className="absolute right-0 mr-8 mt-8">
