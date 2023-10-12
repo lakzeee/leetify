@@ -16,6 +16,8 @@ import {
 import { PlanQuestion, TreeMapDataPoint } from "@/types";
 import TreeMap from "@/UI/charts/TreeMap";
 import Container from "@/UI/container";
+import MessageCard from "@/UI/homepage/MessageCard";
+import { getCurrentUser } from "@/app/session/authUtils";
 
 export default function Home() {
   const [loadingDayCount, setLoadingDayCount] = useState(false);
@@ -23,6 +25,7 @@ export default function Home() {
   const [loadingTopicsCount, setLoadingTopicsCount] = useState(false);
   const [loadingRecent, setLoadingRecent] = useState(false);
   const [timeoutFlag, setTimeoutFlag] = useState(false);
+  const [userName, setUserName] = useState("");
 
   const [dayCounts, setDayCounts] = useState<DayCountsData>();
   const [difficultiesCount, setDifficultiesCount] = useState<number[]>([
@@ -71,6 +74,7 @@ export default function Home() {
         setLoadingRecent(false);
       })
       .catch(() => {});
+    getCurrentUser().then((r) => setUserName(r?.name || ""));
     const fetchingTimeOut = () => {
       setTimeoutFlag(false);
     };
@@ -97,6 +101,9 @@ export default function Home() {
           </div>
           <div className="lg:col-span-2">
             <RecentVisit data={recentVisitQuestions} />
+          </div>
+          <div className="lg:col-span-2">
+            <MessageCard userName={userName} />
           </div>
         </div>
       </div>

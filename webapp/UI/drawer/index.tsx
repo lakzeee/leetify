@@ -1,4 +1,10 @@
 import React from "react";
+import {
+  BiListUl,
+  BiSolidBookBookmark,
+  BiSolidDashboard,
+} from "react-icons/bi";
+import { TbWorldHeart } from "react-icons/tb";
 
 export default function Drawer() {
   return (
@@ -9,19 +15,30 @@ export default function Drawer() {
           <label htmlFor="my-drawer" className="drawer-overlay"></label>
           <ul className="menu p-4 w-60 min-h-full bg-base-200 text-base-content pt-20">
             {/* Sidebar content here */}
-
             <li>
-              <a href="/dashboard">Dashboard</a>
+              <a href="/dashboard">
+                <BiSolidDashboard />
+                Dashboard
+              </a>
             </li>
             <li>
-              <a href="/plan">My Plans</a>
+              <a href="/plan">
+                <BiSolidBookBookmark />
+                My Plans
+              </a>
             </li>
             <div className="divider" />
             <li>
-              <a href="/question">All Question</a>
+              <a href="/question">
+                <BiListUl />
+                All Question
+              </a>
             </li>
             <li>
-              <a href="/plan/public">Explore Plans</a>
+              <a href="/plan/public">
+                <TbWorldHeart />
+                Explore Plans
+              </a>
             </li>
           </ul>
         </div>

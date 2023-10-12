@@ -3,6 +3,7 @@ import { HiCheck } from "react-icons/hi";
 import { GoDotFill } from "react-icons/go";
 import StatusBadge from "@/UI/badge/StatusBadge";
 import { DndItem } from "@/types";
+import { IoIosArrowDropdownCircle } from "react-icons/io";
 
 type Props = {
   value: DndItem;
@@ -37,18 +38,17 @@ export default function NewStatusSelect({
       <div className="dropdown dropdown-end cursor-pointer">
         <label
           tabIndex={0}
-          className={`badge ${badgeColor} gap-[4px] flex justify-center item-center border-none cursor-pointer hover:scale-105 transition-transform duration-300`}
+          className={`badge ${badgeColor} gap-[4px] flex justify-center item-center border-none cursor-pointer hover:scale-105 transition-transform duration-300 m-1`}
         >
           {value.columnId === "c" ? <HiCheck /> : <GoDotFill size={10} />}{" "}
           {value.content}
         </label>
-        <ul
-          tabIndex={0}
-          className="menu dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-auto gap-2"
-        >
-          {statusItems &&
-            statusItems.length > 0 &&
-            statusItems.map((item) => (
+        {statusItems && statusItems.length > 0 && (
+          <ul
+            tabIndex={0}
+            className="menu dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box max-w-xs gap-2"
+          >
+            {statusItems.map((item) => (
               <div
                 key={generateRandomKey()}
                 onClick={() => handleItemClick(item)}
@@ -60,7 +60,26 @@ export default function NewStatusSelect({
                 />
               </div>
             ))}
-        </ul>
+          </ul>
+        )}
+        {!statusItems ||
+          (statusItems.length === 0 && (
+            <div
+              tabIndex={0}
+              className="dropdown-content z-[1] card card-compact w-64 py-1 shadow bg-base-100 text-primary-content"
+            >
+              <div className="card-body">
+                <p className="text-neutral-content flex flex-row items-center gap-1">
+                  Click STATUS
+                  <IoIosArrowDropdownCircle size={18} />
+                  from above to
+                </p>
+                <p className="text-neutral-content">
+                  add status name to get started
+                </p>
+              </div>
+            </div>
+          ))}
       </div>
     </>
   );
