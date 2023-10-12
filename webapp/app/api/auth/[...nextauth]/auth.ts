@@ -37,7 +37,7 @@ export const authOptions: NextAuthOptions = {
         {
           ...token,
           iss: process.env.NEXTAUTH_URL,
-          exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
+          exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
         },
         secret,
       );
