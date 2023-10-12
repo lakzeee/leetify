@@ -25,9 +25,7 @@ export default function Consent({
             if (r.error) {
               throw r.error;
             }
-            if (!r.isNewUser) {
-              router.push("/dashboard");
-            }
+            router.push("/dashboard");
           })
           .catch((e) => {
             signOut({ callbackUrl: "/auth/error" });
