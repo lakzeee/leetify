@@ -11,6 +11,7 @@ import {
 import { PlanQuestionRes } from "@/types";
 import Heading from "@/UI/heading";
 import { useSavedPlansStore } from "@/Components/hooks/useSavedPlansStore";
+import { Tooltip } from "react-tooltip";
 
 export default function MyPlans() {
   const [userPlans, setUserPlans] = useState<PlanQuestionRes[]>();
@@ -82,6 +83,9 @@ export default function MyPlans() {
           )}
         </div>
       </div>
+      <Tooltip id="progress-tooltip" />
+      <Tooltip id="remove-tooltip" />
+      <Tooltip id="edit-tooltip" />
     </Container>
   );
 }

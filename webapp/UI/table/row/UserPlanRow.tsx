@@ -7,6 +7,7 @@ import Heading from "@/UI/heading";
 import { DeletePlanById } from "@/Components/actions/planActions";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { BsFire } from "react-icons/bs";
 
 type Props = {
   userPlan: PlanQuestionRes;
@@ -19,6 +20,7 @@ export default function UserPlanRow({
   enableProgress = false,
 }: Props) {
   const router = useRouter();
+
   function handleDelete() {
     DeletePlanById(userPlan.id)
       .then((res) => {
@@ -60,12 +62,24 @@ export default function UserPlanRow({
           <td className="px-6 py-4">
             <div className="flex flex-row gap-1">
               <a
+                data-tooltip-id="progress-tooltip"
+                data-tooltip-content="Go to progress page"
+                href={`/plan/progress/${userPlan.id}`}
+                className="btn btn-circle btn-sm btn-primary"
+              >
+                <BsFire />
+              </a>
+              <a
+                data-tooltip-id="edit-tooltip"
+                data-tooltip-content="Edit"
                 href={`/plan/detail/${userPlan.id}`}
-                className="btn btn-circle btn-sm btn-accent"
+                className="btn btn-circle btn-sm btn-secondary"
               >
                 <AiFillEdit />
               </a>
               <button
+                data-tooltip-id="remove-tooltip"
+                data-tooltip-content="Delete"
                 className="btn btn-circle btn-sm"
                 onClick={() =>
                   // @ts-ignore
