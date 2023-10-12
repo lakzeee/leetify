@@ -15,7 +15,7 @@ export default function Footer() {
         <div className="flex flex-row gap-4 justify-center items-center mt-2 md:mt-0">
           <ul className="flex flex-row text-sm font-medium text-gray-500 dark:text-gray-400">
             <li>
-              <a href="/consent/privacypolicy" className="hover:underline mr-2">
+              <a href="/privacypolicy.html" className="hover:underline mr-2">
                 Privacy
               </a>
             </li>
