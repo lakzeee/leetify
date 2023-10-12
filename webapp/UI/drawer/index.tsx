@@ -16,10 +16,6 @@ export default function Drawer() {
             <li>
               <a href="/plan">My Plans</a>
             </li>
-
-            <li>
-              <a href="/session">Session(Dev Only)</a>
-            </li>
             <div className="divider" />
             <li>
               <a href="/question">All Question</a>

@@ -13,8 +13,9 @@ export default function AuthModal() {
           }
         />
         <span className="font-light">
+          {/* eslint-disable-next-line react/no-unescaped-entities */}
           By logging in, you agree to Leetify's
-          <a className="text-primary" href={"/consent/privacypolicy"}>
+          <a className="text-primary" href={"/privacypolicy.html"}>
             {" "}
             Privacy Policy,{" "}
           </a>

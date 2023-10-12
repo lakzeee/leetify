@@ -65,7 +65,7 @@ public class UserController : ControllerBase
         {
             var email = GetUserEmailFromToken();
             var user = await _repo.GetUserByEmail(email);
-
+            var isNewUser = true;
             if (user == null)
             {
                 var newUser = new User
@@ -82,13 +82,14 @@ public class UserController : ControllerBase
                     UpdatedAt = DateTime.UtcNow
                 };
                 await newUser.SaveAsync();
-                return Ok(new { IsNewUser = true });
             }
             else
             {
-                return Ok(new { IsNewUser = false });
+                isNewUser = false;
             }
-            
+
+            return Ok(new { IsNewUser = isNewUser });
+
         }
         catch (Exception ex)
         {
@@ -147,7 +148,7 @@ public class UserController : ControllerBase
             return StatusCode(500, "Internal Server Error");
         }
     }
-
+    
     [HttpGet("count")]
     public async Task<ActionResult> GetUsersCount()
     {

@@ -1,37 +1,24 @@
 "use client";
 import { useEffect, useState } from "react";
 import { getCurrentUser } from "@/app/session/authUtils";
-import {
-  getUserByEmail,
-  GetUsersCount,
-} from "@/Components/actions/userActions";
+import { getUserByEmail } from "@/Components/actions/userActions";
 import { useRouter } from "next/navigation";
 import Container from "@/UI/container";
 import { signOut } from "next-auth/react";
 
-export default function Consent({ params }: { params: { provider: string } }) {
+export default function Consent({
+  params,
+}: {
+  params: {
+    provider: string;
+  };
+}) {
   const router = useRouter();
   const [isNewUser, setIsNewUser] = useState(false);
-  // const [profileName, setProfileName] = useState("");
-  const [user, setUser] = useState<any>();
-  const [userCount, setUserCount] = useState(100);
 
   useEffect(() => {
-    async function fetchUserInfo() {
-      const user: any = await getCurrentUser();
-      if (user) setUser(user);
-    }
-
-    async function fetchUsersCount() {
-      const count = await GetUsersCount();
-      if (count) setUserCount(count);
-    }
-
-    fetchUsersCount();
-
     async function verifyIfIsNewUser() {
       const userData: any = await getCurrentUser();
-      // setProfileName(userData.name);
       if (userData.email) {
         getUserByEmail(params.provider)
           .then((r) => {
@@ -40,16 +27,10 @@ export default function Consent({ params }: { params: { provider: string } }) {
             }
             if (!r.isNewUser) {
               router.push("/dashboard");
-            } else {
-              if (userCount > 100) {
-                signOut({ callbackUrl: "/auth/error" });
-              }
-              fetchUserInfo();
-              setIsNewUser(true);
             }
           })
           .catch((e) => {
-            signOut({ callbackUrl: "/" });
+            signOut({ callbackUrl: "/auth/error" });
           });
       }
     }
