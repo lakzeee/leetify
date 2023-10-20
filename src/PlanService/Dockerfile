@@ -10,6 +10,7 @@ COPY src/ProgressService/ProgressService.csproj src/ProgressService/ProgressServ
 COPY src/UserService/UserService.csproj src/UserService/UserService.csproj
 COPY src/PlanService/PlanService.csproj src/PlanService/PlanService.csproj
 COPY src/GatewayService/GatewayService.csproj src/GatewayService/GatewayService.csproj
+COPY src/SearchService/SearchService.csproj src/SearchService/SearchService.csproj
 
 # Restore package deps
 RUN dotnet restore leetify.sln

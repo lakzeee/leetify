@@ -45,7 +45,6 @@ export default function EditQuestionDialog({
           console.log("Failed getQuestionsByQuestionNumbers");
         });
     }
-    console.log("Fetch Search res once");
   }, [questionNumbers, setQuestions]);
 
   const columTitles = ["no", "title", "topics", "difficulty", "Action"];
