@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useCreatePlanStore } from "@/Components/hooks/useCreatePlanStore";
 import {
   getQuestionsByQuestionNumbers,
@@ -10,6 +10,8 @@ import TableWrapper from "@/UI/table/tablebase/TableWrapper";
 import TableHeader from "@/UI/table/tablebase/TableHeader";
 import Row from "@/UI/table/ActionQuestionTable/Row";
 import { PlanQuestion } from "@/types";
+import { AiOutlineSearch } from "react-icons/ai";
+import toast from "react-hot-toast";
 
 type Props = {
   handleAdd: (question: PlanQuestion, groupName: string) => void;
@@ -38,7 +40,7 @@ export default function EditQuestionDialog({
   }
 
   function isNumberWithCommas(str: string) {
-    const regex = /^(\d{1,3}(,\d{3})*(?!\s*,)|\d{1,4})(?=$|\s)/;
+    const regex = /^\d{1,4}(,\d{1,4})*$|^\d{1,4}$/;
     return regex.test(str);
   }
 
@@ -47,7 +49,7 @@ export default function EditQuestionDialog({
     return regex.test(term);
   }
 
-  useEffect(() => {
+  function handleSearch() {
     if (isNumberWithCommas(questionNumbers)) {
       getQuestionsByQuestionNumbers(questionNumbers)
         .then((data: any) => {
@@ -67,9 +69,9 @@ export default function EditQuestionDialog({
           console.log("Failed getQuestionsByQuestionTitle");
         });
     } else {
-      console.log("Search term is not valid");
+      toast.error("Search term is not valid");
     }
-  }, [questionNumbers, setQuestions]);
+  }
 
   const columTitles = ["no", "title", "topics", "difficulty", "Action"];
 
@@ -78,13 +80,29 @@ export default function EditQuestionDialog({
       <dialog id="edit_question_dialog" className="modal">
         <div className="modal-box w-11/12 max-w-5xl">
           <h3 className="font-bold text-lg mb-3">Add Some Question</h3>
-          <input
-            type="text"
-            value={questionNumbers}
-            onChange={(e) => handleOnChange(e.target.value)}
-            placeholder="Enter question number, seperate by comma or Enter title of question"
-            className="input input-primary focus:ring-0 focus:border-none w-full mb-3"
-          />
+          <div className="relative">
+            <input
+              data-tooltip-id="search-tooltip"
+              data-tooltip-content="Search by pressing enter"
+              type="text"
+              value={questionNumbers}
+              onChange={(e) => handleOnChange(e.target.value)}
+              placeholder="Enter question number, seperate by comma or Enter title of question"
+              className="input input-primary focus:ring-0 focus:border-none w-full mb-3 rounded-full"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault(); // Prevent the default form submission behavior
+                  handleSearch();
+                }
+              }}
+            />
+            <button
+              className="absolute right-2 top-2 btn btn-sm btn-primary btn-circle"
+              onClick={handleSearch}
+            >
+              <AiOutlineSearch />
+            </button>
+          </div>
           {searchResultQuestions && searchResultQuestions.length > 0 && (
             <TableWrapper>
               <TableHeader columTitles={columTitles} />
@@ -109,6 +127,7 @@ export default function EditQuestionDialog({
         </form>
         <Tooltip id="remove-tooltip" />
         <Tooltip id="add-tooltip" />
+        <Tooltip id="search-tooltip" />
       </dialog>
     </>
   );
