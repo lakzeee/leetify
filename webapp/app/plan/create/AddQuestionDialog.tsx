@@ -1,7 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useCreatePlanStore } from "@/Components/hooks/useCreatePlanStore";
-import { getQuestionsByQuestionNumbers } from "@/Components/actions/questionActions";
+import {
+  getQuestionsByQuestionNumbers,
+  getQuestionsByQuestionTitle,
+} from "@/Components/actions/questionActions";
 import { Tooltip } from "react-tooltip";
 import TableWrapper from "@/UI/table/tablebase/TableWrapper";
 import TableHeader from "@/UI/table/tablebase/TableHeader";
@@ -34,8 +37,18 @@ export default function EditQuestionDialog({
     setQuestionNumbers(value);
   }
 
+  function isNumberWithCommas(str: string) {
+    const regex = /^(\d{1,3}(,\d{3})*(?!\s*,)|\d{1,4})(?=$|\s)/;
+    return regex.test(str);
+  }
+
+  function isValidSearchTerm(term: string) {
+    const regex = /^[\s]*[A-Za-z]+[A-Za-z\s]*$/;
+    return regex.test(term);
+  }
+
   useEffect(() => {
-    if (questionNumbers && !questionNumbers.endsWith(",")) {
+    if (isNumberWithCommas(questionNumbers)) {
       getQuestionsByQuestionNumbers(questionNumbers)
         .then((data: any) => {
           if (data.error) throw data.error;
@@ -44,6 +57,17 @@ export default function EditQuestionDialog({
         .catch(() => {
           console.log("Failed getQuestionsByQuestionNumbers");
         });
+    } else if (isValidSearchTerm(questionNumbers)) {
+      getQuestionsByQuestionTitle(questionNumbers)
+        .then((data: any) => {
+          if (data.error) throw data.error;
+          setQuestions(data);
+        })
+        .catch(() => {
+          console.log("Failed getQuestionsByQuestionTitle");
+        });
+    } else {
+      console.log("Search term is not valid");
     }
   }, [questionNumbers, setQuestions]);
 
@@ -58,7 +82,7 @@ export default function EditQuestionDialog({
             type="text"
             value={questionNumbers}
             onChange={(e) => handleOnChange(e.target.value)}
-            placeholder="Enter question number, seperate by comma"
+            placeholder="Enter question number, seperate by comma or Enter title of question"
             className="input input-primary focus:ring-0 focus:border-none w-full mb-3"
           />
           {searchResultQuestions && searchResultQuestions.length > 0 && (

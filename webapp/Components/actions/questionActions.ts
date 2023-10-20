@@ -1,4 +1,4 @@
-import { PageResult, PlanQuestion, Question, UserRes } from "@/types";
+import { PageResult, PlanQuestion, Question } from "@/types";
 import { fetchWrapper } from "@/Components/utils/fetchWrapper";
 
 export async function getQuestionData(
@@ -15,4 +15,10 @@ export async function getQuestionsByQuestionNumbers(
   nums: string,
 ): Promise<PlanQuestion[]> {
   return await fetchWrapper.get(`/question/byqn?questionNumbers=${nums}`);
+}
+
+export async function getQuestionsByQuestionTitle(
+  keyword: string,
+): Promise<PlanQuestion[]> {
+  return await fetchWrapper.get(`/search?keyword=${keyword}`);
 }
