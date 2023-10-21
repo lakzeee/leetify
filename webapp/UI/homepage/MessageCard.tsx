@@ -3,7 +3,7 @@ type Props = {
 };
 export default function MessageCard({ userName = "" }: Props) {
   return (
-    <div className="block w-full p-6 bg-white border-gray-200 rounded-lg shadow dark:bg-gray-800">
+    <div className="block max-w-sm lg:max-w-3xl w-full p-6 bg-white border-gray-200 rounded-lg shadow dark:bg-gray-800">
       <h2 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
         Welcome {userName}
       </h2>

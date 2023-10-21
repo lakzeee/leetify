@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Nav from "@/UI/nav";
 import Drawer from "@/UI/drawer";
 import Footer from "@/UI/homepage/Footer";
+import { getCurrentUser } from "@/app/session/authUtils";
 
 type Props = {
   isLoading?: boolean;
@@ -17,6 +18,20 @@ export default function Container({
   scrollThreshold,
 }: Props) {
   const [isChildrenLoaded, setIsChildrenLoaded] = useState(false);
+  const [user, setUser] = useState(undefined); // State to hold user data
+  const [avatarChar, setAvatarChar] = useState("");
+
+  useEffect(() => {
+    async function fetchUserData() {
+      const userData: any = await getCurrentUser();
+      if (userData) {
+        setUser(userData);
+        setAvatarChar(userData.name.slice(0, 2));
+      }
+    }
+
+    fetchUserData();
+  }, []);
 
   useEffect(() => {
     let timeoutId: any;
@@ -35,8 +50,13 @@ export default function Container({
 
   return (
     <>
-      <Nav scrollThreshold={scrollThreshold} displayAvatar={displayAvatar} />
-      <Drawer />
+      <Nav
+        scrollThreshold={scrollThreshold}
+        displayAvatar={displayAvatar}
+        user={user}
+        avatarChar={avatarChar}
+      />
+      <Drawer user={user} />
       <div className="container mx-auto min-h-full px-4 pt-24 z-0 flex flex-col items-center">
         {/* Toggle button */}
         {isLoading && (
