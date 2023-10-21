@@ -21,7 +21,7 @@ function truncateString(str: string, maxLength: number) {
   }
 }
 
-export default function PlanCard({ plan, heartClickable = true }: Props) {
+export default function PlanCard({ plan, heartClickable = false }: Props) {
   const router = useRouter();
 
   return (
@@ -34,12 +34,12 @@ export default function PlanCard({ plan, heartClickable = true }: Props) {
           <Heart
             planId={plan.id}
             showWhenNotSaved={true}
-            isClickable={heartClickable}
+            isClickable={false}
             count={plan.savesCount || 0}
           />
         </div>
         <div className="card-body">
-          <h2 className="card-title">{plan.planName}</h2>
+          <h2 className="card-title">{truncateString(plan.planName, 24)}</h2>
           <p>{truncateString(plan.description, 65)}</p>
           <div className="card-actions justify-end">
             {plan.tags && <TopicBadges topics={plan.tags} />}

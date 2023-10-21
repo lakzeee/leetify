@@ -33,11 +33,11 @@ export default function Heart({
   );
 
   function handleSaveButton() {
+    if (!isClickable) return;
     if (!isLogIn) {
       toast.error("Please Log In To Do this.");
       return;
     }
-    if (!isClickable) return;
     if (isSaved) {
       RemovePlanFromUser(planId)
         .then((r) => {
