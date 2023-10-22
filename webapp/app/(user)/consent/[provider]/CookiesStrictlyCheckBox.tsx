@@ -1,4 +1,4 @@
-import CheckBox from "@/app/consent/[provider]/CheckBox";
+import CheckBox from "@/app/(user)/consent/[provider]/CheckBox";
 
 type Props = {
   value: boolean;

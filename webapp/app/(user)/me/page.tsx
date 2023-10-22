@@ -1,5 +1,4 @@
 "use client";
-import Container from "@/UI/container";
 import { useEffect, useState } from "react";
 import {
   getUserByUserSub,
@@ -36,7 +35,7 @@ export default function Me() {
   }
 
   return (
-    <Container>
+    <>
       {userInfo && (
         <div className="flex flex-col gap-2">
           <Heading
@@ -74,6 +73,6 @@ export default function Me() {
           </button>
         </div>
       )}
-    </Container>
+    </>
   );
 }

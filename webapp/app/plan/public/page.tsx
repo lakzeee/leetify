@@ -9,7 +9,7 @@ import PlanCard from "@/UI/card/PlanCard";
 import { useEffect, useState } from "react";
 import { PlanQuestionRes } from "@/types";
 import { useSavedPlansStore } from "@/Components/hooks/useSavedPlansStore";
-import { getCurrentUser } from "@/app/session/authUtils";
+import { getCurrentUser } from "@/app/(user)/session/authUtils";
 import qs from "query-string";
 import PublicPlanFilter from "@/UI/table/filter/PublicPlanFilter";
 import { Pagination } from "flowbite-react";
@@ -27,6 +27,7 @@ export default function PublicPlan() {
   });
   const [activeButton, setActiveButton] = useState("saved");
   const queryString = qs.stringifyUrl({ url: "", query: params });
+  const [isLoading, setIsLoading] = useState(false);
 
   function handleFilterOnClick(value: string) {
     if (value === "new") {
@@ -43,11 +44,14 @@ export default function PublicPlan() {
   }
 
   useEffect(() => {
+    setIsLoading(true);
+
     async function fetchPublicPlan() {
       const publicPlans = await GetAllPublicPlans(queryString);
       if (publicPlans && publicPlans.results.length > 0) {
         setPublicPlansData(publicPlans.results);
         setPageCount(publicPlans.pageCount);
+        setIsLoading(false);
       }
     }
 
@@ -74,7 +78,7 @@ export default function PublicPlan() {
   }, [isLogIn, setSavedPlans]);
 
   return (
-    <Container>
+    <Container isLoading={isLoading}>
       <div className="w-full flex justify-center items-center">
         <PublicPlanFilter
           handleFilterOnClick={handleFilterOnClick}

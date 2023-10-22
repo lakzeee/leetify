@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Nav from "@/UI/nav";
 import Drawer from "@/UI/drawer";
 import Footer from "@/UI/homepage/Footer";
-import { getCurrentUser } from "@/app/session/authUtils";
+import { getCurrentUser } from "@/app/(user)/session/authUtils";
 
 type Props = {
   isLoading?: boolean;

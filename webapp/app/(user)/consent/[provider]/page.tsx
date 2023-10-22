@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { getCurrentUser } from "@/app/session/authUtils";
+import { getCurrentUser } from "@/app/(user)/session/authUtils";
 import { getUserByEmail } from "@/Components/actions/userActions";
 import { useRouter } from "next/navigation";
 import Container from "@/UI/container";

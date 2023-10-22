@@ -1,12 +1,11 @@
 "use client";
-import Container from "@/UI/container";
 import Heading from "@/UI/heading";
 import { signIn } from "next-auth/react";
 import { AiFillGithub, AiFillGoogleCircle } from "react-icons/ai";
 
 export default function AuthPage() {
   return (
-    <Container>
+    <>
       <Heading
         center
         title="Log in to contiune"
@@ -46,6 +45,6 @@ export default function AuthPage() {
           Google
         </button>
       </div>
-    </Container>
+    </>
   );
 }

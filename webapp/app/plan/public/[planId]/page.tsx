@@ -7,7 +7,7 @@ import TopicBadges from "@/UI/table/TopicBadges";
 import ProgressQuestionTable from "@/UI/table/ProgressQuestionTable";
 import Image from "next/image";
 import Heart from "@/UI/icons/Heart";
-import { getCurrentUser } from "@/app/session/authUtils";
+import { getCurrentUser } from "@/app/(user)/session/authUtils";
 
 export default function PublicPlanDetail({
   params,

@@ -2,7 +2,7 @@
 import EditQuestionDialog from "@/app/plan/create/AddQuestionDialog";
 import CreatePlanForm from "@/app/plan/create/CreatePlanForm";
 import Container from "../../../UI/container";
-import { getCurrentUser } from "@/app/session/authUtils";
+import { getCurrentUser } from "@/app/(user)/session/authUtils";
 import Heading from "@/UI/heading";
 import { useCreatePlanStore } from "@/Components/hooks/useCreatePlanStore";
 import { PlanQuestion } from "@/types";

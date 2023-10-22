@@ -1,4 +1,4 @@
-import { getTokenWorkAround } from "@/app/session/authUtils";
+import { getTokenWorkAround } from "@/app/(user)/session/authUtils";
 
 const baseUrl =
   process.env.NODE_ENV === "production"

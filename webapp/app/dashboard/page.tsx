@@ -17,7 +17,7 @@ import { PlanQuestion, TreeMapDataPoint } from "@/types";
 import TreeMap from "@/UI/charts/TreeMap";
 import Container from "@/UI/container";
 import MessageCard from "@/UI/homepage/MessageCard";
-import { getCurrentUser } from "@/app/session/authUtils";
+import { getCurrentUser } from "@/app/(user)/session/authUtils";
 
 export default function Home() {
   const [loadingDayCount, setLoadingDayCount] = useState(false);
